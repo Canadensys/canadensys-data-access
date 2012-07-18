@@ -29,7 +29,7 @@ public enum QueryOperatorEnum {
     
     /**
      * You should use this function instead of valueOf if you need more flexibility.
-     * This function is case insensitive and will return null instead an throwing an exception
+     * This function is case insensitive and will return null instead of throwing an exception
      * when a value is not found.
      * @param text
      * @return the matching QueryOperatorEnum value or null if not found

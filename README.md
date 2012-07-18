@@ -2,6 +2,7 @@ canadensys-data-access
 ======================
 
 Canandensys data access layer containing DAO and models.
+__This repository is not completed yet so it won't work for the moment.__
 
 Dependencies
 ------------
