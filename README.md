@@ -10,6 +10,7 @@ Dependencies
 * Spring Framework 3.1
 * Hibernate 4.0
 * Apache BeanUtils 1.8.3
+* Jackson Mapper 1.9.2
 
 * H2 Database 1.3.163 (for unit testing only)
 
