@@ -1,0 +1,2 @@
+id	country	class
+1	Canada	Equisetopsida
