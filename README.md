@@ -14,15 +14,15 @@ Dependencies
 * [JSON.org](http://www.json.org/java/)
 * [Canadensys Core 1.0](https://github.com/Canadensys/canadensys-core)
 
-* H2 Database 1.3.163 (for unit testing only)
+* [H2 Database 1.3.163](http://www.h2database.com) (for unit testing only)
 
 Build
 -----
-To build a jar file:
+Build a jar file:
 ```
 mvn package
 ```
-To install it in your local repository:
+Install to your local repository:
 ```
 mvn install
 ```

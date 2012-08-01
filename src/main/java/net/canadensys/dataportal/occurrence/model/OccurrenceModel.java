@@ -68,6 +68,7 @@ public class OccurrenceModel {
 	
 	private Double minimumelevationinmeters;
 	private Double maximumelevationinmeters;
+	private Integer averagealtituderounded;
 	
 	private Double decimallatitude;
 	private Double decimallongitude;
@@ -379,5 +380,11 @@ public class OccurrenceModel {
 	}
 	public void setDecade(Integer decade) {
 		this.decade = decade;
+	}
+	public Integer getAveragealtituderounded() {
+		return averagealtituderounded;
+	}
+	public void setAveragealtituderounded(Integer averagealtituderounded) {
+		this.averagealtituderounded = averagealtituderounded;
 	}
 }
