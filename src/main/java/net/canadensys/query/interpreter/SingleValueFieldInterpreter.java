@@ -19,12 +19,21 @@ public class SingleValueFieldInterpreter implements QueryPartInterpreter{
 	
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(SingleValueFieldInterpreter.class);
+	
+	@Override
+	public boolean canHandleSearchableField(SearchableField searchableField) {
+		return (searchableField.getRelatedFields() != null && 
+				searchableField.getRelatedFields().size() == 1 &&
+				searchableField.getType() != null &&
+				(String.class.equals(searchableField.getType()) ||
+						Number.class.isAssignableFrom(searchableField.getType()) ||
+						Boolean.class.equals(searchableField.getType())
+				));
+	}
 
 	@Override
 	public boolean canHandleSearchQueryPart(SearchQueryPart searchQueryPart) {
-		SearchableField searchableField = searchQueryPart.getSearchableField();
-		return (searchableField.getRelatedFields() != null && 
-				searchableField.getRelatedFields().size() == 1);
+		return canHandleSearchableField(searchQueryPart.getSearchableField());
 	}
 	
 	@Override
@@ -75,7 +84,7 @@ public class SingleValueFieldInterpreter implements QueryPartInterpreter{
 		if(Number.class.isAssignableFrom(searchableField.getType())){
 			value = StringUtils.join(queryPart.getValueList(),",");
 		}
-		else{
+		else{ //TODO maybe handle boolean itself
 			for(String currValue : queryPart.getValueList()){
 				value += "'" + SQLHelper.escapeSQLString(currValue) + "',";
 			}

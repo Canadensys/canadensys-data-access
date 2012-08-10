@@ -1,6 +1,7 @@
 package net.canadensys.query.interpreter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import net.canadensys.query.QueryOperatorEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.TestSearchableFieldBuilder;
@@ -24,6 +25,7 @@ public class StartEndDateFieldInterpreterTest {
 		sqp2007.addParsedValue("2007--", "syear", 2007);
 		
 		StartEndDateFieldInterpreter seDateInterpreter = new StartEndDateFieldInterpreter();
+		assertTrue(seDateInterpreter.canHandleSearchQueryPart(sqp2007));
 		Criterion c = seDateInterpreter.toCriterion(sqp2007);
 		assertEquals("syear=2007", c.toString());
 		
@@ -34,6 +36,7 @@ public class StartEndDateFieldInterpreterTest {
 		sqp20070830.addParsedValue("2007-08-30", "syear", 2007);
 		sqp20070830.addParsedValue("2007-08-30", "smonth", 8);
 		sqp20070830.addParsedValue("2007-08-30", "sday", 30);
+		assertTrue(seDateInterpreter.canHandleSearchQueryPart(sqp20070830));
 		String sql = seDateInterpreter.toSQL(sqp20070830);
 		assertEquals("syear=2007 AND smonth=8 AND sday=30", sql);
     }
@@ -52,6 +55,7 @@ public class StartEndDateFieldInterpreterTest {
     	sqpBetweenMay2001AndJune2003.addParsedValue("2003-06-", "smonth", 06);
     			
 		StartEndDateFieldInterpreter seDateInterpreter = new StartEndDateFieldInterpreter();
+		assertTrue(seDateInterpreter.canHandleSearchQueryPart(sqpBetweenMay2001AndJune2003));
 		Criterion c = seDateInterpreter.toCriterion(sqpBetweenMay2001AndJune2003);
 		assertEquals("syear>=2001 and syear<=2003 and smonth>=5 and smonth<=6", c.toString());
 		

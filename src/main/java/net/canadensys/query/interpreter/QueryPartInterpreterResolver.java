@@ -14,12 +14,14 @@ public class QueryPartInterpreterResolver {
 	private static final QueryPartInterpreter SINGLE_VALUE_INTERPRETER = new SingleValueFieldInterpreter();
 	private static final QueryPartInterpreter MIN_MAX_NUMBER_INTERPRETER = new MinMaxNumberFieldInterpreter();
 	private static final QueryPartInterpreter START_END_DATE_INTERPRETER = new StartEndDateFieldInterpreter();
+	private static final QueryPartInterpreter GEO_COORDINATES_INTERPRETER = new GeoCoordinatesFieldInterpreter();
 	
 	public static QueryPartInterpreter getQueryPartInterpreter(SearchQueryPart queryPart){
 		switch(queryPart.getSearchableField().getSearchableFieldTypeEnum()){
 			case SINGLE_VALUE : return SINGLE_VALUE_INTERPRETER;
 			case MIN_MAX_NUMBER : return MIN_MAX_NUMBER_INTERPRETER;
 			case START_END_DATE : return START_END_DATE_INTERPRETER;
+			case GEO_COORDINATES : return GEO_COORDINATES_INTERPRETER;
 			default : return null;
 		}
 	}

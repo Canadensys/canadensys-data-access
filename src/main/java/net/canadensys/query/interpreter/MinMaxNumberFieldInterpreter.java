@@ -13,7 +13,7 @@ import org.hibernate.criterion.Restrictions;
 
 /**
  * Interprets a SearchQueryPart on more than one numeric database field.
- * Example : we search for field IntField1 but in the database this fields is stored as a range IntFieldMin and IntFieldMax.
+ * Example : We search for field IntField1 but in the database this fields is stored as a range IntFieldMin and IntFieldMax.
  * @author canadensys
  *
  */
@@ -21,13 +21,18 @@ public class MinMaxNumberFieldInterpreter implements QueryPartInterpreter{
 	
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(MinMaxNumberFieldInterpreter.class);
+	
+	@Override
+	public boolean canHandleSearchableField(SearchableField searchableField) {
+		return (searchableField.getRelatedFields() != null && 
+				searchableField.getRelatedFields().size() == 2 &&
+				searchableField.getType() != null &&
+				Number.class.isAssignableFrom(searchableField.getType()));
+	}
 
 	@Override
 	public boolean canHandleSearchQueryPart(SearchQueryPart searchQueryPart) {
-		SearchableField searchableField = searchQueryPart.getSearchableField();
-
-		return (searchableField.getRelatedFields() != null && 
-				searchableField.getRelatedFields().size() == 2);
+		return canHandleSearchableField(searchQueryPart.getSearchableField());
 	}
 	
 	@Override

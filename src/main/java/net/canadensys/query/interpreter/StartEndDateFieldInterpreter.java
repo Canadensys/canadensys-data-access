@@ -16,11 +16,15 @@ public class StartEndDateFieldInterpreter implements QueryPartInterpreter{
 	private static final Logger LOGGER = Logger.getLogger(StartEndDateFieldInterpreter.class);
 
 	@Override
-	public boolean canHandleSearchQueryPart(SearchQueryPart searchQueryPart) {
-		SearchableField searchableField = searchQueryPart.getSearchableField();
-
+	public boolean canHandleSearchableField(SearchableField searchableField) {
 		return (searchableField.getRelatedFields() != null && 
-				searchableField.getRelatedFields().size() >= 3);
+				searchableField.getRelatedFields().size() >= 3 &&
+				searchableField.getType() == null);
+	}
+	
+	@Override
+	public boolean canHandleSearchQueryPart(SearchQueryPart searchQueryPart) {
+		return canHandleSearchableField(searchQueryPart.getSearchableField());
 	}
 
 	@Override

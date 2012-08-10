@@ -182,6 +182,20 @@ public class SearchQueryPart {
 		return parsedValuesMap.get(value).get(searchableFieldKey);
 	}
 	
+	/**
+	 * @see getParsedValue(String, String)
+	 * Returns the parsed value using the 'searchableField.relatedField' as searchableFieldKey.
+	 * Do not use this function on SearchableField with more than 1 relatedField.
+	 * @param value
+	 * @return the parsed value or null if the value could not be found.
+	 */
+	public Object getParsedValue(String value){
+		if(searchableField.getRelatedFields().size() == 1){
+			return parsedValuesMap.get(value).get(searchableField.getRelatedField());
+		}
+		return null;
+	}
+	
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
