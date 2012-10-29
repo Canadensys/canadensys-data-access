@@ -9,6 +9,11 @@ import net.canadensys.query.TestSearchableFieldBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
+/**
+ * Test for GeoCoordinatesFieldInterpreter
+ * @author canadensys
+ *
+ */
 public class GeoCoordinatesFieldInterpreterTest {
 	
 	@Test

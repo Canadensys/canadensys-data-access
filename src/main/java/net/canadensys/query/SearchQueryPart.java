@@ -147,8 +147,9 @@ public class SearchQueryPart {
 	}
 	
 	/**
-	 * Adds a parsed value for a SearchableField. A single value in the valuesTree can
-	 * lead to multiple values in the parsedValuesMap.
+	 * Adds a parsed value for a SearchableField.
+	 * To know how to store your parsed value, check the proper Interpreter.
+	 * A single value in the valuesTree can lead to multiple values in the parsedValuesMap.
 	 * @param value raw value of this search
 	 * @param searchableFieldKey name of the SearchableField
 	 * @param parsedValue

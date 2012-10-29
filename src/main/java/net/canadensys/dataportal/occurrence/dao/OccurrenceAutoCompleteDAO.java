@@ -21,7 +21,7 @@ public interface OccurrenceAutoCompleteDAO {
 	public String getSuggestionsFor(String field, String currValue, boolean useSanitizedValue);
 	
 	/**
-	 * Returns all possible values as a list of UniqueValuesModel
+	 * Returns all possible values as UniqueValuesModel list.
 	 * @param field
 	 * @return
 	 */

@@ -13,6 +13,11 @@ import org.apache.log4j.Logger;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
+/**
+ * Interprets a SearchQueryPart representing a geospatial query with specific coordinates
+ * @author canadensys
+ *
+ */
 public class GeoCoordinatesFieldInterpreter implements QueryPartInterpreter{
 	
 	//get log4j handler
