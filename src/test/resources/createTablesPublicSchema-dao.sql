@@ -47,13 +47,14 @@ averagealtituderounded integer,
 hascoordinates boolean,
 hasmedia boolean,
 sourcefileid VARCHAR(50),
-occurrenceID VARCHAR(25),
+dwcaid VARCHAR(25),
 CONSTRAINT occurrence_pkey PRIMARY KEY (auto_id )
 );
 
 CREATE TABLE occurrence_raw (
 auto_id INTEGER NOT NULL,
-sourcefileid character varying(255) NOT NULL,
+dwcaid VARCHAR(25),
+sourcefileid character varying(50) NOT NULL,
 acceptedNameUsage TEXT,
 acceptedNameUsageID TEXT,
 accessRights TEXT,
@@ -214,7 +215,7 @@ vernacularName TEXT,
 waterBody TEXT,
 year TEXT,
 CONSTRAINT occurrence_raw_pkey PRIMARY KEY (auto_id ),
-CONSTRAINT occurrence_raw_id_sourcefileid_key UNIQUE (occurrenceID , sourcefileid )
+CONSTRAINT occurrence_raw_dwcaid_sourcefileid_key UNIQUE (dwcaid , sourcefileid)
 );
 
 

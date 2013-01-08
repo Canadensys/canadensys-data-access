@@ -25,13 +25,12 @@ public class OccurrenceRawModel {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "occurrence_raw_auto_id_seq")
 	private int auto_id;
 	
-	//mapped to id in the dwca
-	private String occurrenceid;
-
-	//used for data manipulation but it's never saved
+	//used to easily read the id in the dwca
 	@Transient
 	private String id;
 	
+	//mapped to id in the dwca
+	private String dwcaid;
 	//not in dwca
 	private String sourcefileid;
 	
@@ -144,6 +143,7 @@ public class OccurrenceRawModel {
 	private String namepublishedinyear;
 	private String nomenclaturalcode;
 	private String nomenclaturalstatus;
+	private String occurrenceid;
 	private String occurrenceremarks;
 	private String occurrencestatus;
 	private String _order;
@@ -1171,5 +1171,11 @@ public class OccurrenceRawModel {
 	}
 	public void setSourcefileid(String sourcefileid) {
 		this.sourcefileid = sourcefileid;
+	}
+	public String getDwcaid() {
+		return dwcaid;
+	}
+	public void setDwcaid(String dwcaid) {
+		this.dwcaid = dwcaid;
 	}
 }

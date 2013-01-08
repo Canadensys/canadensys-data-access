@@ -79,10 +79,10 @@ public class OccurrenceModel {
 	private String verbatimelevation;
 	private String habitat;
 	
-	//mapped to id in the dwca
-	private String occurrenceid;
+	//id used in the dwca
+	private String dwcaid;
 	
-	//not in dwca
+	//name of the file that was read
 	private String sourcefileid;
 	
 	public int getAuto_id() {
@@ -363,12 +363,6 @@ public class OccurrenceModel {
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
 	}
-	public String getOccurrenceid() {
-		return occurrenceid;
-	}
-	public void setOccurrenceid(String occurrenceid) {
-		this.occurrenceid = occurrenceid;
-	}
 	public String getSpecies() {
 		return species;
 	}
@@ -386,5 +380,11 @@ public class OccurrenceModel {
 	}
 	public void setAveragealtituderounded(Integer averagealtituderounded) {
 		this.averagealtituderounded = averagealtituderounded;
+	}
+	public String getDwcaid() {
+		return dwcaid;
+	}
+	public void setDwcaid(String dwcaid) {
+		this.dwcaid = dwcaid;
 	}
 }

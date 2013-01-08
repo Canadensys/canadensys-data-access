@@ -55,7 +55,7 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	
 	//natural id
 	private static final String SOURCE_FILE_ID = "sourcefileid";
-	private static final String OCCURRENCE_ID = "occurrenceid";
+	private static final String DWCA_ID = "dwcaid";
 	private static final String RAW_MODEL = "rawModel";
 	
 	//get log4j handler
@@ -76,10 +76,10 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	}
 	
 	@Override
-	public OccurrenceModel load(String sourceFileId, String occurrenceId, boolean deepLoad){
+	public OccurrenceModel load(String sourceFileId, String dwcaId, boolean deepLoad){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceModel.class);
 		searchCriteria.add(Restrictions.eq(SOURCE_FILE_ID, sourceFileId));
-		searchCriteria.add(Restrictions.eq(OCCURRENCE_ID, occurrenceId));
+		searchCriteria.add(Restrictions.eq(DWCA_ID, dwcaId));
 		
 		if(deepLoad){
 			searchCriteria.setFetchMode(RAW_MODEL, FetchMode.JOIN);

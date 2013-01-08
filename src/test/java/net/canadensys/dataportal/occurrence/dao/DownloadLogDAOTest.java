@@ -25,7 +25,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/test-spring.xml" })
 @TransactionConfiguration(transactionManager="hibernateTransactionManager")
-public class DownloadLogDAOTest  extends AbstractTransactionalJUnit4SpringContextTests{
+public class DownloadLogDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 
 	@Autowired
 	private DownloadLogDAO downloadLogDAO;

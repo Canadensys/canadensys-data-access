@@ -32,11 +32,11 @@ public interface OccurrenceDAO {
 	/**
 	 * Load a specific Occurrence into an OccurrenceModel
 	 * @param sourceFileId
-	 * @param occurrenceId
+	 * @param dwcaId
 	 * @param deepLoad Do we need to load the raw model?
 	 * @return
 	 */
-	public OccurrenceModel load(String sourceFileId, String occurrenceId, boolean deepLoad);
+	public OccurrenceModel load(String sourceFileId, String dwcaId, boolean deepLoad);
 	
 	/**
 	 * Search based on the properties set in the searchCriteria
