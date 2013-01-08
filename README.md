@@ -12,7 +12,7 @@ Dependencies
 * [Jackson Mapper 1.9.2](http://jackson.codehaus.org/)
 * [GBIF DarwinCoreArchiveReader 1.9.1](http://code.google.com/p/darwincore/wiki/DarwinCoreArchiveReader)
 * [JSON.org](http://www.json.org/java/)
-* [Canadensys Core 1.0](https://github.com/Canadensys/canadensys-core)
+* [Canadensys Core 1.3](https://github.com/Canadensys/canadensys-core)
 
 * [H2 Database 1.3.163](http://www.h2database.com) (for unit testing only)
 

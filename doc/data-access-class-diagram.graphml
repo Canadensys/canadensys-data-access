@@ -16,384 +16,6 @@
     <data key="d7"/>
     <node id="n0" yfiles.foldertype="group">
       <data key="d4"/>
-      <data key="d5"/>
-      <data key="d6">
-        <y:ProxyAutoBoundsNode>
-          <y:Realizers active="0">
-            <y:GroupNode>
-              <y:Geometry height="219.93208903990546" width="378.45655279199104" x="1619.7486095661843" y="471.1729542915484"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="378.45655279199104" x="0.0" y="0.0">net.canadensys.databaseutils</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="117" bottomF="117.07527803412472" left="12" leftF="12.04064071190237" right="150" rightF="149.99441263626227" top="23" topF="23.19079538078074"/>
-            </y:GroupNode>
-            <y:GroupNode>
-              <y:Geometry height="98.50500556173529" width="378.45655279199104" x="1619.7486095661843" y="471.1729542915484"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="378.45655279199104" x="0.0" y="0.0">net.canadensys.databaseutils</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="true" closedHeight="98.50500556173529" closedWidth="378.45655279199104" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
-            </y:GroupNode>
-          </y:Realizers>
-        </y:ProxyAutoBoundsNode>
-      </data>
-      <graph edgedefault="directed" id="n0:">
-        <node id="n0::n0">
-          <data key="d4"/>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="28.0" width="186.42149944382646" x="1646.7892502780867" y="531.0297652973292"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="custom" textColor="#000000" visible="true" width="73.82421875" x="56.29864034691323" y="3.0">SQLHelper<y:LabelModel>
-                  <y:SmartNodeLabelModel distance="4.0"/>
-                </y:LabelModel>
-                <y:ModelParameter>
-                  <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
-                </y:ModelParameter>
-              </y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel/>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-      </graph>
-    </node>
-    <node id="n1" yfiles.foldertype="group">
-      <data key="d4"/>
-      <data key="d6">
-        <y:ProxyAutoBoundsNode>
-          <y:Realizers active="0">
-            <y:GroupNode>
-              <y:Geometry height="359.08453403086764" width="515.470244716352" x="998.9739482490675" y="61.929119304635606"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="515.470244716352" x="0.0" y="0.0">net.canadensys.dataportal.occurrence.map</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="false" closedHeight="359.08453403086764" closedWidth="515.470244716352" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="1" bottomF="1.2411180901443686" left="0" leftF="0.0" right="30" rightF="30.000000000000455" top="0" topF="0.0"/>
-            </y:GroupNode>
-            <y:GroupNode>
-              <y:Geometry height="63.0" width="379.5995550611792" x="1017.8898776418241" y="-468.92352396760293"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="379.5995550611792" x="0.0" y="0.0">map</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="true" closedHeight="63.0" closedWidth="379.5995550611792" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
-            </y:GroupNode>
-          </y:Realizers>
-        </y:ProxyAutoBoundsNode>
-      </data>
-      <graph edgedefault="directed" id="n1:">
-        <node id="n1::n0">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="124.02503802622653" width="454.22024471635166" x="1015.2239482490672" y="280.74749721913236"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="119.97802734375" x="167.12110868630083" y="26.1328125">MapServerAccess</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel>+getMapQuery(searchCriteria:HashMap&lt;String, List&lt;String&gt;&gt;):String
-+getMapElementDetails(id:int,columnList:List&lt;String&gt;):String
-+getMapCenter(String searchCriteria):String[]
-+getGeoreferencedRecordCount(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):int</y:MethodLabel>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-        <node id="n1::n1">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="98.50500556173529" width="454.22024471635154" x="1013.9739482490675" y="98.5951349296356"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="187.294921875" x="133.46266142067577" y="3.0">WindshaftMapServerAccess</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel>-tableUsed:String
-@sessionFactory:SessionFactory</y:AttributeLabel>
-                <y:MethodLabel/>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-      </graph>
-    </node>
-    <node id="n2" yfiles.foldertype="group">
-      <data key="d4"/>
-      <data key="d6">
-        <y:ProxyAutoBoundsNode>
-          <y:Realizers active="0">
-            <y:GroupNode>
-              <y:Geometry height="541.864987790253" width="1834.4457248794959" x="-1044.4457248794959" y="-78.44799560275311"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="1834.4457248794959" x="0.0" y="0.0">net.canadensys.dataportal.occurrence.dao</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="false" closedHeight="367.58551059336764" closedWidth="1715.6851490009153" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="44" bottomF="43.64445694214106" left="37" leftF="36.62866058583677" right="0" rightF="0.0" top="0" topF="0.13712349659346046"/>
-            </y:GroupNode>
-            <y:GroupNode>
-              <y:Geometry height="63.0" width="163.17575083426038" x="-187.265850945495" y="-451.1710211867353"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="163.17575083426038" x="0.0" y="0.0">dao</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="true" closedHeight="63.0" closedWidth="163.17575083426038" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
-            </y:GroupNode>
-          </y:Realizers>
-        </y:ProxyAutoBoundsNode>
-      </data>
-      <graph edgedefault="directed" id="n2:">
-        <node id="n2::n0">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="247.55789455952743" width="865.2513904338155" x="-90.25139043381546" y="157.21464068583145"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="110.1708984375" x="377.54024599815773" y="26.1328125">OccurrenceDAO</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel>+load(auto_id:int):OccurrenceModel
-+load(sourceFileId,occurrenceId,deepLoad:boolean):OccurrenceModel
-+search(searchCriteria:OccurrenceModel, limit:Integer):List&lt;OccurrenceModel&gt;
-+search(HashMap&lt;String, List&lt;String&gt;&gt; searchCriteria):List&lt;OccurrenceModel&gt;
-+searchWithLimit(searchCriteria:HashMap&lt;String,List&lt;SearchQueryPart&gt;&gt;, columnList:List&lt;String&gt;):LimitedResult&lt;List&lt;Map&lt;String, String&gt;&gt;&gt;
-+searchIterator(Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):Iterator&lt;OccurrenceModel&gt;
-+searchIteratorRaw(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;,orderBy):Iterator&lt;OccurrenceModel&gt; 
-+getOccurrenceCount(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):int
-+getValueCount(searchCriteria:Map&lt;String, List&lt;SearchQueryPart&gt;&gt;,column,max):List&lt;AbstractMap.SimpleImmutableEntry&lt;String,Integer&gt;&gt;
-+getCountDistinct(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;,column):Integer
-+getDistinctInstitutionCode(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):List&lt;String&gt;
-+getOccurrenceSummaryJson(id:int,idColumnName:String,columnList:List&lt;String&gt;):String</y:MethodLabel>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-        <node id="n2::n1">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="87.32836484983315" width="360.5027808676308" x="-90.25139043381546" y="18.5"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="175.74853515625" x="92.3771228556904" y="3.0">HibernateOccurrenceDAO</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel>@sessionFactory:SessionFactory
--jacksonMapper:ObjectMapper</y:AttributeLabel>
-                <y:MethodLabel>-convertIntoCriterion(SearchQueryPart):Criterion</y:MethodLabel>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-        <node id="n2::n2">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="114.8330078125" width="509.6952560622913" x="-633.022419577308" y="182.5423243654144"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="205.36669921875" x="152.16427842177066" y="26.1328125">OccurrenceAutoCompleteDAO</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel>+getSuggestionsFor(field:String,currValue:String,useSanitizedValue:boolean):String
-+getAllPossibleValues(field:String):List&lt;UniqueValuesModel&gt;</y:MethodLabel>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-        <node id="n2::n3">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="100.47163515016689" width="293.87611835372627" x="-525.1128507230255" y="-23.888627337666946"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="270.9443359375" x="11.465891208113135" y="3.0">HibernateOccurrenceAutoCompleteDAO</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel>@sessionFactory:SessionFactory
--jacksonMapper:ObjectMapper</y:AttributeLabel>
-                <y:MethodLabel/>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-        <node id="n2::n4">
-          <data key="d4"/>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="51.76591234705231" width="258.7995052280312" x="200.6002473859844" y="64.11704382647385"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="custom" textColor="#000000" visible="true" width="224.720703125" x="17.039401051515597" y="26.1328125">ScrollableResultsIteratorWrapper<y:LabelModel>
-                  <y:SmartNodeLabelModel distance="4.0"/>
-                </y:LabelModel>
-                <y:ModelParameter>
-                  <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
-                </y:ModelParameter>
-              </y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="inner class" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel/>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-        <node id="n2::n5">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="100.47163515016689" width="293.87611835372627" x="-992.8170642936591" y="-41.64485648115965"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="191.7509765625" x="51.062570895613135" y="3.0">HibernateDownloadLogDAO</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel>@sessionFactory:SessionFactory
--jacksonMapper:ObjectMapper</y:AttributeLabel>
-                <y:MethodLabel/>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-        <node id="n2::n6">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="100.47163515016689" width="280.6226807998472" x="-986.1903455167196" y="182.5423243654144"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="205.36669921875" x="37.62799079054861" y="26.1328125">OccurrenceAutoCompleteDAO</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel>+save(DownloadLogModel)
-+load(Integer id):DownloadLogModel</y:MethodLabel>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-      </graph>
-    </node>
-    <node id="n3" yfiles.foldertype="group">
-      <data key="d4"/>
-      <data key="d6">
-        <y:ProxyAutoBoundsNode>
-          <y:Realizers active="0">
-            <y:GroupNode>
-              <y:Geometry height="146.666015625" width="223.43341490545038" x="638.2832925472748" y="-252.83203125"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="223.43341490545038" x="0.0" y="0.0">org.json</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="false" closedHeight="146.666015625" closedWidth="223.43341490545038" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="53" bottomF="52.57326032831617" left="22" leftF="21.716707452725245" right="72" rightF="71.71670745272513" top="14" topF="14.426739671683833"/>
-            </y:GroupNode>
-            <y:GroupNode>
-              <y:Geometry height="86.49999999999994" width="125.0" x="993.2832925472748" y="-18.166015625"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="125.0" x="0.0" y="0.0">org.json</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="true" closedHeight="86.49999999999994" closedWidth="125.0" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
-            </y:GroupNode>
-          </y:Realizers>
-        </y:ProxyAutoBoundsNode>
-      </data>
-      <graph edgedefault="directed" id="n3:">
-        <node id="n3::n0">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="28.0" width="100.0" x="675.0" y="-201.73927595331617"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="81.009765625" x="9.4951171875" y="3.0">JSONObject</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel/>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-      </graph>
-    </node>
-    <node id="n4" yfiles.foldertype="group">
-      <data key="d4"/>
-      <data key="d6">
-        <y:ProxyAutoBoundsNode>
-          <y:Realizers active="0">
-            <y:GroupNode>
-              <y:Geometry height="93.166015625" width="280.6226807998472" x="-446.93805917686313" y="-196.5830078125"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="280.6226807998472" x="0.0" y="0.0">org.codehaus.jackson.</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="false" closedHeight="93.166015625" closedWidth="280.6226807998472" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="14" bottomF="13.5" left="65" leftF="64.86083984374989" right="36" rightF="35.76184095609733" top="0" topF="0.0"/>
-            </y:GroupNode>
-            <y:GroupNode>
-              <y:Geometry height="50.0" width="50.0" x="995.0" y="-175.0"/>
-              <y:Fill color="#F5F5F5" transparent="false"/>
-              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="50.0" x="0.0" y="0.0">1</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-              <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
-              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
-            </y:GroupNode>
-          </y:Realizers>
-        </y:ProxyAutoBoundsNode>
-      </data>
-      <graph edgedefault="directed" id="n4:">
-        <node id="n4::n0">
-          <data key="d4"/>
-          <data key="d5"><![CDATA[UMLClass]]></data>
-          <data key="d6">
-            <y:UMLClassNode>
-              <y:Geometry height="28.0" width="150.0" x="-367.07721933311325" y="-159.9169921875"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="129.7216796875" x="10.13916015625" y="3.0">map.ObjectMapper</y:NodeLabel>
-              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel/>
-                <y:MethodLabel/>
-              </y:UML>
-            </y:UMLClassNode>
-          </data>
-        </node>
-      </graph>
-    </node>
-    <node id="n5" yfiles.foldertype="group">
-      <data key="d4"/>
       <data key="d6">
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
@@ -420,8 +42,8 @@
           </y:Realizers>
         </y:ProxyAutoBoundsNode>
       </data>
-      <graph edgedefault="directed" id="n5:">
-        <node id="n5::n0" yfiles.foldertype="group">
+      <graph edgedefault="directed" id="n0:">
+        <node id="n0::n0" yfiles.foldertype="group">
           <data key="d4"/>
           <data key="d6">
             <y:ProxyAutoBoundsNode>
@@ -449,8 +71,8 @@
               </y:Realizers>
             </y:ProxyAutoBoundsNode>
           </data>
-          <graph edgedefault="directed" id="n5::n0:">
-            <node id="n5::n0::n0">
+          <graph edgedefault="directed" id="n0::n0:">
+            <node id="n0::n0::n0">
               <data key="d4"/>
               <data key="d6">
                 <y:UMLClassNode>
@@ -473,7 +95,7 @@
                 </y:UMLClassNode>
               </data>
             </node>
-            <node id="n5::n0::n1">
+            <node id="n0::n0::n1">
               <data key="d4"/>
               <data key="d6">
                 <y:UMLClassNode>
@@ -494,7 +116,7 @@
                 </y:UMLClassNode>
               </data>
             </node>
-            <node id="n5::n0::n2">
+            <node id="n0::n0::n2">
               <data key="d4"/>
               <data key="d6">
                 <y:UMLClassNode>
@@ -515,7 +137,7 @@
                 </y:UMLClassNode>
               </data>
             </node>
-            <node id="n5::n0::n3">
+            <node id="n0::n0::n3">
               <data key="d4"/>
               <data key="d6">
                 <y:UMLClassNode>
@@ -538,7 +160,7 @@
             </node>
           </graph>
         </node>
-        <node id="n5::n1">
+        <node id="n0::n1">
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
@@ -565,7 +187,7 @@
             </y:UMLClassNode>
           </data>
         </node>
-        <node id="n5::n2">
+        <node id="n0::n2">
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
@@ -586,7 +208,7 @@
             </y:UMLClassNode>
           </data>
         </node>
-        <node id="n5::n3">
+        <node id="n0::n3">
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
@@ -609,7 +231,7 @@
             </y:UMLClassNode>
           </data>
         </node>
-        <node id="n5::n4">
+        <node id="n0::n4">
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
@@ -631,7 +253,7 @@ rows:T</y:AttributeLabel>
             </y:UMLClassNode>
           </data>
         </node>
-        <node id="n5::n5">
+        <node id="n0::n5">
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
@@ -654,7 +276,7 @@ rows:T</y:AttributeLabel>
             </y:UMLClassNode>
           </data>
         </node>
-        <node id="n5::n6">
+        <node id="n0::n6">
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
@@ -681,7 +303,7 @@ rows:T</y:AttributeLabel>
             </y:UMLClassNode>
           </data>
         </node>
-        <node id="n5::n7">
+        <node id="n0::n7">
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
@@ -698,6 +320,383 @@ rows:T</y:AttributeLabel>
               <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="static" use3DEffect="true">
                 <y:AttributeLabel/>
                 <y:MethodLabel>getQueryPartInterpreter(SearchQueryPart):QueryPartInterpreter</y:MethodLabel>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n1" yfiles.foldertype="group">
+      <data key="d4"/>
+      <data key="d6">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="93.166015625" width="280.6226807998472" x="-446.93805917686313" y="-196.5830078125"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="280.6226807998472" x="0.0" y="0.0">org.codehaus.jackson.</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="93.166015625" closedWidth="280.6226807998472" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="14" bottomF="13.5" left="65" leftF="64.86083984374989" right="36" rightF="35.76184095609733" top="0" topF="0.0"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="50.0" width="50.0" x="995.0" y="-175.0"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="50.0" x="0.0" y="0.0">1</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n1:">
+        <node id="n1::n0">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="28.0" width="150.0" x="-367.07721933311325" y="-159.9169921875"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="129.7216796875" x="10.13916015625" y="3.0">map.ObjectMapper</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel/>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n2" yfiles.foldertype="group">
+      <data key="d4"/>
+      <data key="d6">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="146.666015625" width="223.43341490545038" x="638.2832925472748" y="-252.83203125"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="223.43341490545038" x="0.0" y="0.0">org.json</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="146.666015625" closedWidth="223.43341490545038" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="53" bottomF="52.57326032831617" left="22" leftF="21.716707452725245" right="72" rightF="71.71670745272513" top="14" topF="14.426739671683833"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="86.49999999999994" width="125.0" x="993.2832925472748" y="-18.166015625"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="125.0" x="0.0" y="0.0">org.json</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="86.49999999999994" closedWidth="125.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n2:">
+        <node id="n2::n0">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="28.0" width="100.0" x="675.0" y="-201.73927595331617"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="81.009765625" x="9.4951171875" y="3.0">JSONObject</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel/>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n3" yfiles.foldertype="group">
+      <data key="d4"/>
+      <data key="d6">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="541.864987790253" width="1834.4457248794959" x="-1044.4457248794959" y="-78.44799560275311"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="1834.4457248794959" x="0.0" y="0.0">net.canadensys.dataportal.occurrence.dao</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="367.58551059336764" closedWidth="1715.6851490009153" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="44" bottomF="43.64445694214106" left="37" leftF="36.62866058583677" right="0" rightF="0.0" top="0" topF="0.13712349659346046"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="63.0" width="163.17575083426038" x="-187.265850945495" y="-451.1710211867353"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="163.17575083426038" x="0.0" y="0.0">dao</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="63.0" closedWidth="163.17575083426038" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n3:">
+        <node id="n3::n0">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="247.55789455952743" width="865.2513904338155" x="-90.25139043381546" y="157.21464068583145"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="110.1708984375" x="377.54024599815773" y="26.1328125">OccurrenceDAO</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel>+load(auto_id:int):OccurrenceModel
++load(sourceFileId,dwcaId,deepLoad:boolean):OccurrenceModel
++search(searchCriteria:OccurrenceModel, limit:Integer):List&lt;OccurrenceModel&gt;
++search(HashMap&lt;String, List&lt;String&gt;&gt; searchCriteria):List&lt;OccurrenceModel&gt;
++searchWithLimit(searchCriteria:HashMap&lt;String,List&lt;SearchQueryPart&gt;&gt;, columnList:List&lt;String&gt;):LimitedResult&lt;List&lt;Map&lt;String, String&gt;&gt;&gt;
++searchIterator(Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):Iterator&lt;OccurrenceModel&gt;
++searchIteratorRaw(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;,orderBy):Iterator&lt;OccurrenceModel&gt; 
++getOccurrenceCount(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):int
++getValueCount(searchCriteria:Map&lt;String, List&lt;SearchQueryPart&gt;&gt;,column,max):List&lt;AbstractMap.SimpleImmutableEntry&lt;String,Integer&gt;&gt;
++getCountDistinct(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;,column):Integer
++getDistinctInstitutionCode(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):List&lt;String&gt;
++getOccurrenceSummaryJson(id:int,idColumnName:String,columnList:List&lt;String&gt;):String</y:MethodLabel>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n3::n1">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="87.32836484983315" width="360.5027808676308" x="-90.25139043381546" y="18.5"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="175.74853515625" x="92.3771228556904" y="3.0">HibernateOccurrenceDAO</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel>@sessionFactory:SessionFactory
+-jacksonMapper:ObjectMapper</y:AttributeLabel>
+                <y:MethodLabel>-convertIntoCriterion(SearchQueryPart):Criterion</y:MethodLabel>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n3::n2">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="114.8330078125" width="509.6952560622913" x="-633.022419577308" y="182.5423243654144"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="205.36669921875" x="152.16427842177066" y="26.1328125">OccurrenceAutoCompleteDAO</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel>+getSuggestionsFor(field:String,currValue:String,useSanitizedValue:boolean):String
++getAllPossibleValues(field:String):List&lt;UniqueValuesModel&gt;</y:MethodLabel>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n3::n3">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="100.47163515016689" width="293.87611835372627" x="-525.1128507230255" y="-23.888627337666946"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="270.9443359375" x="11.465891208113135" y="3.0">HibernateOccurrenceAutoCompleteDAO</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel>@sessionFactory:SessionFactory
+-jacksonMapper:ObjectMapper</y:AttributeLabel>
+                <y:MethodLabel/>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n3::n4">
+          <data key="d4"/>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="51.76591234705231" width="258.7995052280312" x="200.6002473859844" y="64.11704382647385"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="custom" textColor="#000000" visible="true" width="224.720703125" x="17.039401051515597" y="26.1328125">ScrollableResultsIteratorWrapper<y:LabelModel>
+                  <y:SmartNodeLabelModel distance="4.0"/>
+                </y:LabelModel>
+                <y:ModelParameter>
+                  <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+                </y:ModelParameter>
+              </y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="inner class" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel/>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n3::n5">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="100.47163515016689" width="293.87611835372627" x="-992.8170642936591" y="-41.64485648115965"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="191.7509765625" x="51.062570895613135" y="3.0">HibernateDownloadLogDAO</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel>@sessionFactory:SessionFactory
+-jacksonMapper:ObjectMapper</y:AttributeLabel>
+                <y:MethodLabel/>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n3::n6">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="100.47163515016689" width="280.6226807998472" x="-986.1903455167196" y="182.5423243654144"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="205.36669921875" x="37.62799079054861" y="26.1328125">OccurrenceAutoCompleteDAO</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel>+save(DownloadLogModel)
++load(Integer id):DownloadLogModel</y:MethodLabel>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n4" yfiles.foldertype="group">
+      <data key="d4"/>
+      <data key="d6">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="359.08453403086764" width="515.470244716352" x="998.9739482490675" y="61.929119304635606"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="515.470244716352" x="0.0" y="0.0">net.canadensys.dataportal.occurrence.map</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="359.08453403086764" closedWidth="515.470244716352" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="1" bottomF="1.2411180901443686" left="0" leftF="0.0" right="30" rightF="30.000000000000455" top="0" topF="0.0"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="63.0" width="379.5995550611792" x="1017.8898776418241" y="-468.92352396760293"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="379.5995550611792" x="0.0" y="0.0">map</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="63.0" closedWidth="379.5995550611792" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n4:">
+        <node id="n4::n0">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="124.02503802622653" width="454.22024471635166" x="1015.2239482490672" y="280.74749721913236"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="119.97802734375" x="167.12110868630083" y="26.1328125">MapServerAccess</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="interface" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel>+getMapQuery(searchCriteria:HashMap&lt;String, List&lt;String&gt;&gt;):String
++getMapElementDetails(id:int,columnList:List&lt;String&gt;):String
++getMapCenter(String searchCriteria):String[]
++getGeoreferencedRecordCount(searchCriteria:Map&lt;String,List&lt;SearchQueryPart&gt;&gt;):int</y:MethodLabel>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n4::n1">
+          <data key="d4"/>
+          <data key="d5"><![CDATA[UMLClass]]></data>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="98.50500556173529" width="454.22024471635154" x="1013.9739482490675" y="98.5951349296356"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="187.294921875" x="133.46266142067577" y="3.0">WindshaftMapServerAccess</y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel>-tableUsed:String
+@sessionFactory:SessionFactory</y:AttributeLabel>
+                <y:MethodLabel/>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+      </graph>
+    </node>
+    <node id="n5" yfiles.foldertype="group">
+      <data key="d4"/>
+      <data key="d6">
+        <y:ProxyAutoBoundsNode>
+          <y:Realizers active="0">
+            <y:GroupNode>
+              <y:Geometry height="219.93208903990546" width="378.45655279199104" x="1619.7486095661843" y="471.1729542915484"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="378.45655279199104" x="0.0" y="0.0">net.canadensys.databaseutils</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="117" bottomF="117.07527803412472" left="12" leftF="12.04064071190237" right="150" rightF="149.99441263626227" top="23" topF="23.19079538078074"/>
+            </y:GroupNode>
+            <y:GroupNode>
+              <y:Geometry height="98.50500556173529" width="378.45655279199104" x="1619.7486095661843" y="471.1729542915484"/>
+              <y:Fill color="#F5F5F5" transparent="false"/>
+              <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="378.45655279199104" x="0.0" y="0.0">net.canadensys.databaseutils</y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+              <y:State closed="true" closedHeight="98.50500556173529" closedWidth="378.45655279199104" innerGraphDisplayEnabled="false"/>
+              <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+            </y:GroupNode>
+          </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+      </data>
+      <graph edgedefault="directed" id="n5:">
+        <node id="n5::n0">
+          <data key="d4"/>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="28.0" width="186.42149944382646" x="1646.7892502780867" y="531.0297652973292"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" modelName="custom" textColor="#000000" visible="true" width="73.82421875" x="56.29864034691323" y="3.0">SQLHelper<y:LabelModel>
+                  <y:SmartNodeLabelModel distance="4.0"/>
+                </y:LabelModel>
+                <y:ModelParameter>
+                  <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+                </y:ModelParameter>
+              </y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel/>
               </y:UML>
             </y:UMLClassNode>
           </data>
@@ -721,7 +720,7 @@ rows:T</y:AttributeLabel>
           <y:Geometry height="189.02183171695413" width="205.9741748609568" x="-1044.4457248794959" y="895.4890841415229"/>
           <y:Fill color="#CCCCCC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" borderDistance="0.0" fontFamily="Dialog" fontSize="24" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="173.59375" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="155.3828125" x="25.29568118047837" y="7.714040858477063">Field legend:
+          <y:NodeLabel alignment="left" autoSizePolicy="content" borderDistance="0.0" fontFamily="Dialog" fontSize="24" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="173.59375" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="155.3828125" x="25.29568118047837" y="7.714040858477119">Field legend:
 
 + : public
 -: private
@@ -731,7 +730,7 @@ rows:T</y:AttributeLabel>
         </y:ShapeNode>
       </data>
     </node>
-    <edge id="n2::e0" source="n2::n1" target="n2::n0">
+    <edge id="n3::e0" source="n3::n1" target="n3::n0">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -742,7 +741,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n1::e0" source="n1::n1" target="n1::n0">
+    <edge id="n4::e0" source="n4::n1" target="n4::n0">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -753,7 +752,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e0" source="n4::n0" target="n2::n1">
+    <edge id="e0" source="n1::n0" target="n3::n1">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -764,7 +763,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n2::e1" source="n2::n3" target="n2::n2">
+    <edge id="n3::e1" source="n3::n3" target="n3::n2">
       <data key="d8"/>
       <data key="d9"><![CDATA[UMLreferences]]></data>
       <data key="d10">
@@ -777,7 +776,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e1" source="n4::n0" target="n2::n3">
+    <edge id="e1" source="n1::n0" target="n3::n3">
       <data key="d8"/>
       <data key="d9"><![CDATA[UMLreferences]]></data>
       <data key="d10">
@@ -790,7 +789,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e2" source="n5::n4" target="n2::n0">
+    <edge id="e2" source="n0::n4" target="n3::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -809,7 +808,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e3" source="n2::n0" target="n5::n1">
+    <edge id="e3" source="n3::n0" target="n0::n1">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -828,7 +827,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::e0" source="n5::n1" target="n5::n3">
+    <edge id="n0::e0" source="n0::n1" target="n0::n3">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -847,7 +846,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::e1" source="n5::n2" target="n5::n1">
+    <edge id="n0::e1" source="n0::n2" target="n0::n1">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -866,7 +865,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::e2" source="n5::n2" target="n5::n3">
+    <edge id="n0::e2" source="n0::n2" target="n0::n3">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -885,7 +884,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::e3" source="n5::n6" target="n5::n5">
+    <edge id="n0::e3" source="n0::n6" target="n0::n5">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -904,7 +903,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::e4" source="n5::n6" target="n5::n1">
+    <edge id="n0::e4" source="n0::n6" target="n0::n1">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -923,7 +922,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::n0::e0" source="n5::n0::n1" target="n5::n0::n0">
+    <edge id="n0::n0::e0" source="n0::n0::n1" target="n0::n0::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -942,7 +941,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::n0::e1" source="n5::n0::n2" target="n5::n0::n0">
+    <edge id="n0::n0::e1" source="n0::n0::n2" target="n0::n0::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -961,7 +960,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::n0::e2" source="n5::n0::n3" target="n5::n0::n0">
+    <edge id="n0::n0::e2" source="n0::n0::n3" target="n0::n0::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -980,7 +979,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n5::e5" source="n5::n0::n0" target="n5::n1">
+    <edge id="n0::e5" source="n0::n0::n0" target="n0::n1">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -999,7 +998,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e4" source="n1::n1" target="n0::n0">
+    <edge id="e4" source="n4::n1" target="n5::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -1018,7 +1017,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e5" source="n5::n0::n0" target="n0::n0">
+    <edge id="e5" source="n0::n0::n0" target="n5::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -1037,7 +1036,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e6" source="n2::n0" target="n5::n0::n0">
+    <edge id="e6" source="n3::n0" target="n0::n0::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -1056,7 +1055,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e7" source="n1::n1" target="n5::n0::n0">
+    <edge id="e7" source="n4::n1" target="n0::n0::n0">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -1075,7 +1074,7 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n2::e2" source="n2::n5" target="n2::n6">
+    <edge id="n3::e2" source="n3::n5" target="n3::n6">
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -1094,9 +1093,8 @@ rows:T</y:AttributeLabel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e8" source="n2::n0" target="n5::n7">
+    <edge id="e8" source="n3::n0" target="n0::n7">
       <data key="d8"/>
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
