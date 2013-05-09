@@ -19,7 +19,6 @@
 
 	<import resource="classpath:/test-data-source.xml" />
 	
-
 	<bean id="hibernateTransactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager" lazy-init="true">
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -41,4 +40,9 @@
 	<bean id="downloadLogDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateDownloadLogDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
+	
+	<bean id="nameDAO" class="net.canadensys.dataportal.vascan.dao.impl.ElasticSearchNameDAO">
+		<property name="client" ref="esClient"/>
+	</bean>
+	
 </beans>

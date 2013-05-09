@@ -29,4 +29,9 @@
 			</props>
 		</property>
 	</bean>
+	
+	
+	<bean id="esTestInstance" class="net.canadensys.databaseutils.ElasticSearchTestInstance" init-method="startElasticSearch" destroy-method="stopElasticSearch"/>
+	<bean id="esClient" class="org.elasticsearch.client.Client" factory-bean ="esTestInstance" factory-method="buildLocalClient"/>
+      	
 </beans>

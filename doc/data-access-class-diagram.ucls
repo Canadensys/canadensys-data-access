@@ -1,0 +1,310 @@
+<class-diagram version="1.0.11" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface id="1" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.occurrence.dao.OccurrenceDAO" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/occurrence/dao/OccurrenceDAO.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="708" y="132"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface id="2" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.occurrence.dao.DownloadLogDAO" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/occurrence/dao/DownloadLogDAO.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="193" y="192"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface id="3" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.dataportal.occurrence.dao.OccurrenceAutoCompleteDAO" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/occurrence/dao/OccurrenceAutoCompleteDAO.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1275" y="58"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.dataportal.occurrence.model.OccurrenceRawModel" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/occurrence/model/OccurrenceRawModel.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="701" y="-241"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.occurrence.model.OccurrenceModel" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/occurrence/model/OccurrenceModel.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="705" y="-90"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.occurrence.model.DownloadLogModel" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/occurrence/model/DownloadLogModel.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="195" y="-109"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.dataportal.occurrence.model.UniqueValuesModel" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/occurrence/model/UniqueValuesModel.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1273" y="-195"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.SearchQueryPartValidator" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/SearchQueryPartValidator.java" binary="false">    
+    <position height="-1" width="-1" x="614" y="924"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.LimitedResult" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/LimitedResult.java" binary="false">    
+    <position height="-1" width="-1" x="132" y="436"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="10" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.SearchableField" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/SearchableField.java" binary="false">    
+    <position height="-1" width="-1" x="606" y="653"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <enumeration id="11" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.SearchableFieldTypeEnum" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/SearchableFieldTypeEnum.java" binary="false">    
+    <position height="-1" width="-1" x="216" y="641"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.SearchQueryPartUtils" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/SearchQueryPartUtils.java" binary="false">    
+    <position height="-1" width="-1" x="1514" y="492"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.SearchQueryPart" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/SearchQueryPart.java" binary="false">    
+    <position height="-1" width="-1" x="1090" y="648"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="14" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.QueryOperatorEnum" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/QueryOperatorEnum.java" binary="false">    
+    <position height="-1" width="-1" x="1448" y="925"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="15" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.query.interpreter.StartEndDateFieldInterpreter" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/interpreter/StartEndDateFieldInterpreter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="279" y="1150"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="16" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.query.interpreter.GeoCoordinatesFieldInterpreter" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/interpreter/GeoCoordinatesFieldInterpreter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="247" y="1349"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="17" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.query.interpreter.QueryPartInterpreterResolver" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/interpreter/QueryPartInterpreterResolver.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="236" y="867"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="18" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.query.interpreter.SingleValueFieldInterpreter" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/interpreter/SingleValueFieldInterpreter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1363" y="1193"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="19" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.query.interpreter.MinMaxNumberFieldInterpreter" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/interpreter/MinMaxNumberFieldInterpreter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="678" y="1445"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="20" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.query.interpreter.QueryPartInterpreter" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/interpreter/QueryPartInterpreter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="719" y="1156"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="21" corner="BOTTOM_RIGHT" language="java" 
+    name="net.canadensys.query.interpreter.PredefinedAreaFieldInterpreter" project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/query/interpreter/PredefinedAreaFieldInterpreter.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1209" y="1394"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.vascan.model.NameModel" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/vascan/model/NameModel.java" binary="false">    
+    <position height="-1" width="-1" x="1619" y="-213"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="23" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.vascan.dao.NameDAO" 
+    project="occurrence-data-access" 
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/vascan/dao/NameDAO.java" binary="false">    
+    <position height="-1" width="-1" x="1625" y="56"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <realization id="24">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <association id="25">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="26" name="rawModel"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="28">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <realization id="29">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="31">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <association id="32">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="33" name="searchableField"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="35">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <association id="36">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="37" name="op"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="39">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="40">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <realization id="41">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <realization id="42">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <dependency id="43">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="44">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="45">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <realization id="46">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

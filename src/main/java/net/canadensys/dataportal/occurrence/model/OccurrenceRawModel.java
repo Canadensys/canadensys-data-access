@@ -1,10 +1,7 @@
 package net.canadensys.dataportal.occurrence.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -18,11 +15,11 @@ import javax.persistence.Transient;
 @Table(name = "occurrence_raw")
 //allocationSize=1 is a workaround to avoid improper behavior
 //http://acodapella.blogspot.ca/2011/06/hibernate-annotation-postgresql.html
-@SequenceGenerator(name = "occurrence_raw_auto_id_seq", sequenceName = "occurrence_raw_auto_id_seq", allocationSize=1)
+//@SequenceGenerator(name = "occurrence_raw_auto_id_seq", sequenceName = "occurrence_raw_auto_id_seq", allocationSize=1)
 public class OccurrenceRawModel {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "occurrence_raw_auto_id_seq")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "occurrence_raw_auto_id_seq")
 	private int auto_id;
 	
 	//used to easily read the id in the dwca

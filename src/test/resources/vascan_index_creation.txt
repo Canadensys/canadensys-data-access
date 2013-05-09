@@ -1,0 +1,49 @@
+{
+	"settings":{
+      "index":{
+         "analysis":{
+			"filter" : {
+	            "name_nGram" : {
+	               "max_gram" : 10,
+	               "min_gram" : 2,
+	               "type" : "edge_ngram"
+	            }
+	         },
+            "analyzer":{
+               "name_index" : {
+					"filter" : [
+					   "lowercase","asciifolding","name_nGram"
+					],
+	            	"tokenizer" : "standard"
+            	},
+	            "name_search" : {
+	              "filter" : [
+	                 "lowercase","asciifolding"
+	                 ],
+		              "tokenizer" : "standard"
+	           	}
+			}
+         }
+      }
+   },
+	"mappings" : {
+	    "namebag" : {
+	        "properties" : {
+	            "name" : {
+	            	"type" : "multi_field",
+	            	"fields":{
+	            		 "name":{
+	            		 	"index" : "not_analyzed",
+							"type" : "string"
+							},
+	            		 "ngrams":{
+	            		 	"search_analyzer" : "name_search",
+		                    "index_analyzer" : "name_index",
+		                    "type" : "string"
+		                 	}
+	            	}
+				}
+	        }
+	    }
+	}
+}'
