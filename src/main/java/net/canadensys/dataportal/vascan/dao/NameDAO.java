@@ -12,5 +12,24 @@ import net.canadensys.dataportal.vascan.model.NameModel;
  */
 public interface NameDAO {
 
+	/**
+	 * Search NameModel from a String
+	 * @param text
+	 * @return
+	 */
 	public List<NameModel> search(String text);
+	
+	/**
+	 * Search NameModel from a String with paging.
+	 * @param text
+	 * @param pageNumber (starting at 0)
+	 * @return
+	 */
+	public List<NameModel> search(String text, int pageNumber);
+	
+	/**
+	 * Set new page size for search with paging capability.
+	 * @param pageSize
+	 */
+	public void setPageSize(int pageSize);
 }

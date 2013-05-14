@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.List;
 
 import net.canadensys.databaseutils.ElasticSearchTestInstance;
+import net.canadensys.dataportal.vascan.dao.impl.ElasticSearchNameDAO;
 import net.canadensys.dataportal.vascan.model.NameModel;
 
 import org.apache.commons.io.FileUtils;
@@ -85,15 +86,21 @@ public class NameDAOTest {
 	
 	@Test
 	public void testSearch(){
-		//Test asscifolding filter
+		//Test asciifolding filter
 		List<NameModel> nameModeList = nameDAO.search("epi");
 		assertEquals(1,nameModeList.size());
 		assertEquals(7890, nameModeList.get(0).getTaxonId());
 		
-		nameModeList = nameDAO.search("care");
-		assertEquals(2,nameModeList.size());
-		//Carex should be before Carex feta
+		//We should not do this outside testing
+		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
+		
+		//Test with paging
+		nameModeList = nameDAO.search("care",0);
+		assertEquals(1,nameModeList.size());
 		assertEquals(951, nameModeList.get(0).getTaxonId());
-		assertEquals(4864, nameModeList.get(1).getTaxonId());
+		
+		nameModeList = nameDAO.search("care",1);
+		assertEquals(1,nameModeList.size());
+		assertEquals(4864, nameModeList.get(0).getTaxonId());
 	}
 }

@@ -25,6 +25,9 @@ import org.springframework.stereotype.Repository;
 @Repository("nameDAO")
 public class ElasticSearchNameDAO implements NameDAO{
 	
+	private static final int DEFAULT_PAGE_SIZE = 20;
+	private int pageSize = DEFAULT_PAGE_SIZE;
+	
 	@Autowired
 	@Qualifier("esClient")
 	private Client client;
@@ -36,10 +39,29 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
 		        .execute()
 		        .actionGet();
-		
-		SearchHits hits = response.getHits();
-		NameModel newNameModel;
+		return searchHitsToNameModelList(response.getHits());
+	}
+	
+	@Override
+	public List<NameModel> search(String text, int pageNumber) {
+		SearchResponse response = client.prepareSearch("vascan")
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setFrom(pageNumber)
+		        .setSize(pageSize)
+		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
+		        .execute()
+		        .actionGet();
+		return searchHitsToNameModelList(response.getHits());
+	}
+	
+	/**
+	 * Creates a List<NameModel> from ES SearchHits object.
+	 * @param hits
+	 * @return
+	 */
+	private List<NameModel>searchHitsToNameModelList(SearchHits hits){
 		List<NameModel> newNameModelList = new ArrayList<NameModel>();
+		NameModel newNameModel;
 		for(SearchHit currHit: hits.hits()){
 			newNameModel = new NameModel();
 			newNameModel.setTaxonId((Integer)currHit.sourceAsMap().get("taxonid"));
@@ -48,11 +70,17 @@ public class ElasticSearchNameDAO implements NameDAO{
 		}
 		return newNameModelList;
 	}
+	
+	@Override
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
 
 	public Client getClient() {
 		return client;
 	}
 	public void setClient(Client client) {
 		this.client = client;
-	}	
+	}
+	
 }
