@@ -23,13 +23,35 @@
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager" lazy-init="true">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
-	<jdbc:initialize-database data-source="dataSource">
-    	<jdbc:script location="classpath:vascan/vascan-createTables-dao.sql" />
-  	</jdbc:initialize-database>
-  	
 
-  	<bean id="occurrenceDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateOccurrenceDAO">
+  	<bean id="dataSourceInitializer" class="org.springframework.jdbc.datasource.init.DataSourceInitializer">
+	    <property name="dataSource" ref="dataSource"/>
+	    <property name="databasePopulator">
+	        <bean class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator">
+	            <property name="sqlScriptEncoding" value="UTF-8"/>
+	            <property name="scripts">
+	                <list>
+	                    <value>classpath:vascan/vascan-createTables-dao.sql</value>
+	                    <value>classpath:vascan/vascan-insertData-dao.sql</value>
+	                </list>
+	            </property>
+	        </bean>
+	    </property>
+	</bean>
+  	
+	<bean id="taxonDAO" class="net.canadensys.dataportal.vascan.dao.impl.HibernateTaxonDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="vernacularNameDAO" class="net.canadensys.dataportal.vascan.dao.impl.HibernateVernacularNameDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="taxonomyDAO" class="net.canadensys.dataportal.vascan.dao.impl.HibernateTaxonomyDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="distributionDAO" class="net.canadensys.dataportal.vascan.dao.impl.HibernateDistributionDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	

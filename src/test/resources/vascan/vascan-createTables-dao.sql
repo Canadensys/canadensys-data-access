@@ -107,7 +107,7 @@ CREATE TABLE `lookup` (
   `author` varchar(255)  DEFAULT NULL,
   `vernacularfr` varchar(255)  DEFAULT NULL,
   `vernacularen` varchar(255)  DEFAULT NULL,
-  `cdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `cdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `mdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   KEY `p_AB` (`AB`,`BC`,`GL`,`NL_L`,`MB`,`NB`,`NL_N`,`NT`,`NS`,`NU`,`ON`,`PE`,`QC`,`PM`,`SK`,`YT`),
   KEY `taxonid` (`taxonid`)

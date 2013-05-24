@@ -14,15 +14,16 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="annotatedClasses">
+		<property name="packagesToScan">
 			<list>
-				<value>net.canadensys.dataportal.vascan.model.ReferenceModel</value>
+				<value>net.canadensys.dataportal.vascan.model</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.globally_quoted_identifiers">"true"</prop>
 			</props>
 		</property>
 	</bean>
