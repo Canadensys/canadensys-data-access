@@ -64,12 +64,22 @@ INSERT INTO `reference` (id,referencecode,referenceshort,reference,url) VALUES
 INSERT INTO taxon (id,uninomial,author,statusid,rankid,referenceid) VALUES
 (73,'Equisetopsida','C. Aghard',1,1,105),
 (26,'Equisetidae','Warming',1,2,105),
-(33,'Polypodiidae','Cronquist, Takhtajan & Zimmermann',1,2,105);
+(33,'Polypodiidae','Cronquist, Takhtajan & Zimmermann',1,2,105),
+(1043,'Cosmos','Cavanilles',1,9,105);
+
+INSERT INTO taxon (id,uninomial,binomial,author,statusid,rankid,referenceid) VALUES
+(15428,'Carex','abdita','Bicknell',2,14,105),
+(5129,'Carex','umbellata','Schkuhr ex Willdenow',1,14,105),
+(9401,'Taxus','canadensis','Marshall',1,14,105);
 		
 INSERT INTO taxonomy (parentid,childid) VALUES (73,26);
-INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
+INSERT INTO taxonomy (parentid,childid) VALUES (5129,15428);
+INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (73,'Equisetopsida','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
-'accepted','herb,shrub,tree,vine','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
+'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 
 INSERT INTO vernacularname (id,name,statusid,taxonid,language,referenceid) VALUES
-(1,'Fougères',1,33,'fr',1);
+(1,'Fougères',1,33,'fr',1),
+(26256,'if du Canada',1,9401,'fr',1),
+(26258,'buis',2,9401,'fr',1),
+(2627,'cosmos',2,3018,'fr',1);

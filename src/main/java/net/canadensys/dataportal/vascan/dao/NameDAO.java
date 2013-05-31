@@ -2,7 +2,7 @@ package net.canadensys.dataportal.vascan.dao;
 
 import java.util.List;
 
-import net.canadensys.dataportal.vascan.model.NameModel;
+import net.canadensys.dataportal.vascan.model.NameConceptModelIF;
 
 /**
  * Interface for accessing Vascan names data.
@@ -17,7 +17,10 @@ public interface NameDAO {
 	 * @param text
 	 * @return
 	 */
-	public List<NameModel> search(String text);
+	public List<NameConceptModelIF> search(String text);
+	
+	public List<NameConceptModelIF> searchTaxon(String text);
+	public List<NameConceptModelIF> searchVernacular(String text);
 	
 	/**
 	 * Search NameModel from a String with paging.
@@ -25,7 +28,7 @@ public interface NameDAO {
 	 * @param pageNumber (starting at 0)
 	 * @return
 	 */
-	public List<NameModel> search(String text, int pageNumber);
+	public List<NameConceptModelIF> search(String text, int pageNumber);
 	
 	/**
 	 * Set new page size for search with paging capability.

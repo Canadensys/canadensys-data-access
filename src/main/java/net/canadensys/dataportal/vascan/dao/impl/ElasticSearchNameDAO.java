@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.canadensys.dataportal.vascan.dao.NameDAO;
-import net.canadensys.dataportal.vascan.model.NameModel;
+import net.canadensys.dataportal.vascan.model.NameConceptModelIF;
+import net.canadensys.dataportal.vascan.model.NameConceptTaxonModel;
+import net.canadensys.dataportal.vascan.model.NameConceptVernacularNameModel;
 
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
@@ -25,6 +28,11 @@ import org.springframework.stereotype.Repository;
 @Repository("nameDAO")
 public class ElasticSearchNameDAO implements NameDAO{
 	
+	private static final String INDEX_NAME = "vascan";
+	
+	private static final String TAXON_TYPE = "taxon";
+	private static final String VERNACULAR_TYPE = "vernacular";
+	
 	private static final int DEFAULT_PAGE_SIZE = 20;
 	private int pageSize = DEFAULT_PAGE_SIZE;
 	
@@ -33,22 +41,52 @@ public class ElasticSearchNameDAO implements NameDAO{
 	private Client client;
 
 	@Override
-	public List<NameModel> search(String text) {
-		SearchResponse response = client.prepareSearch("vascan")
+	public List<NameConceptModelIF> search(String text) {
+		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
+		        .setSize(pageSize);
+		SearchResponse response = srb
 		        .execute()
 		        .actionGet();
 		return searchHitsToNameModelList(response.getHits());
 	}
 	
 	@Override
-	public List<NameModel> search(String text, int pageNumber) {
-		SearchResponse response = client.prepareSearch("vascan")
+	public List<NameConceptModelIF> searchTaxon(String text) {
+		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setTypes(TAXON_TYPE)
+		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
+		        .setSize(pageSize);
+		SearchResponse response = srb
+		        .execute()
+		        .actionGet();
+		return searchHitsToNameModelList(response.getHits());
+	}
+	
+	@Override
+	public List<NameConceptModelIF> searchVernacular(String text) {
+		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setTypes(VERNACULAR_TYPE)
+		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
+		        .setSize(pageSize);
+		SearchResponse response = srb
+		        .execute()
+		        .actionGet();
+		return searchHitsToNameModelList(response.getHits());
+	}
+	
+	@Override
+	public List<NameConceptModelIF> search(String text, int pageNumber) {
+		
+		SearchRequestBuilder srb = client.prepareSearch("vascan")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setFrom(pageNumber)
 		        .setSize(pageSize)
-		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
+		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text));
+		SearchResponse response = srb
 		        .execute()
 		        .actionGet();
 		return searchHitsToNameModelList(response.getHits());
@@ -59,14 +97,26 @@ public class ElasticSearchNameDAO implements NameDAO{
 	 * @param hits
 	 * @return
 	 */
-	private List<NameModel>searchHitsToNameModelList(SearchHits hits){
-		List<NameModel> newNameModelList = new ArrayList<NameModel>();
-		NameModel newNameModel;
+	private List<NameConceptModelIF>searchHitsToNameModelList(SearchHits hits){
+		List<NameConceptModelIF> newNameModelList = new ArrayList<NameConceptModelIF>();
+		NameConceptTaxonModel tNameModel;
+		NameConceptVernacularNameModel vNameModel;
 		for(SearchHit currHit: hits.hits()){
-			newNameModel = new NameModel();
-			newNameModel.setTaxonId((Integer)currHit.sourceAsMap().get("taxonid"));
-			newNameModel.setName((String)currHit.sourceAsMap().get("name"));
-			newNameModelList.add(newNameModel);
+			if(currHit.getType().equalsIgnoreCase(TAXON_TYPE)){
+				tNameModel = new NameConceptTaxonModel();
+				tNameModel.setTaxonId(Integer.parseInt(currHit.getId()));
+				tNameModel.setName((String)currHit.sourceAsMap().get("name"));
+				tNameModel.setStatus((String)currHit.sourceAsMap().get("status"));
+				newNameModelList.add(tNameModel);
+			}
+			else if(currHit.getType().equalsIgnoreCase(VERNACULAR_TYPE)){
+				vNameModel = new NameConceptVernacularNameModel();
+				vNameModel.setTaxonId((Integer)currHit.sourceAsMap().get("taxonid"));
+				vNameModel.setName((String)currHit.sourceAsMap().get("name"));
+				vNameModel.setStatus((String)currHit.sourceAsMap().get("status"));
+				vNameModel.setLang((String)currHit.sourceAsMap().get("language"));
+				newNameModelList.add(vNameModel);
+			}
 		}
 		return newNameModelList;
 	}

@@ -27,7 +27,7 @@
       }
    },
 	"mappings" : {
-	    "namebag" : {
+	    "taxon" : {
 	        "properties" : {
 	            "name" : {
 	            	"type" : "multi_field",
@@ -42,8 +42,46 @@
 		                    "type" : "string"
 		                 	}
 	            	}
+				},
+				"namehtml":{
+					"index" : "not_analyzed",
+					"type" : "string"
+				},
+                "status":{
+                	 "index" : "not_analyzed",
+                	 "type" : "string"
+				}
+	        }
+	    },
+	    "vernacular" : {
+	        "properties" : {
+	            "name" : {
+	            	"type" : "multi_field",
+	            	"fields":{
+	            		 "name":{
+	            		 	"index" : "not_analyzed",
+							"type" : "string"
+							},
+	            		 "ngrams":{
+	            		 	"search_analyzer" : "name_search",
+		                    "index_analyzer" : "name_index",
+		                    "type" : "string"
+		                 	}
+	            	}
+				},
+				"taxonid":{
+					"index" : "not_analyzed",
+					"type" : "integer"
+				},
+				"status":{
+					"index" : "not_analyzed",
+					"type" : "string"
+				},
+				"language":{
+					"index" : "not_analyzed",
+					"type" : "string"
 				}
 	        }
 	    }
 	}
-}'
+}

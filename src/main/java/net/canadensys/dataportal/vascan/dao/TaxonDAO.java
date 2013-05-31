@@ -1,5 +1,6 @@
 package net.canadensys.dataportal.vascan.dao;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
@@ -24,6 +25,31 @@ public interface TaxonDAO {
 	 * @return
 	 */
 	public TaxonLookupModel loadTaxonLookup(Integer taxonId);
+	
+	/**
+	 * Get an Iterator on the TaxonLookupModel matching the criteria 
+	 * @param returnCountOnly
+	 * @param limitResultsTo
+	 * @param combination
+	 * @param habitus
+	 * @param taxonid
+	 * @param province
+	 * @param status
+	 * @param rank
+	 * @param hybrids
+	 * @param sort
+	 * @return
+	 */
+	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids, String sort);
+	
+	public Integer countTaxonLookup(String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids, String sort);
+
+	/**
+	 * 
+	 * @param maximumRank
+	 * @return List of Object array [id:integer,calname:String,rank:String]
+	 */
+	public List<Object[]> getAcceptedTaxon(int maximumRank);
 	
 	/**
 	 * Load a TaxonModel from an identifier.

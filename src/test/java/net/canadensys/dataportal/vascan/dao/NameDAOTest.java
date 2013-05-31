@@ -9,7 +9,7 @@ import java.util.List;
 
 import net.canadensys.databaseutils.ElasticSearchTestInstance;
 import net.canadensys.dataportal.vascan.dao.impl.ElasticSearchNameDAO;
-import net.canadensys.dataportal.vascan.model.NameModel;
+import net.canadensys.dataportal.vascan.model.NameConceptModelIF;
 
 import org.apache.commons.io.FileUtils;
 import org.elasticsearch.client.Client;
@@ -51,27 +51,27 @@ public class NameDAOTest {
 		    .execute()
 		    .actionGet();
 
-		client.prepareIndex("vascan", "namebag", "1")
+		client.prepareIndex("vascan", "taxon", "951")
 		        .setSource(jsonBuilder()
 		                    .startObject()
-		                        .field("taxonid", 951)
 		                        .field("name", "Carex")
+		                        .field("status", "accepted")
 		                    .endObject()
 		                  )
 		        .execute()
 		        .actionGet();
 
-		client.prepareIndex("vascan", "namebag", "2")
+		client.prepareIndex("vascan", "taxon", "4864")
         .setSource(jsonBuilder()
                     .startObject()
-                        .field("taxonid", 4864)
                         .field("name", "Carex feta")
+                        .field("status", "accepted")
                     .endObject()
                   )
         .execute()
         .actionGet();
 		
-		client.prepareIndex("vascan", "namebag", "3")
+		client.prepareIndex("vascan", "vernacular", "3")
         .setSource(jsonBuilder()
                     .startObject()
                         .field("taxonid", 7890)
@@ -87,7 +87,7 @@ public class NameDAOTest {
 	@Test
 	public void testSearch(){
 		//Test asciifolding filter
-		List<NameModel> nameModeList = nameDAO.search("epi");
+		List<NameConceptModelIF> nameModeList = nameDAO.search("epi");
 		assertEquals(1,nameModeList.size());
 		assertEquals(7890, nameModeList.get(0).getTaxonId());
 		
@@ -98,9 +98,14 @@ public class NameDAOTest {
 		nameModeList = nameDAO.search("care",0);
 		assertEquals(1,nameModeList.size());
 		assertEquals(951, nameModeList.get(0).getTaxonId());
+	
 		
 		nameModeList = nameDAO.search("care",1);
 		assertEquals(1,nameModeList.size());
 		assertEquals(4864, nameModeList.get(0).getTaxonId());
+		
+		nameModeList = nameDAO.searchTaxon("epi");
+		assertEquals(0,nameModeList.size());
+		
 	}
 }

@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.persistence.Table;
 
 import net.canadensys.databaseutils.PostgresUtils;
+import net.canadensys.databaseutils.ScrollableResultsIteratorWrapper;
 import net.canadensys.dataportal.occurrence.dao.OccurrenceDAO;
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
 import net.canadensys.query.LimitedResult;
@@ -29,7 +30,6 @@ import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -356,70 +356,5 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 		return intepreter.toCriterion(queryPart);
 	}
 	
-	/**
-	 * Iterator implementation to avoid exposing ScrollableResults to other layers.
-	 * @author canadensys
-	 *
-	 */
-	private class ScrollableResultsIteratorWrapper<T> implements Iterator<T>{
-		private ScrollableResults sr;
-		private T next = null;
-		private Session session;
-		private int count = 0;
-		
-		private ScrollableResultsIteratorWrapper(ScrollableResults sr, Session session){
-			this.sr = sr;
-			this.session = session;
-		}
-		
-		//ScrollableResults does not provide a hasNext method.
-		//We need to implement it
-		@SuppressWarnings("unchecked")
-		@Override
-		public boolean hasNext() {
-			if(sr.next()){
-				//we remember the element
-				next = (T)sr.get()[0];
-				return true;
-			}
-			return false;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public T next() {
-			T toReturn = null;
-			//next variable could be null because the last element was sent or because we iterate on the next()
-			//instead of hasNext()
-			if(next == null){
-				//if we can retrieve an element, do it
-				if(sr.next()){
-					toReturn = (T)sr.get()[0];
-				}
-			}
-			else{ //the element was fetched by hasNext, return it
-				toReturn = next;
-				next = null;
-			}
-			
-			//if we are at the end, close the result set
-			if(toReturn == null){
-				sr.close();
-			}
-			else{ //clear memory to avoid memory leak
-				if(count == DEFAULT_FLUSH_LIMIT){
-					session.flush();
-					session.clear();
-					count=0;
-				}
-				count++;
-			}
-			return toReturn;
-		}
-
-		@Override
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-	}
+	
 }
