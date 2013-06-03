@@ -10,6 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Model representing a status (accepted, synonym).
+ * @author canadensys
+ *
+ */
 @Entity
 @Table(name="status")
 public class StatusModel{

@@ -8,6 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Model representing a status of a distribution(native, introduced, ...)
+ * @author canadensys
+ *
+ */
 @Entity
 @Table(name="distributionstatus")
 public class DistributionStatusModel{

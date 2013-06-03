@@ -1,5 +1,5 @@
 /*
-	Copyright (c) 2010 Canadensys
+	Copyright (c) 2010-2013 Canadensys
 */
 
 package net.canadensys.dataportal.vascan.model;
@@ -9,6 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Model representing a rank (genus, family, order, ...)
+ * @author canadensys
+ *
+ */
 @Entity
 @Table(name="rank")
 public class RankModel{
@@ -16,18 +21,11 @@ public class RankModel{
 	private	String		rank;
 	private int			sort;
 	
-	/**
-	 * @return the id
-	 */
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public int getId() {
 		return id;
 	}
-	
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -35,15 +33,21 @@ public class RankModel{
 	public int getSort(){
 		return sort;
 	}
-	
 	public void setSort(int sort){
 		this.sort = sort;
 	}
 	
+	/**
+	 * 
+	 * @return the rank name
+	 */
 	public String getRank(){
 		return rank;
 	}
-	
+	/**
+	 * 
+	 * @param rank the rank name
+	 */
 	public void setRank(String rank){
 		this.rank = rank;
 	}

@@ -12,11 +12,14 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Implementation for handling distribution related models through Hibernate technology.
+ * @author canadensys
+ *
+ */
 @Repository("distributionDAO")
 public class HibernateDistributionDAO implements DistributionDAO{
-	
-	private static final String TAXON_ID = "taxonid";
-	
+		
 	@Autowired
 	private SessionFactory sessionFactory;
 

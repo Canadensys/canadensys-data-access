@@ -10,6 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Model to hold information about the distribution of a taxon.
+ * @author canadensys
+ *
+ */
 @Entity
 @Table(name="distribution")
 public class DistributionModel{
@@ -18,7 +23,7 @@ public class DistributionModel{
 	private TaxonModel			taxon;
 	private RegionModel			region;
 	private DistributionStatusModel	distributionStatus;
-	private ExcludedCodeModel		excludedcode;
+	private ExcludedCodeModel	excludedcode;
 	private ReferenceModel		reference;
 	
 	/**

@@ -1,5 +1,5 @@
 /*
-	Copyright (c) 2010 Canadensys
+	Copyright (c) 2010-2013 Canadensys
 */
 package net.canadensys.dataportal.vascan.model;
 import java.util.Comparator;
