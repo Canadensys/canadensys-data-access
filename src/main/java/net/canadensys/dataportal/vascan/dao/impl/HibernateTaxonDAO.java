@@ -1,11 +1,8 @@
 package net.canadensys.dataportal.vascan.dao.impl;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import net.canadensys.databaseutils.ScrollableResultsIteratorWrapper;
 import net.canadensys.dataportal.vascan.dao.TaxonDAO;
@@ -21,6 +18,12 @@ import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
@@ -34,6 +37,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("taxonDAO")
 public class HibernateTaxonDAO implements TaxonDAO{
+	
+	private enum RegionCriterionOperatorEnum{OR,AND};
 
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(HibernateTaxonDAO.class);
@@ -88,134 +93,91 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return (List<TaxonModel>)searchCriteria.list();
 	}
 	
-
-	/**
-	 * TODO this function needs a complete rewrite to use Criteria
-	 */
 	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids, String sort){
+		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
 
-		Session hibernateSession = sessionFactory.getCurrentSession();
-
-		String tables = "lookup";
-		String sortJoin = "1";
-		
 		// don't go any further if no provinces & status
 		// Make sure this request is looking for something
 		if((status == null || province == null) && taxonid == 0 && habitus.equals("all")){
 			return null;
 		}
 		
-		StringBuffer sql = new StringBuffer("");
-		sql.append("SELECT lookup.*");
-
-		sql.append("\nFROM ").append(tables);
-		sql.append("\nWHERE ").append(sortJoin);
-		
-		// filter by hierarchy of children for IN clause
 		if(taxonid > 0){
-			StringBuffer in = new StringBuffer(taxonid);
-			taxonClause(taxonid,in);
-			sql.append("\nAND lookup.taxonid IN ( ").append(taxonid).append(in.toString()).append(")");
+			searchCriteria.add(getTaxonCriterion(taxonid));
 		}
 		
 		// filter by status in provinces
-		if(status != null && province != null && combination != null)
-			sql.append("\nAND ").append(provinceClause(combination, status, province));
-		
+		if(status != null && province != null && combination != null){
+			searchCriteria.add(getStatusRegionCriterion(combination, status, province));
+		}
 		
 		// filter by habitus
-		if(habitus != null && habitus!="" && !habitus.equals("all"))
-			sql.append("\nAND ").append(habitusClause(habitus));
+		if(habitus != null && habitus!="" && !habitus.equals("all")){
+			searchCriteria.add(getHabitCriterion(habitus));
+		}
 		
 		// filter by rank
 		if(rank != null){
-			sql.append("\nAND ").append(rankClause(rank));
+			searchCriteria.add(getRankCriterion(rank));
 		}
 		
 		// filter by hybrids
-		if(!includeHybrids)
-			sql.append("\nAND ").append(hybridClause());
+		if(!includeHybrids){
+			searchCriteria.add(getExcludeHybridCriterion());
+		}
 		
 		// order
-		sql.append("\n").append(sortClause(sort));
+		addOrderBy(searchCriteria, sort);
 		
 		// limit
-		if(limitResultsTo > 0 )
-			sql.append("\n").append(limitClause(limitResultsTo));
-
-		SQLQuery sqlQuery = null;
-		try {
-			sqlQuery = hibernateSession.createSQLQuery(sql.toString()).addEntity(TaxonLookupModel.class);
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}		
+		if(limitResultsTo > 0 ){
+			addLimitClause(searchCriteria, limitResultsTo);
+		}
 		
-		return new ScrollableResultsIteratorWrapper<TaxonLookupModel>(sqlQuery.scroll(ScrollMode.FORWARD_ONLY),hibernateSession);
+		return new ScrollableResultsIteratorWrapper<TaxonLookupModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY),sessionFactory.getCurrentSession());
 	}
 	
-	/**
-	 * TODO this function needs a complete rewrite to use Criteria
-	 */
-	public Integer countTaxonLookup(String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids, String sort){
-		Session hibernateSession = sessionFactory.getCurrentSession();
+	public Integer countTaxonLookup(String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids){
+		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
 
-		String tables = "lookup";
-		String sortJoin = "1";
-		
 		// don't go any further if no provinces & status
 		// Make sure this request is looking for something
 		if((status == null || province == null) && taxonid == 0 && habitus.equals("all")){
 			return null;
 		}
+		//we only want to count
+		searchCriteria.setProjection(Projections.count("taxonId"));
 		
-		StringBuffer sql = new StringBuffer("");
-		
-		sql.append("SELECT count(lookup.taxonid)");
-
-		sql.append("\nFROM ").append(tables);
-		sql.append("\nWHERE ").append(sortJoin);
-		
-		// filter by hierarchy of children for IN clause
 		if(taxonid > 0){
-			StringBuffer in = new StringBuffer(taxonid);
-			taxonClause(taxonid,in);
-			sql.append("\nAND lookup.taxonid IN ( ").append(taxonid).append(in.toString()).append(")");
+			searchCriteria.add(getTaxonCriterion(taxonid));
 		}
 		
 		// filter by status in provinces
-		if(status != null && province != null && combination != null)
-			sql.append("\nAND ").append(provinceClause(combination, status, province));
-		
+		if(status != null && province != null && combination != null){
+			searchCriteria.add(getStatusRegionCriterion(combination, status, province));
+		}
 		
 		// filter by habitus
-		if(habitus != null && habitus!="" && !habitus.equals("all"))
-			sql.append("\nAND ").append(habitusClause(habitus));
+		if(habitus != null && habitus!="" && !habitus.equals("all")){
+			searchCriteria.add(getHabitCriterion(habitus));
+		}
 		
 		// filter by rank
 		if(rank != null){
-			sql.append("\nAND ").append(rankClause(rank));
+			searchCriteria.add(getRankCriterion(rank));
 		}
 		
 		// filter by hybrids
-		if(!includeHybrids)
-			sql.append("\nAND ").append(hybridClause());
-		
-		// order
-		sql.append("\n").append(sortClause(sort));
-		
-		SQLQuery sqlQuery = null;
-		try {
-			sqlQuery = hibernateSession.createSQLQuery(sql.toString());
-		} catch (HibernateException e) {
-			e.printStackTrace();
+		if(!includeHybrids){
+			searchCriteria.add(getExcludeHybridCriterion());
 		}
-		
-		return ((BigInteger)sqlQuery.uniqueResult()).intValue();
-		
+
+		Long total_rows = (Long)searchCriteria.uniqueResult();
+		return total_rows.intValue();
 	}
 	
 	public List<Object[]> getAcceptedTaxon(int maximumRank){
-		org.hibernate.Session hibernateSession =sessionFactory.getCurrentSession();
+		org.hibernate.Session hibernateSession = sessionFactory.getCurrentSession();
 		Query query = hibernateSession.createSQLQuery("SELECT taxon.id, lookup.calname, lookup.rank FROM taxon,lookup WHERE taxon.id = lookup.taxonid AND taxon.rankid <= :rankid AND taxon.statusid = :statusid  ORDER BY lookup.calname ASC")
 				.addScalar("id",IntegerType.INSTANCE)
 				.addScalar("calname",StringType.INSTANCE)
@@ -225,10 +187,13 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return (List<Object[]>)query.list();
 	}
 	
-	private static String limitClause(int limitResultsTo){
-		String clause = "";
-		clause = "LIMIT ".concat(String.valueOf(limitResultsTo));
-		return clause;
+	/**
+	 * Add a limit to the provided Criteria
+	 * @param searchCriteria
+	 * @param limitResultsTo
+	 */
+	private void addLimitClause(Criteria searchCriteria, int limitResultsTo){
+		searchCriteria.setMaxResults(limitResultsTo);
 	}
 	
 	/**
@@ -236,31 +201,28 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @param sort
 	 * @return
 	 */
-	private static String sortClause(String sort){
-		String clause = "";
+	private void addOrderBy(Criteria searchCriteria, String sort){
 		if(sort != null){
 			if(sort.equals("alphabetically")){
-				clause = "ORDER BY calname ASC";
+				searchCriteria.addOrder(Order.asc("calname"));
 			}
 			else if(sort.equals("taxonomically")){
-				clause = "";
+				//nothing to do, it's the assumed default order. This is risky and should be fixed.
 			}
 			else{
 				
 			}
 		}
-		return clause;
 	}
 	
 	/**
-	 * This method is used to exclude hybrids
+	 * Returns a criterion to exclude hybrids
 	 * @return
 	 */
-	private static String hybridClause(){
-		String clause = "lookup.calname NOT LIKE '%×%'";// not x character, × = &times;
-		return clause;
+	private Criterion getExcludeHybridCriterion(){
+		//warning, × is not the x character, × = &times;
+		return Restrictions.not(Restrictions.like("calname", "×", MatchMode.ANYWHERE));
 	}
-
 	
 	/**
 	 * 
@@ -269,7 +231,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @param taxonid
 	 * @param in
 	 */
-	private void taxonClause(int taxonid, StringBuffer in){
+	private void getTaxonIdTree(int taxonid, List<Integer> idList){
 		Session hibernateSession = sessionFactory.getCurrentSession();
 		SQLQuery query;
 		try {
@@ -282,8 +244,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 				sr.beforeFirst();
 				while(sr.next()){
 					int id = sr.getInteger(0); //0=childid
-					in.append(",").append(String.valueOf(id));
-					taxonClause(id,in);
+					idList.add(id);
+					getTaxonIdTree(id,idList);
 				}
 				sr.close();
 				sr = null;
@@ -294,188 +256,163 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	}
 	
 	/**
-	 * TODO change to Criteria
+	 * Returns a Criterion for a taxon and all its accepted children
+	 * @param taxonId
+	 * @return
+	 */
+	private Criterion getTaxonCriterion(int taxonId){
+		 List<Integer> idList = new ArrayList<Integer>();
+		getTaxonIdTree(taxonId, idList);
+		return Restrictions.in("taxonid", idList);
+	}
+	
+	/**
+	 * Returns a Criterion for one ore more rank(s)
 	 * @param rank a validated rank array
 	 * @return
-	 */
-	private String rankClause(String[] rank){
-		StringBuffer buffer = new StringBuffer("");
-		ArrayList<String> clause = new ArrayList<String>();
-
+	 */	
+	private Criterion getRankCriterion(String[] rank){
+		Criterion fieldCriterion = null;
 		for(String r : rank){
-			buffer = new StringBuffer(" (");
-			clause.add("lookup.rank = '" + r.toLowerCase() + "'");
+			if(fieldCriterion == null){
+				fieldCriterion = Restrictions.eq("rank", r.toLowerCase());
+			}
+			else{ //separate different values with an OR statement
+				fieldCriterion = Restrictions.or(fieldCriterion, Restrictions.eq("rank", r.toLowerCase()));
+			}
 		}
-		Iterator it = clause.iterator();
-        if (it.hasNext()) {
-            buffer.append(it.next());
-            while (it.hasNext()) {
-            	buffer.append(" OR ");
-                buffer.append(it.next());
-            }
-        }	
-        buffer.append(") ");
-		return buffer.toString();
+		return fieldCriterion;
 	}
+
 	
 	/**
-	 * TODO change to Criteria
-	 * @param habitus a validated habitus
+	 * Returns a Criterion for a habit
 	 * @return
 	 */
-	private String habitusClause(String habitus){
-		String clause = "lookup.calhabit like '%" + habitus + "%'";
-		return clause;
+	private Criterion getHabitCriterion(String habit){
+		return Restrictions.eq("calhabit", habit.toLowerCase());
 	}
 	
 	/**
-	 * Build sql statement to filter on provinces and statuses; String[] status,
-	 * String[] province & String combination must not be null.
-	 * 
-	 * depending on the combination value (allof, anyof, only, only_ca), the sql
-	 * operator will change from AND to OR to match groupings of provinces and
-	 * statuses. The only / only_ca combination will also append exclusion sql
-	 * statements to exlude statuses from provinces
-	 * 
-	 * ex. (allof), (native,ephemere), (qc,on): 
+	 * Returns a Criterion for a combination of status and region(provinces)
+	 * Combination definition : 
+	 * (allof), (native,ephemere), (qc,on): 
 	 * AND (p_ON = 'native' OR p_ON = 'ephemere') AND (p_QC = 'native' OR p_QC = 'ephemere') ...
 	 * 
-	 * ex. (anyof), (native,ephemere), (qc,on): 
+	 * (anyof), (native,ephemere), (qc,on): 
 	 * AND (p_ON = 'native' OR p_ON = 'ephemere' OR p_QC = 'native' OR p_QC = 'ephemere') ...
 	 * 
-	 * ex. (only), (native,ephemere), (qc,on):
+	 * (only), (native,ephemere), (qc,on):
 	 * AND (p_ON = 'native' OR p_ON = 'ephemere') OR (p_QC = 'native' OR p_QC = 'ephemere') 
 	 * AND p_BC <> 'native' AND p_BC <> 'ephemere' AND p_PM <> 'native' AND p_PM <> 'ephemere' [and so on for all provinces & territories] ... 
 	 * 
-	 * ex. (only_ca), (native,ephemere), (qc,on):
+	 * (only_ca), (native,ephemere), (qc,on):
 	 * AND (p_ON = 'native' OR p_ON = 'ephemere') OR (p_QC = 'native' OR p_QC = 'ephemere') 
 	 * AND p_BC <> 'native' AND p_BC <> 'ephemere' AND p_PM <> 'native' AND p_MB <> 'ephemere' [and so on for all provinces & territories, except p_PM & p_GL] ...
-	 * 
 	 * 
 	 * @param combination
 	 * @param status
 	 * @param province
-	 * @return a string representation of the sql statement AND ...
+	 * @return
 	 */
-	private static String provinceClause(String combination, String[] status, String[] province){
-		StringBuffer buffer = new StringBuffer("");
-		Iterator it;
-		ArrayList<String> clauses = new ArrayList<String>();
-		ArrayList<String> clause = new ArrayList<String>();
-		String op = "";
-		
-		// all available provinces & territories 
-		String provinces[] = ALL_PROVINCES;
-		
-		// set sql operator based on type of combination 
-		if(combination.equals("allof"))
-			op = " AND ";
-		else if(combination.equals("anyof"))
-			op = " OR ";
-		else if(combination.equals("only"))
-			op = " AND ";
-		else{ //only_ca
-			op = " AND ";
+	private Criterion getStatusRegionCriterion(String combination, String[] status, String[] region){
+		if(combination.equals("allof")){
+			return getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.AND);
+		}
+		else if(combination.equals("anyof")){
+			return getAnyRegionStatusCriterion(status, region);
+		}
+		else if(combination.equals("only")){
+			return Restrictions.and(getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.OR), 
+					getExclusionCriterion(status,region,ALL_PROVINCES));
+		}
+		else if(combination.equals("only_ca")){
 			// we are looking to query only canadian provinces, and ignore greenland and saint-pierre miquelon 
 			// (may or may not have a status that must be excluded in other canadian provinces)
-			provinces = CANADA_PROVINCES;
+			return Restrictions.and(getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.OR), 
+					getExclusionCriterion(status,region,CANADA_PROVINCES));
 		}
-		
-		// INCLUSION SQL STATEMENT (province = status)
-		// for every provinces checked in the checklist builder
-		for(String prov : province){
-			clause = new ArrayList<String>();
-			buffer = new StringBuffer("(");
-			
+		return null;
+	}
+	
+	/**
+	 * Returns a Criterion to include all region with one of the status.
+	 * The operation determine if the have an OR or an AND between the regions
+	 * @param status
+	 * @param province
+	 * @param op
+	 * @return
+	 */
+	private Criterion getAllRegionStatusCriterion(String[] status, String[] region, RegionCriterionOperatorEnum op){
+		Criterion regionStatusCriterion = null;
+		for(String prov : region){
 			// match against all the statuses checked in the checklist builder
 			// fill an array list of clauses that will be joined into a string by an sql operator
-			for(String stat: status){
-				clause.add("lookup.`" + prov + "` = '" + stat +"'");
-			}
-			
-			// for all the province = status clauses, join into a string with appropriate operator
-			it = clause.iterator();
-	        if (it.hasNext()) {
-	            buffer.append(it.next());
-	            while (it.hasNext()) {
-	            	if(combination.equals("allof") && status.length == 1)
-	            		buffer.append(" AND ");
-	            	else
-	            		buffer.append(" OR ");
-	                buffer.append(it.next());
-	            }
-	        }
-			buffer.append(")");	
-			clauses.add(buffer.toString());
-		}
-
-		// EXCLUSION SQL STATEMENT (province <> status)
-		if(combination.equals("only") || combination.equals("only_ca")){
-			// we need to exclude every other province...
-			
-			ArrayList<String> notEqualClause = new ArrayList<String>();
-			// for every checked status
-			for(String stat: status){
-				// for every province
-				for(String excludeProvince : provinces){
-					boolean exclude = true;
-					// if province is checked in checklist builder, do not exclude
-					for(String prov : province){
-						if(prov.equals(excludeProvince)){
-							exclude = false;
-							break;
-						}
-					}
-					// if province is not checked in builder, exclude that province for that status
-					if(exclude){
-						notEqualClause.add("lookup.`" + excludeProvince + "` <> '" + stat +"'");
-					}
+			Criterion fieldCriterion = null;
+			for(String currStatus: status){
+				if(fieldCriterion == null){
+					fieldCriterion = Restrictions.eq(prov, currStatus);
+				}
+				else{ //separate different values with an OR statement
+					fieldCriterion = Restrictions.or(fieldCriterion, Restrictions.eq(prov, currStatus));
 				}
 			}
-			
-			//for all the province <> status clauses, join into a string with AND operator (p_ON <> 'native' AND p_QC <> 'native' AND p_SK <> 'native' ...)
-			StringBuffer notEqualBuffer = new StringBuffer("");
-			it = notEqualClause.iterator();
-	        if (it.hasNext()) {
-	            notEqualBuffer.append(it.next());
-	            while (it.hasNext()) {
-	            	notEqualBuffer.append(" AND ");
-	            	notEqualBuffer.append(it.next());
-	            }
-	        }
-
-	        // reuse the previous clauses arraylist to rewrite the inclusion sql statement with proper parenthesis groupings and OR operators
-	        StringBuffer equalBuffer = new StringBuffer("(");
-	        it = clauses.iterator();
-	        if (it.hasNext()) {
-	            equalBuffer.append(it.next());
-	            while (it.hasNext()) {
-	            	equalBuffer.append(" OR ");
-	            	equalBuffer.append(it.next());
-	            }
-	        }
-	        equalBuffer.append(")");
-	        
-	        // rewrite clauses to add only to sql statements : the equality one where we match provinces on statuses 
-	        // and the exclusion one where we exclude provinces on statuses. these two statements will be joined by an
-	        // AND operator
-	        clauses = new ArrayList();
-	        clauses.add(equalBuffer.toString());
-			clauses.add(notEqualBuffer.toString());
+			if(regionStatusCriterion == null){
+				regionStatusCriterion = fieldCriterion;
+			}
+			else{
+				if(op == RegionCriterionOperatorEnum.AND){
+					regionStatusCriterion = Restrictions.and(regionStatusCriterion, fieldCriterion);
+				}
+				else if(op == RegionCriterionOperatorEnum.OR){
+					regionStatusCriterion = Restrictions.or(regionStatusCriterion, fieldCriterion);
+				}
+			}
 		}
-		
-		// join all sql statement clauses with sql operator
-		buffer = new StringBuffer("(");
-		it = clauses.iterator();
-	    if (it.hasNext()) {
-	        buffer.append(it.next());
-	        while (it.hasNext()) {
-	            buffer.append(op);
-	            buffer.append(it.next());
-	        }
-	    }
-		buffer.append(")");
-		return buffer.toString();
+		return regionStatusCriterion;
+	}
+	
+	/**
+	 * Returns a Criterion to include any of the regions with any of the status.
+	 * @param status
+	 * @param province
+	 * @return
+	 */
+	private Criterion getAnyRegionStatusCriterion(String[] status, String[] regions){
+		Disjunction disjunction = Restrictions.disjunction();
+		for(String currRegion : regions){
+			for(String currStatus: status){
+				disjunction.add( Restrictions.eq(currRegion, currStatus));
+			}
+		}
+		return disjunction;
+	}
+	
+	/**
+	 * Returns a Criterion to exclude all regions with one of the provided status that are not in the provided region array.
+	 * @param status
+	 * @param province
+	 * @param allProvinces
+	 * @return
+	 */
+	private Criterion getExclusionCriterion(String[] status, String[] region, String[] allRegions){
+		Conjunction exclusionCriterion = Restrictions.conjunction();
+		for(String stat: status){
+			for(String excludeProvince : allRegions){
+				boolean exclude = true;
+				for(String prov : region){
+					if(prov.equals(excludeProvince)){
+						exclude = false;
+						break;
+					}
+				}
+				// if province is not checked in builder, exclude that province for that status
+				if(exclude){
+					exclusionCriterion.add(Restrictions.ne(excludeProvince, stat));
+				}
+			}
+		}
+		return exclusionCriterion;
 	}
 	
 	public SessionFactory getSessionFactory() {

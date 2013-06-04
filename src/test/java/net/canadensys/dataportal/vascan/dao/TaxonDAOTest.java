@@ -3,6 +3,8 @@ package net.canadensys.dataportal.vascan.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,17 +24,15 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @TransactionConfiguration(transactionManager="hibernateTransactionManager")
 public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	
+	private static final String MOCK_TAXON_NAME = "_Mock";
+	
 	@Autowired
 	private TaxonDAO taxonDAO;
 		
 	@Test
 	public void testSaveLoadTaxonLookupModel(){
-		
-		//"higherclassification","class","order","family","genus","subgenus","specificepithet","infraspecificepithet","author","vernacularfr","vernacularen","cdate","mdate"
-		//"","Equisetopsida","","","","","","","C. Aghard","","","2013-03-08 00:00:00","2013-03-08 10:30:44"
-		
 		TaxonLookupModel tlm = new TaxonLookupModel();
-		tlm.setTaxonId(73);
+		tlm.setTaxonId(173);
 		tlm.setCalname("Equisetopsida");
 		tlm.setCalnameauthor("Equisetopsida C. Aghard");
 		tlm.setCalnamehtml("<em>Equisetopsida</em>");
@@ -60,10 +60,9 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 
 		assertTrue(taxonDAO.saveTaxonLookup(tlm));
 		
-		TaxonLookupModel loadedTlm = taxonDAO.loadTaxonLookup(73);
+		TaxonLookupModel loadedTlm = taxonDAO.loadTaxonLookup(173);
 		assertEquals("<em>Equisetopsida</em> C. Aghard",loadedTlm.getCalnamehtmlauthor());
 		assertEquals("native",loadedTlm.getGL());
-		
 	}
 	
 	/**
@@ -91,13 +90,47 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	
 	@Test
 	public void loadTaxonLookupModelCriteria(){
+		int count = taxonDAO.countTaxonLookup(null, null, -1, null, null, new String[]{"class"}, false);
+		assertTrue(count > 0);
+	}
+	
+	@Test
+	public void loadTaxonLookupModelStatusRegionCriteria(){
 		
-		int count = taxonDAO.countTaxonLookup("allof", null, -1, null, null, new String[]{"class"}, true, null);
-		assertEquals(1,count);
+		//allof should be read : give me all the native and ephemere of AB and BC
+		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, "allof", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		List<String> mockTaxonList = extractMockTaxon(it);
+		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock1","_Mock3"})));
+		assertTrue(!mockTaxonList.contains("_Mock2"));
+
+		//anyof should be read : give me any of the native and ephemere of AB or BC
+		it = taxonDAO.loadTaxonLookup(200, "anyof", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		assertTrue(extractMockTaxon(it).containsAll(Arrays.asList(new String[]{"_Mock1","_Mock2","_Mock3"})));
 		
-		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, "allof", null, -1, null, null, new String[]{"class"}, true, null);
-		assertTrue(it.hasNext());
-		assertEquals(new Integer(73),it.next().getTaxonId());
+		//only should be read : give me the native and ephemere that are only native or ephemere in AB or BC
+		it = taxonDAO.loadTaxonLookup(200, "only", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		mockTaxonList = extractMockTaxon(it);
+		assertTrue(mockTaxonList.contains("_Mock3"));
+		assertEquals(1, mockTaxonList.size());
+		
+		//only_ca should be read : give me the native and ephemere that are only native or ephemere in AB or BC (ignoring Greenland and St-Pierre)
+		it = taxonDAO.loadTaxonLookup(200, "only_ca", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		mockTaxonList = extractMockTaxon(it);
+		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4"})));
+		assertEquals(2, mockTaxonList.size());
+
+	}
+	
+	private List<String> extractMockTaxon(Iterator<TaxonLookupModel> it){
+		List<String> mockTaxonList = new ArrayList<String>();
+		String calname;
+		while(it.hasNext()){
+			calname = it.next().getCalname();
+			if(calname.startsWith(MOCK_TAXON_NAME)){
+				mockTaxonList.add(calname);
+			}
+		}
+		return mockTaxonList;
 	}
 	
 	@Test
