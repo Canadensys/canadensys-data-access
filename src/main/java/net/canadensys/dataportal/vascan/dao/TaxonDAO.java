@@ -28,21 +28,31 @@ public interface TaxonDAO {
 	
 	/**
 	 * Get an Iterator on the TaxonLookupModel matching the criteria 
-	 * @param returnCountOnly
-	 * @param limitResultsTo
-	 * @param combination
+	 * @param limitResultsTo 
 	 * @param habitus
 	 * @param taxonid
-	 * @param province
+	 * @param combination
+	 * @param region
 	 * @param status
 	 * @param rank
-	 * @param hybrids
+	 * @param includeHybrids
 	 * @param sort
 	 * @return
 	 */
-	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids, String sort);
+	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids, String sort);
 	
-	public Integer countTaxonLookup(String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids);
+	/**
+	 * Count the taxon matching the criteria 
+	 * @param habitus
+	 * @param taxonid
+	 * @param combination
+	 * @param region
+	 * @param status
+	 * @param rank
+	 * @param includeHybrids
+	 * @return
+	 */
+	public Integer countTaxonLookup(String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids);
 
 	/**
 	 * 

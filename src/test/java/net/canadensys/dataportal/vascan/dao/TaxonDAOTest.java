@@ -90,7 +90,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	
 	@Test
 	public void loadTaxonLookupModelCriteria(){
-		int count = taxonDAO.countTaxonLookup(null, null, -1, null, null, new String[]{"class"}, false);
+		int count = taxonDAO.countTaxonLookup(null, -1, null, null, null, new String[]{"class"}, false);
 		assertTrue(count > 0);
 	}
 	
@@ -98,23 +98,23 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	public void loadTaxonLookupModelStatusRegionCriteria(){
 		
 		//allof should be read : give me all the native and ephemere of AB and BC
-		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, "allof", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,"allof", new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
 		List<String> mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock1","_Mock3"})));
 		assertTrue(!mockTaxonList.contains("_Mock2"));
 
 		//anyof should be read : give me any of the native and ephemere of AB or BC
-		it = taxonDAO.loadTaxonLookup(200, "anyof", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.loadTaxonLookup(200, null, -1, "anyof", new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
 		assertTrue(extractMockTaxon(it).containsAll(Arrays.asList(new String[]{"_Mock1","_Mock2","_Mock3"})));
 		
 		//only should be read : give me the native and ephemere that are only native or ephemere in AB or BC
-		it = taxonDAO.loadTaxonLookup(200, "only", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.loadTaxonLookup(200, null, -1,"only", new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.contains("_Mock3"));
 		assertEquals(1, mockTaxonList.size());
 		
 		//only_ca should be read : give me the native and ephemere that are only native or ephemere in AB or BC (ignoring Greenland and St-Pierre)
-		it = taxonDAO.loadTaxonLookup(200, "only_ca", null, -1, new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.loadTaxonLookup(200, null, -1, "only_ca", new String[]{"AB","BC"}, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4"})));
 		assertEquals(2, mockTaxonList.size());
@@ -140,6 +140,4 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		assertEquals(1,taxonInfo.size());
 		assertEquals(new Integer(73),taxonInfo.get(0)[0]);
 	}
-
-
 }

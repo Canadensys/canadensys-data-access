@@ -44,8 +44,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	private static final Logger LOGGER = Logger.getLogger(HibernateTaxonDAO.class);
 	private static final String MANAGED_ID = "taxonId";
 	
-	//includes Greenland and St-Pierre Miquelon
 	//TODO should not be in that class
+	//includes Greenland and St-Pierre Miquelon
 	public static final String ALL_PROVINCES[] = {"AB","BC","GL","NL_N","NL_L","MB","NB","NT","NS","NU","ON","PE","QC","PM","SK","YT"};
 	public static final String CANADA_PROVINCES[] = {"AB","BC","NL_N","NL_L","MB","NB","NT","NS","NU","ON","PE","QC","SK","YT"};
 	public static final int STATUS_ACCEPTED = 1;
@@ -93,12 +93,16 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return (List<TaxonModel>)searchCriteria.list();
 	}
 	
-	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids, String sort){
+	/**
+	 * @see TaxonDAO
+	 */
+	@Override
+	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids, String sort){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
 
-		// don't go any further if no provinces & status
+		// don't go any further if no region & status
 		// Make sure this request is looking for something
-		if((status == null || province == null) && taxonid == 0 && habitus.equals("all")){
+		if((status == null || region == null) && taxonid == 0 && habitus.equals("all")){
 			return null;
 		}
 		
@@ -106,9 +110,9 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			searchCriteria.add(getTaxonCriterion(taxonid));
 		}
 		
-		// filter by status in provinces
-		if(status != null && province != null && combination != null){
-			searchCriteria.add(getStatusRegionCriterion(combination, status, province));
+		// filter by status in region
+		if(status != null && region != null && combination != null){
+			searchCriteria.add(getStatusRegionCriterion(combination, status, region));
 		}
 		
 		// filter by habitus
@@ -137,12 +141,16 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return new ScrollableResultsIteratorWrapper<TaxonLookupModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY),sessionFactory.getCurrentSession());
 	}
 	
-	public Integer countTaxonLookup(String combination, String habitus, int taxonid, String[] province, String[] status, String[] rank, boolean includeHybrids){
+	/**
+	 * @see TaxonDAO
+	 */
+	@Override
+	public Integer countTaxonLookup(String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
 
-		// don't go any further if no provinces & status
+		// don't go any further if no region & status
 		// Make sure this request is looking for something
-		if((status == null || province == null) && taxonid == 0 && habitus.equals("all")){
+		if((status == null || region == null) && taxonid == 0 && habitus.equals("all")){
 			return null;
 		}
 		//we only want to count
@@ -152,9 +160,9 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			searchCriteria.add(getTaxonCriterion(taxonid));
 		}
 		
-		// filter by status in provinces
-		if(status != null && province != null && combination != null){
-			searchCriteria.add(getStatusRegionCriterion(combination, status, province));
+		// filter by status in region
+		if(status != null && region != null && combination != null){
+			searchCriteria.add(getStatusRegionCriterion(combination, status, region));
 		}
 		
 		// filter by habitus
@@ -226,7 +234,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	
 	/**
 	 * 
-	 * fill "in" StringBuffer from sql statement : where taxonid IN (133,455,553,1,43)
+	 * Fills the idList with the entire accepted children, recursively.
 	 * 
 	 * @param taxonid
 	 * @param in
@@ -243,7 +251,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			if(sr != null){
 				sr.beforeFirst();
 				while(sr.next()){
-					int id = sr.getInteger(0); //0=childid
+					int id = sr.getInteger(0);
 					idList.add(id);
 					getTaxonIdTree(id,idList);
 				}

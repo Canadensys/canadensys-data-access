@@ -203,9 +203,10 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="22" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.vascan.model.NameModel" 
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="net.canadensys.dataportal.vascan.model.NameConceptModelIF" 
     project="occurrence-data-access" 
-    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/vascan/model/NameModel.java" binary="false">    
+    file="/occurrence-data-access/src/main/java/net/canadensys/dataportal/vascan/model/NameConceptModelIF.java" 
+    binary="false">    
     <position height="-1" width="-1" x="1619" y="-213"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
