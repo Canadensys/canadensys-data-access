@@ -7,6 +7,8 @@ public class NameConceptTaxonModel implements NameConceptModelIF{
 	private int taxonId;
 	private String name;
 	private String status;
+	private String namehtml;
+	private String namehtmlauthor;
 	
 
 	@Override
@@ -34,6 +36,20 @@ public class NameConceptTaxonModel implements NameConceptModelIF{
 	@Override
 	public void setStatus(String status) {
 		this.status=status;
+	}
+	
+	public String getNamehtml() {
+		return namehtml;
+	}
+	public void setNamehtml(String namehtml) {
+		this.namehtml = namehtml;
+	}
+	
+	public String getNamehtmlauthor() {
+		return namehtmlauthor;
+	}
+	public void setNamehtmlauthor(String namehtmlauthor) {
+		this.namehtmlauthor = namehtmlauthor;
 	}
 	
 	@Override

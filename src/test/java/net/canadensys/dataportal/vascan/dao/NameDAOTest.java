@@ -10,6 +10,7 @@ import java.util.List;
 import net.canadensys.databaseutils.ElasticSearchTestInstance;
 import net.canadensys.dataportal.vascan.dao.impl.ElasticSearchNameDAO;
 import net.canadensys.dataportal.vascan.model.NameConceptModelIF;
+import net.canadensys.dataportal.vascan.model.NameConceptTaxonModel;
 import net.canadensys.query.LimitedResult;
 
 import org.apache.commons.io.FileUtils;
@@ -57,6 +58,8 @@ public class NameDAOTest {
 		                    .startObject()
 		                        .field("name", "Carex")
 		                        .field("status", "accepted")
+		                        .field("calnamehtml", "<em>Carex</em>")
+		                        .field("calnamehtmlauthor", "<em>Carex</em> Linnaeus")
 		                    .endObject()
 		                  )
 		        .execute()
@@ -67,6 +70,8 @@ public class NameDAOTest {
                     .startObject()
                         .field("name", "Carex feta")
                         .field("status", "accepted")
+                        .field("namehtml", "<em>Carex feta</em>")
+                        .field("namehtmlauthor", "<em>Carex feta</em> L.H. Bailey")
                     .endObject()
                   )
         .execute()
@@ -93,21 +98,22 @@ public class NameDAOTest {
 		assertEquals(1,nameModeListLR.getTotal_rows());
 		assertEquals(7890, nameModeListLR.getRows().get(0).getTaxonId());
 		
-		//We should not do this outside testing
-		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
+		//search for carex feta
+		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex fe");
+		assertEquals("<em>Carex feta</em> L.H. Bailey",((NameConceptTaxonModel)nameModeList.get(0)).getNamehtmlauthor());
 		
 		//Test with paging
-		List<NameConceptModelIF> nameModeList = nameDAO.search("care",0);
+		//We should not do this outside testing
+		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
+		nameModeList = nameDAO.search("care",0);
 		assertEquals(1,nameModeList.size());
-		assertEquals(951, nameModeList.get(0).getTaxonId());
-	
-		
 		nameModeList = nameDAO.search("care",1);
 		assertEquals(1,nameModeList.size());
-		assertEquals(4864, nameModeList.get(0).getTaxonId());
 		
 		nameModeList = nameDAO.searchTaxon("epi");
 		assertEquals(0,nameModeList.size());
+		
+
 		
 	}
 }

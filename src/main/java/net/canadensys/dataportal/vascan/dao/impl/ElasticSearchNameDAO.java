@@ -116,6 +116,8 @@ public class ElasticSearchNameDAO implements NameDAO{
 				tNameModel.setTaxonId(Integer.parseInt(currHit.getId()));
 				tNameModel.setName((String)currHit.sourceAsMap().get("name"));
 				tNameModel.setStatus((String)currHit.sourceAsMap().get("status"));
+				tNameModel.setNamehtml((String)currHit.sourceAsMap().get("namehtml"));
+				tNameModel.setNamehtmlauthor((String)currHit.sourceAsMap().get("namehtmlauthor"));
 				newNameModelList.add(tNameModel);
 			}
 			else if(currHit.getType().equalsIgnoreCase(VERNACULAR_TYPE)){

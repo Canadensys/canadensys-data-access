@@ -43,11 +43,15 @@
 		                 	}
 	            	}
 				},
+                "status":{
+                	 "index" : "not_analyzed",
+                	 "type" : "string"
+				},
 				"namehtml":{
 					"index" : "not_analyzed",
 					"type" : "string"
 				},
-                "status":{
+				"namehtmlauthor":{
                 	 "index" : "not_analyzed",
                 	 "type" : "string"
 				}
