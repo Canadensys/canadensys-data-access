@@ -10,6 +10,7 @@ import java.util.List;
 import net.canadensys.databaseutils.ElasticSearchTestInstance;
 import net.canadensys.dataportal.vascan.dao.impl.ElasticSearchNameDAO;
 import net.canadensys.dataportal.vascan.model.NameConceptModelIF;
+import net.canadensys.query.LimitedResult;
 
 import org.apache.commons.io.FileUtils;
 import org.elasticsearch.client.Client;
@@ -87,15 +88,16 @@ public class NameDAOTest {
 	@Test
 	public void testSearch(){
 		//Test asciifolding filter
-		List<NameConceptModelIF> nameModeList = nameDAO.search("epi");
-		assertEquals(1,nameModeList.size());
-		assertEquals(7890, nameModeList.get(0).getTaxonId());
+		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("epi");
+		assertEquals(1,nameModeListLR.getRows().size());
+		assertEquals(1,nameModeListLR.getTotal_rows());
+		assertEquals(7890, nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//We should not do this outside testing
 		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
 		
 		//Test with paging
-		nameModeList = nameDAO.search("care",0);
+		List<NameConceptModelIF> nameModeList = nameDAO.search("care",0);
 		assertEquals(1,nameModeList.size());
 		assertEquals(951, nameModeList.get(0).getTaxonId());
 	

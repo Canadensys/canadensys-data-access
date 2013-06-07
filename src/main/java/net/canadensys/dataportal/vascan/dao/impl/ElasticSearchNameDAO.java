@@ -1,13 +1,19 @@
 package net.canadensys.dataportal.vascan.dao.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.canadensys.dataportal.vascan.dao.NameDAO;
 import net.canadensys.dataportal.vascan.model.NameConceptModelIF;
 import net.canadensys.dataportal.vascan.model.NameConceptTaxonModel;
 import net.canadensys.dataportal.vascan.model.NameConceptVernacularNameModel;
+import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
+import net.canadensys.query.LimitedResult;
 
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -41,7 +47,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 	private Client client;
 
 	@Override
-	public List<NameConceptModelIF> search(String text) {
+	public LimitedResult<List<NameConceptModelIF>> search(String text) {
 		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
@@ -49,7 +55,10 @@ public class ElasticSearchNameDAO implements NameDAO{
 		SearchResponse response = srb
 		        .execute()
 		        .actionGet();
-		return searchHitsToNameModelList(response.getHits());
+		LimitedResult<List<NameConceptModelIF>> qr = new LimitedResult<List<NameConceptModelIF>>();
+		qr.setRows(searchHitsToNameModelList(response.getHits()));
+		qr.setTotal_rows(response.getHits().getTotalHits());
+		return qr;
 	}
 	
 	@Override
@@ -81,7 +90,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 	@Override
 	public List<NameConceptModelIF> search(String text, int pageNumber) {
 		
-		SearchRequestBuilder srb = client.prepareSearch("vascan")
+		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setFrom(pageNumber)
 		        .setSize(pageSize)
@@ -119,6 +128,24 @@ public class ElasticSearchNameDAO implements NameDAO{
 			}
 		}
 		return newNameModelList;
+	}
+	
+	/**
+	 * Index a taxon
+	 * @param tlm
+	 * @return
+	 */
+	public boolean indexTaxon(TaxonLookupModel tlm){
+		Map<String,Object> sourceData = new HashMap<String,Object>();
+		sourceData.put("name", tlm.getCalname());
+		sourceData.put("status", tlm.getStatus());
+		sourceData.put("rank", tlm.getRank());
+		IndexResponse response = client.prepareIndex(INDEX_NAME, TAXON_TYPE)
+				.setSource(sourceData)
+				.setId(Integer.toString(tlm.getTaxonId()))
+		        .execute()
+		        .actionGet();
+		return (StringUtils.equals(response.getId(),Integer.toString(tlm.getTaxonId())));
 	}
 	
 	@Override

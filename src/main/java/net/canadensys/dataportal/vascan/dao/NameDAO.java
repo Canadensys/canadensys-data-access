@@ -3,6 +3,7 @@ package net.canadensys.dataportal.vascan.dao;
 import java.util.List;
 
 import net.canadensys.dataportal.vascan.model.NameConceptModelIF;
+import net.canadensys.query.LimitedResult;
 
 /**
  * Interface for accessing Vascan names data.
@@ -17,7 +18,7 @@ public interface NameDAO {
 	 * @param text
 	 * @return
 	 */
-	public List<NameConceptModelIF> search(String text);
+	public LimitedResult<List<NameConceptModelIF>> search(String text);
 	
 	public List<NameConceptModelIF> searchTaxon(String text);
 	public List<NameConceptModelIF> searchVernacular(String text);
