@@ -95,6 +95,12 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	}
 	
 	@Test
+	public void loadTaxonLookupModelTaxonIdCriteria(){
+		int count = taxonDAO.countTaxonLookup(null, 73, null, null, null, null, false);
+		assertTrue(count > 0);
+	}
+	
+	@Test
 	public void loadTaxonLookupModelStatusRegionCriteria(){
 		
 		//allof should be read : give me all the native and ephemere of AB and BC

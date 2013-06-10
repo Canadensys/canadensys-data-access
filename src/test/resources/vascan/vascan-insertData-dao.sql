@@ -77,6 +77,9 @@ INSERT INTO taxonomy (parentid,childid) VALUES (5129,15428);
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (73,'Equisetopsida','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
+INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
+(26,'Equisetidae','Equisetidae Warming','<em>Equisetidae</em>','<em>Equisetidae</em> Warming',
+'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (1,'_Mock1','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',

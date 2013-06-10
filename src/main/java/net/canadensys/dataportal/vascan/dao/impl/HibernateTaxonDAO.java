@@ -15,7 +15,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Conjunction;
@@ -243,20 +242,17 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		Session hibernateSession = sessionFactory.getCurrentSession();
 		SQLQuery query;
 		try {
-			query = hibernateSession.createSQLQuery("SELECT childid FROM taxonomy,taxon WHERE parentid = " + taxonid + " AND taxonomy.childid = taxon.id AND taxon.statusid = " + STATUS_ACCEPTED);
-			query.setParameter(0, taxonid);
+			query = hibernateSession.createSQLQuery("SELECT childid FROM taxonomy,taxon WHERE parentid = :taxonid AND taxonomy.childid = taxon.id AND taxon.statusid = :statusid");
+			query.setParameter("taxonid", taxonid);
+			query.setParameter("statusid",STATUS_ACCEPTED);
+			query.addScalar("childid",IntegerType.INSTANCE);
 			
-			ScrollableResults sr = query.scroll(ScrollMode.FORWARD_ONLY);
-			
-			if(sr != null){
-				sr.beforeFirst();
-				while(sr.next()){
-					int id = sr.getInteger(0);
-					idList.add(id);
-					getTaxonIdTree(id,idList);
+			List<Integer> result = query.list();
+			if(result != null){
+				for(Integer currId : result){
+					idList.add(currId);
+					getTaxonIdTree(currId,idList);
 				}
-				sr.close();
-				sr = null;
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();
@@ -271,6 +267,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	private Criterion getTaxonCriterion(int taxonId){
 		 List<Integer> idList = new ArrayList<Integer>();
 		getTaxonIdTree(taxonId, idList);
+		//add the taxon itself
+		idList.add(taxonId);
 		return Restrictions.in("taxonId", idList);
 	}
 	
