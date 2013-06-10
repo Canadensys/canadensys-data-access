@@ -49,7 +49,7 @@ public class NameDAOTest {
 		catch(IndexMissingException imEx){}//ignore
 		
 		client.admin().indices().prepareCreate("vascan")
-		    .setSource(FileUtils.readFileToString(new File("src/test/resources/vascan_index_creation.txt")))
+		    .setSource(FileUtils.readFileToString(new File("script/vascan/vascan_index_creation.txt")))
 		    .execute()
 		    .actionGet();
 

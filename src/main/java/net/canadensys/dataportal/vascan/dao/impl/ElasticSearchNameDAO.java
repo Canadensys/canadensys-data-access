@@ -122,6 +122,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 			}
 			else if(currHit.getType().equalsIgnoreCase(VERNACULAR_TYPE)){
 				vNameModel = new NameConceptVernacularNameModel();
+				vNameModel.setId(Integer.parseInt(currHit.getId()));
 				vNameModel.setTaxonId((Integer)currHit.sourceAsMap().get("taxonid"));
 				vNameModel.setName((String)currHit.sourceAsMap().get("name"));
 				vNameModel.setStatus((String)currHit.sourceAsMap().get("status"));

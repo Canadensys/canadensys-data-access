@@ -271,7 +271,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	private Criterion getTaxonCriterion(int taxonId){
 		 List<Integer> idList = new ArrayList<Integer>();
 		getTaxonIdTree(taxonId, idList);
-		return Restrictions.in("taxonid", idList);
+		return Restrictions.in("taxonId", idList);
 	}
 	
 	/**

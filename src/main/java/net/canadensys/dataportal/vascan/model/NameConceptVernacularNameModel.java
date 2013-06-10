@@ -4,11 +4,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class NameConceptVernacularNameModel implements NameConceptModelIF{
 
+	private int id;
 	private int taxonId;
 	private String name;
 	private String status;
 	private String	language;
 
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getLang() {
 		return language;
 	}
