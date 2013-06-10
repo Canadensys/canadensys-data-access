@@ -153,7 +153,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			return null;
 		}
 		//we only want to count
-		searchCriteria.setProjection(Projections.count("taxonId"));
+		searchCriteria.setProjection(Projections.count(MANAGED_ID));
 		
 		if(taxonid > 0){
 			searchCriteria.add(getTaxonCriterion(taxonid));

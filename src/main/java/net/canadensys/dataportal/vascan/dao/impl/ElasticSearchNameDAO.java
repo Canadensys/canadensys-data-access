@@ -62,6 +62,22 @@ public class ElasticSearchNameDAO implements NameDAO{
 	}
 	
 	@Override
+	public LimitedResult<List<NameConceptModelIF>> search(String text, int pageNumber) {
+		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setFrom(pageNumber*pageSize)
+		        .setSize(pageSize)
+		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text));
+		SearchResponse response = srb
+		        .execute()
+		        .actionGet();
+		LimitedResult<List<NameConceptModelIF>> qr = new LimitedResult<List<NameConceptModelIF>>();
+		qr.setRows(searchHitsToNameModelList(response.getHits()));
+		qr.setTotal_rows(response.getHits().getTotalHits());
+		return qr;
+	}
+	
+	@Override
 	public List<NameConceptModelIF> searchTaxon(String text) {
 		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
@@ -81,20 +97,6 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setTypes(VERNACULAR_TYPE)
 		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text))
 		        .setSize(pageSize);
-		SearchResponse response = srb
-		        .execute()
-		        .actionGet();
-		return searchHitsToNameModelList(response.getHits());
-	}
-	
-	@Override
-	public List<NameConceptModelIF> search(String text, int pageNumber) {
-		
-		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setFrom(pageNumber)
-		        .setSize(pageSize)
-		        .setQuery(QueryBuilders.matchQuery("name.ngrams", text));
 		SearchResponse response = srb
 		        .execute()
 		        .actionGet();
@@ -154,6 +156,10 @@ public class ElasticSearchNameDAO implements NameDAO{
 	@Override
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+	@Override
+	public int getPageSize() {
+		return pageSize;
 	}
 
 	public Client getClient() {

@@ -105,15 +105,12 @@ public class NameDAOTest {
 		//Test with paging
 		//We should not do this outside testing
 		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
-		nameModeList = nameDAO.search("care",0);
-		assertEquals(1,nameModeList.size());
-		nameModeList = nameDAO.search("care",1);
-		assertEquals(1,nameModeList.size());
+		nameModeListLR = nameDAO.search("care",0);
+		assertEquals(1,nameModeListLR.getRows().size());
+		nameModeListLR = nameDAO.search("care",1);
+		assertEquals(1,nameModeListLR.getRows().size());
 		
 		nameModeList = nameDAO.searchTaxon("epi");
 		assertEquals(0,nameModeList.size());
-		
-
-		
 	}
 }

@@ -19,21 +19,27 @@ public interface NameDAO {
 	 * @return
 	 */
 	public LimitedResult<List<NameConceptModelIF>> search(String text);
-	
-	public List<NameConceptModelIF> searchTaxon(String text);
-	public List<NameConceptModelIF> searchVernacular(String text);
-	
 	/**
 	 * Search NameModel from a String with paging.
 	 * @param text
 	 * @param pageNumber (starting at 0)
 	 * @return
 	 */
-	public List<NameConceptModelIF> search(String text, int pageNumber);
+	public LimitedResult<List<NameConceptModelIF>> search(String text, int pageNumber);
+	
+	
+	public List<NameConceptModelIF> searchTaxon(String text);
+	public List<NameConceptModelIF> searchVernacular(String text);
 	
 	/**
+	 * Initialization function.
 	 * Set new page size for search with paging capability.
 	 * @param pageSize
 	 */
 	public void setPageSize(int pageSize);
+	/**
+	 * Returns the current page size.
+	 * @return
+	 */
+	public int getPageSize();
 }
