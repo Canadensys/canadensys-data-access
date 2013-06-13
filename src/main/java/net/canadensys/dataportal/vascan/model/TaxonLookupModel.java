@@ -8,6 +8,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 /**
@@ -17,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="lookup")
-public class TaxonLookupModel{
+public class TaxonLookupModel extends NestedSet{
 
 	private String	calname;
 	private String 	calnameauthor;

@@ -1,9 +1,13 @@
 package net.canadensys.dataportal.vascan.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.Set;
 
+import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
+
+import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 public class TaxonomyDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private TaxonomyDAO taxonomyDAO;
 	
 	/**
@@ -29,4 +36,25 @@ public class TaxonomyDAOTest extends AbstractTransactionalJUnit4SpringContextTes
 		assertTrue(childrenIdSet.contains(26));
 	}
 
+	/**
+	 * Test Nested Sets building and querying
+	 */
+	@Test
+	public void testNestedSetsBuilding(){
+		taxonomyDAO.buildNestedSets(73);
+		//we need to flush to ensure data is there
+		sessionFactory.getCurrentSession().flush();
+		List<Integer> childList = taxonomyDAO.getAcceptedChildrenIdListFromNestedSets(73);
+		assertTrue(childList.contains(new Integer(26)));
+		
+		List<TaxonLookupModel> childObjList = taxonomyDAO.getAcceptedChildrenListFromNestedSets(73,new String[]{"class","subclass"});
+		boolean found = false;
+		for(TaxonLookupModel curr : childObjList){
+			if(curr.getTaxonId().equals(new Integer(26))){
+				found = true;
+				break;
+			}
+		}
+		assertTrue(found);
+	}
 }

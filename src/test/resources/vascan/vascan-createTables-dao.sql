@@ -107,6 +107,8 @@ CREATE TABLE `lookup` (
   `author` varchar(255)  DEFAULT NULL,
   `vernacularfr` varchar(255)  DEFAULT NULL,
   `vernacularen` varchar(255)  DEFAULT NULL,
+  `_left` integer DEFAULT NULL,
+  `_right` integer DEFAULT NULL,
   `cdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `mdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   KEY `p_AB` (`AB`,`BC`,`GL`,`NL_L`,`MB`,`NB`,`NL_N`,`NT`,`NS`,`NU`,`ON`,`PE`,`QC`,`PM`,`SK`,`YT`),

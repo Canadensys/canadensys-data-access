@@ -1,6 +1,9 @@
 package net.canadensys.dataportal.vascan.dao;
 
+import java.util.List;
 import java.util.Set;
+
+import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 
 /**
  * Interface for accessing taxonomy data. Taxonomy represents links between taxon (including synonym).
@@ -16,5 +19,36 @@ public interface TaxonomyDAO {
 	 * @return all unique children id found
 	 */
 	public Set<Integer> getChildrenIdSet(Integer taxonId, boolean recursive);
+	
+	/**
+	 * Get the all the direct accepted children id for a taxon.
+	 * This will not traverse the entire tree.
+	 * @param taxonId
+	 * @return
+	 */
+	public List<Integer> getAcceptedChildrenIdList(Integer taxonId);
+	
+	/**
+	 * Build nested sets structure from a taxonid.
+	 * The sets are built from the taxonomy tree using the provided taxonid as root.
+	 * @param taxonId
+	 */
+	public void buildNestedSets(Integer taxonId);
+	
+	/**
+	 * Get all the accepted children id for a taxon.
+	 * The nested sets will be used.
+	 * @param taxonId
+	 * @return
+	 */
+	public List<Integer> getAcceptedChildrenIdListFromNestedSets(Integer taxonId);
+	
+	/**
+	 * Get all accepted children TaxonLookupModel for a taxonId and a list of ranks.
+	 * The nested sets will be used and the list will be ordered by the 'left' value.
+	 * @param taxonId 
+	 * @param acceptedRanks the list of all accepted ranks(inclusive) for the returned children list
+	 */
+	public List<TaxonLookupModel> getAcceptedChildrenListFromNestedSets(Integer taxonId, String[] acceptedRanks);
 
 }
