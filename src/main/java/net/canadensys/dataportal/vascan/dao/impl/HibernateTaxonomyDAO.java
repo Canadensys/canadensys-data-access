@@ -41,6 +41,16 @@ public class HibernateTaxonomyDAO implements TaxonomyDAO {
 		return query.list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> getSynonymChildrenIdList(List<Integer> taxonIdList){
+		Session hibernateSession = sessionFactory.getCurrentSession();
+		Query query = hibernateSession.createSQLQuery("SELECT taxonomy.childid FROM taxonomy,taxon WHERE taxonomy.parentid IN (:taxonid) AND taxon.id = taxonomy.childid AND taxon.statusid = :statusid");
+		query.setParameterList("taxonid", taxonIdList);
+		query.setParameter("statusid", HibernateTaxonDAO.STATUS_SYNONYM);
+		return query.list();
+	}
+	
 	@Override
 	public Set<Integer> getChildrenIdSet(Integer taxonId, boolean recursive) {
 		LinkedHashSet<Integer> childrenIdSet = new LinkedHashSet<Integer>();

@@ -3,6 +3,10 @@ package net.canadensys.dataportal.vascan.dao;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.type.CalendarType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
+
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
@@ -74,5 +78,13 @@ public interface TaxonDAO {
 	 * @return
 	 */
 	public List<TaxonModel> loadTaxonByName(String taxonCalculatedName);
+	
+	/**
+	 * Load denormalized taxon data for a collection of ids.
+	 * @param taxonIdList
+	 * @return list of Object with the following content: "id","mdate","status","parentid","url","reference","calnameauthor","author","rank","parentfsn","higherclassification","class",
+			"order","family","genus","subgenus","specificepithet","infraspecificepithet"
+	 */
+	public List<Object[]> loadCompleteTaxonData(List<Integer> taxonIdList);
 
 }

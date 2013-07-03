@@ -8,8 +8,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 /**
@@ -56,6 +54,10 @@ public class TaxonLookupModel extends NestedSet{
 	private String	specificepithet;
 	private String	infraspecificepithet;
 	private String	author;
+	
+	private String acceptedVernacularFr;
+	private String acceptedVernacularEn;
+	
 	private Date	cdate;
 	private Date	mdate;
 	
@@ -438,14 +440,29 @@ public class TaxonLookupModel extends NestedSet{
 	public String getAuthor() {
 		return author;
 	}
-
 	/**
 	 * @param author the author to set
 	 */
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+	
+	@Column(name="vernacularfr")
+	public String getAcceptedVernacularFr() {
+		return acceptedVernacularFr;
+	}
+	public void setAcceptedVernacularFr(String acceptedVernacularFr) {
+		this.acceptedVernacularFr = acceptedVernacularFr;
+	}
 
+	@Column(name="vernacularen")
+	public String getAcceptedVernacularEn() {
+		return acceptedVernacularEn;
+	}
+	public void setAcceptedVernacularEn(String acceptedVernacularEn) {
+		this.acceptedVernacularEn = acceptedVernacularEn;
+	}
+	
 	/**
 	 * @return the cdate
 	 */

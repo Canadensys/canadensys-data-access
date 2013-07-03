@@ -13,7 +13,7 @@ import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 public interface TaxonomyDAO {
 	
 	/**
-	 * Get the all the direct children id for a taxon. Could also get the entire children id list using the recursive flag.
+	 * Get the all the direct children id for a taxonid. Could also get the entire children id list using the recursive flag.
 	 * @param taxonId
 	 * @param recursive get all children id, including the children of our children and so on
 	 * @return all unique children id found
@@ -21,12 +21,20 @@ public interface TaxonomyDAO {
 	public Set<Integer> getChildrenIdSet(Integer taxonId, boolean recursive);
 	
 	/**
-	 * Get the all the direct accepted children id for a taxon.
+	 * Get the all the direct accepted children id for a taxonid.
 	 * This will not traverse the entire tree.
 	 * @param taxonId
 	 * @return
 	 */
 	public List<Integer> getAcceptedChildrenIdList(Integer taxonId);
+	
+	/**
+	 * Get the all the synonym id (taxonid) for a taxonid list.
+	 * This will not traverse the entire tree.
+	 * @param taxonIdList
+	 * @return
+	 */
+	public List<Integer> getSynonymChildrenIdList(List<Integer> taxonIdList);
 	
 	/**
 	 * Build nested sets structure from a taxonid.

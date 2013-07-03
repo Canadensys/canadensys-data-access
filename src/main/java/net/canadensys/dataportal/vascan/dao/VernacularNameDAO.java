@@ -24,4 +24,11 @@ public interface VernacularNameDAO {
 	 * @return
 	 */
 	public List<VernacularNameModel> loadVernacularNameByName(String vernacularName);
+	
+	/**
+	 * Load denormalized vernacular name data for a collection of ids.
+	 * @param taxonIdList
+	 * @return list of Object with the following content: "taxonid","name","reference","url","language","statusid"
+	 */
+	public List<Object[]> loadCompleteVernacularNameData(List<Integer> taxonIdList);
 }

@@ -7,8 +7,12 @@ import net.canadensys.dataportal.vascan.model.DistributionModel;
 import net.canadensys.dataportal.vascan.model.DistributionStatusModel;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +39,28 @@ public class HibernateDistributionDAO implements DistributionDAO{
 	public List<DistributionStatusModel> loadAllDistributionStatus(){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(DistributionStatusModel.class);
 		return (List<DistributionStatusModel>)searchCriteria.list();
+	}
+	
+	@Override
+	public List<Object[]> loadCompleteDistributionData(List<Integer> taxonIdList){
+		Query query = sessionFactory.getCurrentSession().createSQLQuery("SELECT distribution.taxonid, region.iso3166_2, region.region, region.iso3166_1, distributionstatus.occurrencestatus, distributionstatus.establishmentmeans, reference.reference, reference.url, excludedcode.excludedcode" +
+			" FROM region,distributionstatus,reference,distribution,excludedcode" +
+			" WHERE distribution.taxonid IN (:id)" +
+			" AND distributionstatus.id = distribution.distributionstatusid" +
+			" AND region.id = distribution.regionid" +
+			" AND reference.id = distribution.referenceid" +
+			" AND excludedcode.id = distribution.excludedcodeid")
+			.addScalar("taxonid",IntegerType.INSTANCE)
+			.addScalar("iso3166_2",StringType.INSTANCE)
+			.addScalar("region",StringType.INSTANCE)
+			.addScalar("iso3166_1",StringType.INSTANCE)
+			.addScalar("occurrencestatus",StringType.INSTANCE)
+			.addScalar("establishmentMeans",StringType.INSTANCE)
+			.addScalar("reference",StringType.INSTANCE)
+			.addScalar("url",StringType.INSTANCE)
+			.addScalar("excludedcode",StringType.INSTANCE);
+		query.setParameterList("id", taxonIdList);
+		return query.list();
 	}
 	
 	/**

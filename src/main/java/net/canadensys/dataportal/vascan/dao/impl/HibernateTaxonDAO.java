@@ -24,6 +24,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.CalendarType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	public static final String ALL_PROVINCES[] = {"AB","BC","GL","NL_N","NL_L","MB","NB","NT","NS","NU","ON","PE","QC","PM","SK","YT"};
 	public static final String CANADA_PROVINCES[] = {"AB","BC","NL_N","NL_L","MB","NB","NT","NS","NU","ON","PE","QC","SK","YT"};
 	public static final int STATUS_ACCEPTED = 1;
+	public static final int STATUS_SYNONYM = 2;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -183,6 +185,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return total_rows.intValue();
 	}
 	
+	@Override
 	public List<Object[]> getAcceptedTaxon(int maximumRank){
 		org.hibernate.Session hibernateSession = sessionFactory.getCurrentSession();
 		Query query = hibernateSession.createSQLQuery("SELECT taxon.id, lookup.calname, lookup.rank FROM taxon,lookup WHERE taxon.id = lookup.taxonid AND taxon.rankid <= :rankid AND taxon.statusid = :statusid  ORDER BY lookup.calname ASC")
@@ -192,6 +195,39 @@ public class HibernateTaxonDAO implements TaxonDAO{
 				.setParameter("rankid", maximumRank)
 				.setParameter("statusid", STATUS_ACCEPTED);
 		return (List<Object[]>)query.list();
+	}
+	
+	@Override
+	public List<Object[]> loadCompleteTaxonData(List<Integer> taxonIdList){
+		Query query = sessionFactory.getCurrentSession().createSQLQuery("SELECT taxon.id, taxon.mdate, lookup.status, taxonomy.parentid, reference.url, reference.reference, lookup.calnameauthor,taxon.author,lookup.rank, N.calnameauthor AS parentFSN, lookup.higherclassification, "+
+			"lookup.class, lookup._order,lookup.family,lookup.genus,lookup.subgenus,lookup.specificepithet,lookup.infraspecificepithet" +
+			" FROM taxon" +
+			" INNER JOIN lookup ON taxon.id = lookup.taxonid"+
+			" INNER JOIN reference ON taxon.referenceid = reference.id"+
+			" LEFT JOIN taxonomy ON taxonomy.childid = taxon.id"+
+			" LEFT JOIN taxon T ON taxonomy.parentid = T.id"+
+			" LEFT JOIN lookup N ON N.taxonid = T.id"+
+		    " WHERE taxon.id IN (:id)")
+		    .addScalar("id", IntegerType.INSTANCE)
+			.addScalar("mdate",CalendarType.INSTANCE)
+			.addScalar("status",StringType.INSTANCE)
+			.addScalar("parentid",IntegerType.INSTANCE)
+			.addScalar("url",StringType.INSTANCE)
+			.addScalar("reference",StringType.INSTANCE)
+			.addScalar("calnameauthor",StringType.INSTANCE)
+			.addScalar("author",StringType.INSTANCE)
+			.addScalar("rank",StringType.INSTANCE)
+			.addScalar("parentfsn",StringType.INSTANCE)
+			.addScalar("higherclassification",StringType.INSTANCE)
+			.addScalar("class",StringType.INSTANCE)
+			.addScalar("_order",StringType.INSTANCE)
+			.addScalar("family",StringType.INSTANCE)
+			.addScalar("genus",StringType.INSTANCE)
+			.addScalar("subgenus",StringType.INSTANCE)
+			.addScalar("specificepithet",StringType.INSTANCE)
+			.addScalar("infraspecificepithet",StringType.INSTANCE);
+		query.setParameterList("id", taxonIdList);
+		return query.list();
 	}
 	
 	/**
