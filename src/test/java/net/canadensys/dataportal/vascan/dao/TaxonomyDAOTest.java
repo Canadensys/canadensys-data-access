@@ -2,6 +2,7 @@ package net.canadensys.dataportal.vascan.dao;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -57,4 +58,11 @@ public class TaxonomyDAOTest extends AbstractTransactionalJUnit4SpringContextTes
 		}
 		assertTrue(found);
 	}
+	
+	@Test
+	public void testGetSynonymChildrenIdList(){
+		List<Integer> synonyms = taxonomyDAO.getSynonymChildrenIdList(Arrays.asList(new Integer[]{5129}));
+		assertTrue(synonyms.contains(new Integer(15428)));
+	}
+	
 }
