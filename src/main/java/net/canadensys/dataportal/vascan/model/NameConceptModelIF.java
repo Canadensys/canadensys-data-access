@@ -9,8 +9,9 @@ package net.canadensys.dataportal.vascan.model;
  */
 public interface NameConceptModelIF {
 	
-	public int getTaxonId();
-	public void setTaxonId(int taxonId);
+	public Integer getTaxonId();
+	public void setTaxonId(Integer taxonId);
+	
 	public String getName();
 	public void setName(String name);
 

@@ -54,6 +54,18 @@
 				"namehtmlauthor":{
 					"index" : "not_analyzed",
 					"type" : "string"
+				},
+				"rankname":{
+					"index" : "not_analyzed",
+					"type" : "string"
+				},
+				"parentid":{
+					"index" : "not_analyzed",
+					"type" : "integer"
+				},
+				"parentnamehtml":{
+					"index" : "not_analyzed",
+					"type" : "string"
 				}
 			}
 		},
@@ -82,6 +94,10 @@
 					"type" : "string"
 				},
 				"language":{
+					"index" : "not_analyzed",
+					"type" : "string"
+				},
+				"taxonnamehtml":{
 					"index" : "not_analyzed",
 					"type" : "string"
 				}

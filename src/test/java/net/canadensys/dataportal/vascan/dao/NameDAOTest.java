@@ -58,8 +58,9 @@ public class NameDAOTest {
 		                    .startObject()
 		                        .field("name", "Carex")
 		                        .field("status", "accepted")
-		                        .field("calnamehtml", "<em>Carex</em>")
-		                        .field("calnamehtmlauthor", "<em>Carex</em> Linnaeus")
+		                        .field("namehtml", "<em>Carex</em>")
+		                        .field("namehtmlauthor", "<em>Carex</em> Linnaeus")
+		                        .field("rankname", "genus")
 		                    .endObject()
 		                  )
 		        .execute()
@@ -72,6 +73,21 @@ public class NameDAOTest {
                         .field("status", "accepted")
                         .field("namehtml", "<em>Carex feta</em>")
                         .field("namehtmlauthor", "<em>Carex feta</em> L.H. Bailey")
+                        .field("rankname", "species")
+                    .endObject()
+                  )
+        .execute()
+        .actionGet();
+		
+		client.prepareIndex("vascan", "taxon", "23238")
+        .setSource(jsonBuilder()
+                    .startObject()
+                        .field("name", "Carex straminea var. mixta")
+                        .field("status", "synonym")
+                        .field("namehtml", "<em>Carex straminea</em> var. <em>mixta</em>>")
+                        .field("namehtmlauthor", "<em>Carex straminea</em> var. <em>mixta</em> L.H. Bailey")
+                        .field("parentid", 864)
+                        .field("parentnamehtml", "<em>Carex feta</em>")
                     .endObject()
                   )
         .execute()
@@ -80,7 +96,8 @@ public class NameDAOTest {
 		client.prepareIndex("vascan", "vernacular", "3")
         .setSource(jsonBuilder()
                     .startObject()
-                        .field("taxonid", 7890)
+                        .field("taxonid", 7174)
+                        .field("taxonnamehtml", "<em>Picea mariana</em>")
                         .field("name", "épinette")
                     .endObject()
                   )
@@ -96,7 +113,7 @@ public class NameDAOTest {
 		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("epi");
 		assertEquals(1,nameModeListLR.getRows().size());
 		assertEquals(1,nameModeListLR.getTotal_rows());
-		assertEquals(7890, nameModeListLR.getRows().get(0).getTaxonId());
+		assertEquals(new Integer(7174), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//search for carex feta
 		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex fe");

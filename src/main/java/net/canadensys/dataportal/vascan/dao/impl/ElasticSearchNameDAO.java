@@ -112,23 +112,29 @@ public class ElasticSearchNameDAO implements NameDAO{
 		List<NameConceptModelIF> newNameModelList = new ArrayList<NameConceptModelIF>();
 		NameConceptTaxonModel tNameModel;
 		NameConceptVernacularNameModel vNameModel;
+		Map<String,Object> esHitData = null;
 		for(SearchHit currHit: hits.hits()){
+			esHitData = currHit.sourceAsMap();
 			if(currHit.getType().equalsIgnoreCase(TAXON_TYPE)){
 				tNameModel = new NameConceptTaxonModel();
-				tNameModel.setTaxonId(Integer.parseInt(currHit.getId()));
-				tNameModel.setName((String)currHit.sourceAsMap().get("name"));
-				tNameModel.setStatus((String)currHit.sourceAsMap().get("status"));
-				tNameModel.setNamehtml((String)currHit.sourceAsMap().get("namehtml"));
-				tNameModel.setNamehtmlauthor((String)currHit.sourceAsMap().get("namehtmlauthor"));
+				tNameModel.setTaxonId(Integer.valueOf(currHit.getId()));
+				tNameModel.setName((String)esHitData.get("name"));
+				tNameModel.setStatus((String)esHitData.get("status"));
+				tNameModel.setNamehtml((String)esHitData.get("namehtml"));
+				tNameModel.setNamehtmlauthor((String)esHitData.get("namehtmlauthor"));
+				tNameModel.setRankname((String)esHitData.get("rankname"));
+				tNameModel.setParentid((Integer)esHitData.get("parentid"));
+				tNameModel.setParentnamehtml((String)esHitData.get("parentnamehtml"));
 				newNameModelList.add(tNameModel);
 			}
 			else if(currHit.getType().equalsIgnoreCase(VERNACULAR_TYPE)){
 				vNameModel = new NameConceptVernacularNameModel();
-				vNameModel.setId(Integer.parseInt(currHit.getId()));
-				vNameModel.setTaxonId((Integer)currHit.sourceAsMap().get("taxonid"));
-				vNameModel.setName((String)currHit.sourceAsMap().get("name"));
-				vNameModel.setStatus((String)currHit.sourceAsMap().get("status"));
-				vNameModel.setLang((String)currHit.sourceAsMap().get("language"));
+				vNameModel.setId(Integer.valueOf(currHit.getId()));
+				vNameModel.setName((String)esHitData.get("name"));
+				vNameModel.setStatus((String)esHitData.get("status"));
+				vNameModel.setLang((String)esHitData.get("language"));
+				vNameModel.setTaxonId((Integer)esHitData.get("taxonid"));
+				vNameModel.setTaxonnamehtml((String)esHitData.get("taxonnamehtml"));
 				newNameModelList.add(vNameModel);
 			}
 		}
