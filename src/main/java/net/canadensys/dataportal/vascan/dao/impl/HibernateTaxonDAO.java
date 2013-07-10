@@ -187,7 +187,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	
 	@Override
 	public List<Object[]> getAcceptedTaxon(int maximumRank){
-		org.hibernate.Session hibernateSession = sessionFactory.getCurrentSession();
+		Session hibernateSession = sessionFactory.getCurrentSession();
 		Query query = hibernateSession.createSQLQuery("SELECT taxon.id, lookup.calname, lookup.rank FROM taxon,lookup WHERE taxon.id = lookup.taxonid AND taxon.rankid <= :rankid AND taxon.statusid = :statusid  ORDER BY lookup.calname ASC")
 				.addScalar("id",IntegerType.INSTANCE)
 				.addScalar("calname",StringType.INSTANCE)
