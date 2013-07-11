@@ -130,12 +130,26 @@ public class HibernateTaxonomyDAO implements TaxonomyDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TaxonLookupModel> getAcceptedChildrenListFromNestedSets(Integer taxonId, String[] acceptedRanks){
+		if(acceptedRanks == null){
+			throw new IllegalArgumentException("acceptedRanks can not be null");
+		}
 		Session hibernateSession = sessionFactory.getCurrentSession();
 		SQLQuery query = hibernateSession.createSQLQuery("SELECT * FROM lookup as child, (SELECT _left,_right FROM lookup where taxonid = :id) as parent " +
 				"WHERE child._left > parent._left AND child._right < parent._right AND child.rank IN (:ranks) ORDER BY child._left");
 		query.addEntity(TaxonLookupModel.class);
 		query.setParameter("id", taxonId);
 		query.setParameterList("ranks", acceptedRanks);
+		return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TaxonLookupModel> getAcceptedChildrenListFromNestedSets(Integer taxonId){
+		Session hibernateSession = sessionFactory.getCurrentSession();
+		SQLQuery query = hibernateSession.createSQLQuery("SELECT * FROM lookup as child, (SELECT _left,_right FROM lookup where taxonid = :id) as parent " +
+				"WHERE child._left > parent._left AND child._right < parent._right ORDER BY child._left");
+		query.addEntity(TaxonLookupModel.class);
+		query.setParameter("id", taxonId);
 		return query.list();
 	}
 	

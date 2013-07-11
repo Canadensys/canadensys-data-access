@@ -65,4 +65,7 @@ public class TaxonomyDAOTest extends AbstractTransactionalJUnit4SpringContextTes
 		assertTrue(synonyms.contains(new Integer(15428)));
 	}
 	
+	//TODO
+	//test getAcceptedChildrenListFromNestedSets
+	
 }

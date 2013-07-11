@@ -58,5 +58,13 @@ public interface TaxonomyDAO {
 	 * @param acceptedRanks the list of all accepted ranks(inclusive) for the returned children list
 	 */
 	public List<TaxonLookupModel> getAcceptedChildrenListFromNestedSets(Integer taxonId, String[] acceptedRanks);
+	
+	/**
+	 * Get all accepted children TaxonLookupModel for a taxonId without any rank restriction.
+	 * The nested sets will be used and the list will be ordered by the 'left' value.
+	 * @param taxonId
+	 * @return
+	 */
+	public List<TaxonLookupModel> getAcceptedChildrenListFromNestedSets(Integer taxonId);
 
 }
