@@ -116,8 +116,12 @@ public class NameDAOTest {
 		assertEquals(new Integer(7174), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//search for carex feta
-		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex fe");
+		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex f");
 		assertEquals("<em>Carex feta</em> L.H. Bailey",((NameConceptTaxonModel)nameModeList.get(0)).getNamehtmlauthor());
+		
+		//search carex alone
+		nameModeListLR = nameDAO.search("carex");
+		assertEquals(new Integer(951), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//Test with paging
 		//We should not do this outside testing
