@@ -18,10 +18,11 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -40,7 +41,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 	private static final String TAXON_TYPE = "taxon";
 	private static final String VERNACULAR_TYPE = "vernacular";
 	
-	private static final int DEFAULT_PAGE_SIZE = 20;
+	private static final int DEFAULT_PAGE_SIZE = 50;
 	private int pageSize = DEFAULT_PAGE_SIZE;
 	
 	@Autowired
@@ -96,9 +97,10 @@ public class ElasticSearchNameDAO implements NameDAO{
 	}
 	
 	/**
-	 * Build a bool query using the name and name.ngrams field.
+	 * Build a bool query using the name and name.ngrams fields.
 	 * SHOULD match the name
-	 * MUST match the name.ngrams
+	 * SHOULD match the name.ngrams
+	 * Sorted by score then name (maybe it should be provided by the caller?)
 	 * @param text
 	 * @param pageSize
 	 * @return
@@ -109,8 +111,10 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setQuery(QueryBuilders
 	                .boolQuery()
 	                .should(QueryBuilders.matchQuery("name", text))
-	                .must(QueryBuilders.matchQuery("name.ngrams", text)))
-	                .setSize(pageSize);
+	                .should(QueryBuilders.matchQuery("name.ngrams", text)))
+	                .setSize(pageSize)
+	                .addSort(SortBuilders.scoreSort())
+	                .addSort(SortBuilders.fieldSort("name").order(SortOrder.ASC));
 	}
 	
 	/**

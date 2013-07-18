@@ -2,7 +2,7 @@ package net.canadensys.dataportal.vascan.dao;
 
 import static org.elasticsearch.client.Requests.refreshRequest;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
@@ -79,12 +79,27 @@ public class NameDAOTest {
         .execute()
         .actionGet();
 		
+		//Add a hybrid
 		client.prepareIndex("vascan", "taxon", "23238")
+        .setSource(jsonBuilder()
+                    .startObject()
+                        .field("name", "×Achnella")
+                        .field("status", "accepted")
+                        .field("namehtml", "<em>×Achnella</em>")
+                        .field("namehtmlauthor", "<em>×Achnella</em> Barkworth")
+                        .field("parentid", 746)
+                        .field("parentnamehtml", "<em>Stipinae</em>")
+                    .endObject()
+                  )
+        .execute()
+        .actionGet();
+		
+		client.prepareIndex("vascan", "taxon", "1941")
         .setSource(jsonBuilder()
                     .startObject()
                         .field("name", "Carex straminea var. mixta")
                         .field("status", "synonym")
-                        .field("namehtml", "<em>Carex straminea</em> var. <em>mixta</em>>")
+                        .field("namehtml", "<em>Carex straminea</em> var. <em>mixta</em>")
                         .field("namehtmlauthor", "<em>Carex straminea</em> var. <em>mixta</em> L.H. Bailey")
                         .field("parentid", 864)
                         .field("parentnamehtml", "<em>Carex feta</em>")
@@ -115,22 +130,34 @@ public class NameDAOTest {
 		assertEquals(1,nameModeListLR.getTotal_rows());
 		assertEquals(new Integer(7174), nameModeListLR.getRows().get(0).getTaxonId());
 		
-		//search for carex feta
+		//Test search using carex f
 		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex f");
+		//make sure Carex feta is the first element
 		assertEquals("<em>Carex feta</em> L.H. Bailey",((NameConceptTaxonModel)nameModeList.get(0)).getNamehtmlauthor());
+		//make sure Carex alone (951) is not there
+		boolean carexFound = false;
+		for(NameConceptModelIF curr : nameModeList){
+			if(curr.getTaxonId().intValue() == 951){
+				carexFound = true;
+			}
+		}
+		assertFalse(carexFound);
 		
-		//search carex alone
+		//Test search carex
 		nameModeListLR = nameDAO.search("carex");
 		assertEquals(new Integer(951), nameModeListLR.getRows().get(0).getTaxonId());
+		//make sure other carex are returned (carex feta)
+		assertTrue(nameModeListLR.getRows().size() > 1);
 		
 		//Test with paging
-		//We should not do this outside testing
+		//We should not use setPageSize outside testing
 		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
 		nameModeListLR = nameDAO.search("care",0);
 		assertEquals(1,nameModeListLR.getRows().size());
 		nameModeListLR = nameDAO.search("care",1);
 		assertEquals(1,nameModeListLR.getRows().size());
 		
+		//Test searching for a vernacular on taxon index
 		nameModeList = nameDAO.searchTaxon("epi");
 		assertEquals(0,nameModeList.size());
 	}
