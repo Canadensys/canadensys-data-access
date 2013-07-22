@@ -41,6 +41,12 @@ public class ElasticSearchNameDAO implements NameDAO{
 	private static final String TAXON_TYPE = "taxon";
 	private static final String VERNACULAR_TYPE = "vernacular";
 	
+	private static final String TAXON_NAME_FIELD = "taxonname";
+	private static final String VERNACULAR_NAME_FIELD = "vernacularname";
+	
+	private static final String TAXON_NAME_NGRAM_FIELD = "taxonname.ngrams";
+	private static final String VERNACULAR_NAME_NGRAM_FIELD = "vernacularname.ngrams";
+	
 	private static final int DEFAULT_PAGE_SIZE = 50;
 	private int pageSize = DEFAULT_PAGE_SIZE;
 	
@@ -76,8 +82,16 @@ public class ElasticSearchNameDAO implements NameDAO{
 	
 	@Override
 	public List<NameConceptModelIF> searchTaxon(String text) {
-		SearchRequestBuilder srb = buildSearchRequestBuilderFromText(text,pageSize);
-		srb.setTypes(TAXON_TYPE);
+		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setQuery(QueryBuilders
+	                .boolQuery()
+	                .should(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text))
+	                .should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text)))
+	            .setSize(pageSize)
+	            .addSort(SortBuilders.scoreSort())
+	            .addSort(SortBuilders.fieldSort(TAXON_NAME_FIELD).order(SortOrder.ASC))
+	            .setTypes(TAXON_TYPE);
 
 		SearchResponse response = srb
 		        .execute()
@@ -87,8 +101,16 @@ public class ElasticSearchNameDAO implements NameDAO{
 	
 	@Override
 	public List<NameConceptModelIF> searchVernacular(String text) {
-		SearchRequestBuilder srb = buildSearchRequestBuilderFromText(text,pageSize);
-		srb.setTypes(VERNACULAR_TYPE);
+		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setQuery(QueryBuilders
+	                .boolQuery()
+	                .should(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text))
+	                .should(QueryBuilders.matchQuery(VERNACULAR_NAME_NGRAM_FIELD,text)))
+	            .setSize(pageSize)
+	            .addSort(SortBuilders.scoreSort())
+	            .addSort(SortBuilders.fieldSort(VERNACULAR_NAME_FIELD).order(SortOrder.ASC))
+	            .setTypes(VERNACULAR_TYPE);
 
 		SearchResponse response = srb
 		        .execute()
@@ -110,11 +132,12 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(QueryBuilders
 	                .boolQuery()
-	                .should(QueryBuilders.matchQuery("name", text))
-	                .should(QueryBuilders.matchQuery("name.ngrams", text)))
+	                .should(QueryBuilders.multiMatchQuery(text, TAXON_NAME_FIELD,VERNACULAR_NAME_FIELD))
+	                .should(QueryBuilders.multiMatchQuery(text, TAXON_NAME_NGRAM_FIELD,VERNACULAR_NAME_NGRAM_FIELD)))
 	                .setSize(pageSize)
 	                .addSort(SortBuilders.scoreSort())
-	                .addSort(SortBuilders.fieldSort("name").order(SortOrder.ASC));
+	                .addSort(SortBuilders.fieldSort(TAXON_NAME_FIELD).order(SortOrder.ASC))
+	                .addSort(SortBuilders.fieldSort(VERNACULAR_NAME_FIELD).order(SortOrder.ASC));
 	}
 	
 	/**
@@ -132,7 +155,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 			if(currHit.getType().equalsIgnoreCase(TAXON_TYPE)){
 				tNameModel = new NameConceptTaxonModel();
 				tNameModel.setTaxonId(Integer.valueOf(currHit.getId()));
-				tNameModel.setName((String)esHitData.get("name"));
+				tNameModel.setName((String)esHitData.get("taxonname"));
 				tNameModel.setStatus((String)esHitData.get("status"));
 				tNameModel.setNamehtml((String)esHitData.get("namehtml"));
 				tNameModel.setNamehtmlauthor((String)esHitData.get("namehtmlauthor"));
@@ -144,7 +167,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 			else if(currHit.getType().equalsIgnoreCase(VERNACULAR_TYPE)){
 				vNameModel = new NameConceptVernacularNameModel();
 				vNameModel.setId(Integer.valueOf(currHit.getId()));
-				vNameModel.setName((String)esHitData.get("name"));
+				vNameModel.setName((String)esHitData.get("vernacularname"));
 				vNameModel.setStatus((String)esHitData.get("status"));
 				vNameModel.setLang((String)esHitData.get("language"));
 				vNameModel.setTaxonId((Integer)esHitData.get("taxonid"));

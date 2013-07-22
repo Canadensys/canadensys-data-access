@@ -7,7 +7,12 @@
 						"max_gram" : 100,
 						"min_gram" : 2,
 						"type" : "edge_ngram"
-					}
+					},
+					"strip_hydrid_sign_filter":{ 
+	                    "pattern":"\u00D7",
+	                    "replacement":"",
+	                    "type": "pattern_replace"
+	                }
 				},
 				"analyzer":{
 					"name_index" : {
@@ -24,13 +29,19 @@
 					},
 					"scientificname_index" : {
 						"filter" : [
-							"lowercase","asciifolding","name_nGram"
+							"lowercase","asciifolding","strip_hydrid_sign_filter","name_nGram"
 						],
 						"tokenizer" : "keyword"
 					},
 					"name_search" : {
 						"filter" : [
 							"lowercase","asciifolding"
+						],
+						"tokenizer" : "keyword"
+					},
+					"scientificname_search" : {
+						"filter" : [
+							"lowercase","asciifolding","strip_hydrid_sign_filter"
 						],
 						"tokenizer" : "keyword"
 					}
@@ -41,10 +52,10 @@
 	"mappings" : {
 		"taxon" : {
 			"properties" : {
-				"name" : {
+				"taxonname" : {
 					"type" : "multi_field",
 					"fields":{
-						"name":{
+						"taxonname":{
 							"type" : "string",
 							"index_analyzer" : "full_name_index",
 							"search_analyzer" : "name_search"
@@ -52,7 +63,7 @@
 						"ngrams":{
 							"type" : "string",
 							"index_analyzer" : "scientificname_index",
-							"search_analyzer" : "name_search"
+							"search_analyzer" : "scientificname_search"
 						}
 					}
 				},
@@ -84,10 +95,10 @@
 		},
 		"vernacular" : {
 			"properties" : {
-				"name" : {
+				"vernacularname" : {
 					"type" : "multi_field",
 					"fields":{
-						"name":{
+						"vernacularname":{
 							"type" : "string",
 							"index" : "not_analyzed"
 						},

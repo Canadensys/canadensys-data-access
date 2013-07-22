@@ -56,7 +56,7 @@ public class NameDAOTest {
 		client.prepareIndex("vascan", "taxon", "951")
 		        .setSource(jsonBuilder()
 		                    .startObject()
-		                        .field("name", "Carex")
+		                        .field("taxonname", "Carex")
 		                        .field("status", "accepted")
 		                        .field("namehtml", "<em>Carex</em>")
 		                        .field("namehtmlauthor", "<em>Carex</em> Linnaeus")
@@ -69,7 +69,7 @@ public class NameDAOTest {
 		client.prepareIndex("vascan", "taxon", "4864")
         .setSource(jsonBuilder()
                     .startObject()
-                        .field("name", "Carex feta")
+                        .field("taxonname", "Carex feta")
                         .field("status", "accepted")
                         .field("namehtml", "<em>Carex feta</em>")
                         .field("namehtmlauthor", "<em>Carex feta</em> L.H. Bailey")
@@ -83,7 +83,7 @@ public class NameDAOTest {
 		client.prepareIndex("vascan", "taxon", "23238")
         .setSource(jsonBuilder()
                     .startObject()
-                        .field("name", "×Achnella")
+                        .field("taxonname", "×Achnella")
                         .field("status", "accepted")
                         .field("namehtml", "<em>×Achnella</em>")
                         .field("namehtmlauthor", "<em>×Achnella</em> Barkworth")
@@ -97,7 +97,7 @@ public class NameDAOTest {
 		client.prepareIndex("vascan", "taxon", "1941")
         .setSource(jsonBuilder()
                     .startObject()
-                        .field("name", "Carex straminea var. mixta")
+                        .field("taxonname", "Carex straminea var. mixta")
                         .field("status", "synonym")
                         .field("namehtml", "<em>Carex straminea</em> var. <em>mixta</em>")
                         .field("namehtmlauthor", "<em>Carex straminea</em> var. <em>mixta</em> L.H. Bailey")
@@ -113,7 +113,7 @@ public class NameDAOTest {
                     .startObject()
                         .field("taxonid", 7174)
                         .field("taxonnamehtml", "<em>Picea mariana</em>")
-                        .field("name", "épinette")
+                        .field("vernacularname", "épinette")
                     .endObject()
                   )
         .execute()
@@ -148,6 +148,14 @@ public class NameDAOTest {
 		assertEquals(new Integer(951), nameModeListLR.getRows().get(0).getTaxonId());
 		//make sure other carex are returned (carex feta)
 		assertTrue(nameModeListLR.getRows().size() > 1);
+		
+		//Test hybrids
+		//should work without the multiply sign
+		nameModeListLR = nameDAO.search("Achnella");
+		assertEquals(new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
+		//should also work with the multiply sign
+		nameModeListLR = nameDAO.search("×Achnella");
+		assertEquals(new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//Test with paging
 		//We should not use setPageSize outside testing
