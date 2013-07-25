@@ -118,6 +118,17 @@ public class NameDAOTest {
                   )
         .execute()
         .actionGet();
+		
+		client.prepareIndex("vascan", "vernacular", "25445")
+        .setSource(jsonBuilder()
+                    .startObject()
+                        .field("taxonid", 9208)
+                        .field("taxonnamehtml", "<em>Acer palmatum</em>")
+                        .field("vernacularname", "Japanese maple")
+                    .endObject()
+                  )
+        .execute()
+        .actionGet();
 		//refresh the index
 		client.admin().indices().refresh(refreshRequest()).actionGet();
 	}
@@ -168,5 +179,11 @@ public class NameDAOTest {
 		//Test searching for a vernacular on taxon index
 		nameModeList = nameDAO.searchTaxon("epi");
 		assertEquals(0,nameModeList.size());
+		
+		//Test vernacular
+		nameModeListLR = nameDAO.search("japanese m");
+		assertEquals(1,nameModeListLR.getRows().size());
+		nameModeListLR = nameDAO.search("maple");
+		assertEquals(1,nameModeListLR.getRows().size());
 	}
 }

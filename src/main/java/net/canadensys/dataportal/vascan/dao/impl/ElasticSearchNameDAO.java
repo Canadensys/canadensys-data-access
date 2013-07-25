@@ -46,6 +46,8 @@ public class ElasticSearchNameDAO implements NameDAO{
 	
 	private static final String TAXON_NAME_NGRAM_FIELD = "taxonname.ngrams";
 	private static final String VERNACULAR_NAME_NGRAM_FIELD = "vernacularname.ngrams";
+	private static final String VERNACULAR_NAME_SPLIT_NGRAM_FIELD = "vernacularname.split_ngrams";
+	
 	
 	private static final int DEFAULT_PAGE_SIZE = 50;
 	private int pageSize = DEFAULT_PAGE_SIZE;
@@ -106,7 +108,8 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setQuery(QueryBuilders
 	                .boolQuery()
 	                .should(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text))
-	                .should(QueryBuilders.matchQuery(VERNACULAR_NAME_NGRAM_FIELD,text)))
+	                .should(QueryBuilders.matchQuery(VERNACULAR_NAME_NGRAM_FIELD,text))
+	                .should(QueryBuilders.matchQuery(VERNACULAR_NAME_SPLIT_NGRAM_FIELD,text)))
 	            .setSize(pageSize)
 	            .addSort(SortBuilders.scoreSort())
 	            .addSort(SortBuilders.fieldSort(VERNACULAR_NAME_FIELD).order(SortOrder.ASC))
@@ -133,7 +136,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setQuery(QueryBuilders
 	                .boolQuery()
 	                .should(QueryBuilders.multiMatchQuery(text, TAXON_NAME_FIELD,VERNACULAR_NAME_FIELD))
-	                .should(QueryBuilders.multiMatchQuery(text, TAXON_NAME_NGRAM_FIELD,VERNACULAR_NAME_NGRAM_FIELD)))
+	                .should(QueryBuilders.multiMatchQuery(text, TAXON_NAME_NGRAM_FIELD,VERNACULAR_NAME_NGRAM_FIELD,VERNACULAR_NAME_SPLIT_NGRAM_FIELD)))
 	                .setSize(pageSize)
 	                .addSort(SortBuilders.scoreSort())
 	                .addSort(SortBuilders.fieldSort(TAXON_NAME_FIELD).order(SortOrder.ASC))
