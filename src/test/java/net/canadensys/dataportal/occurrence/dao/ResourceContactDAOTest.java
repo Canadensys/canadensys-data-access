@@ -1,11 +1,11 @@
 package net.canadensys.dataportal.occurrence.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
+import java.util.List;
 
-import net.canadensys.dataportal.occurrence.dao.DownloadLogDAO;
-import net.canadensys.dataportal.occurrence.model.DownloadLogModel;
+import net.canadensys.dataportal.occurrence.model.ResourceContactModel;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,35 +17,34 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
  * Test Coverage : 
- * -Save DownloadLogModel
+ * -Save ResourceContactModel
  * -Get generated id
- * -Load DownloadLogModel from id
+ * -Load ResourceContactModel from id
+ * -Load ResourceContactModel list from sourcefileid
  * @author canadensys
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/test-spring.xml" })
 @TransactionConfiguration(transactionManager="hibernateTransactionManager")
-public class DownloadLogDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
-
+public class ResourceContactDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
+	
 	@Autowired
-	private DownloadLogDAO downloadLogDAO;
+	private ResourceContactDAO resourceContactDAO;
 	
 	@Test
 	public void testSaveAndLoad(){
-		DownloadLogModel testModel = new DownloadLogModel();
-		Date now = new Date();
-		testModel.setEvent_date(now);
-		testModel.setSearch_criteria("this is a search");
+		ResourceContactModel testModel = new ResourceContactModel();
+		testModel.setName("Test Name");
 		testModel.setEmail("a@a.com");
-		testModel.setNumber_of_records(12);
-		downloadLogDAO.save(testModel);
+		testModel.setSourcefileid("test-resource");
+		assertTrue(resourceContactDAO.save(testModel));
 		
-		int id = testModel.getId();
-		
-		DownloadLogModel loadedModel = downloadLogDAO.load(id);
-		assertEquals("this is a search",loadedModel.getSearch_criteria());
+		Integer id = testModel.getId();		
+		ResourceContactModel loadedModel = resourceContactDAO.load(id);
+		assertEquals("Test Name",loadedModel.getName());
 		assertEquals("a@a.com",loadedModel.getEmail());
-		assertEquals(new Integer(12),loadedModel.getNumber_of_records());
-		assertEquals(now,loadedModel.getEvent_date());
+		
+		List<ResourceContactModel> loadedList = resourceContactDAO.load("test-resource");
+		assertEquals("Test Name",loadedList.get(0).getName());
 	}
 }

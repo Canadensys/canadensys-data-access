@@ -33,7 +33,7 @@ public class HibernateDownloadLogDAO implements DownloadLogDAO {
 			sessionFactory.getCurrentSession().saveOrUpdate(downloadLogModel);
 		}
 		catch (HibernateException e) {
-			LOGGER.fatal("Could'n save DownloadLogModel", e);
+			LOGGER.fatal("Couldn't save DownloadLogModel", e);
 			return false;
 		}
 		return true;

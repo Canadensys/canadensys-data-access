@@ -20,6 +20,7 @@
 				<value>net.canadensys.dataportal.occurrence.model.OccurrenceModel</value>
 				<value>net.canadensys.dataportal.occurrence.model.UniqueValuesModel</value>
 				<value>net.canadensys.dataportal.occurrence.model.DownloadLogModel</value>
+				<value>net.canadensys.dataportal.occurrence.model.ResourceContactModel</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -29,7 +30,6 @@
 			</props>
 		</property>
 	</bean>
-	
 	
 	<bean id="esTestInstance" class="net.canadensys.databaseutils.ElasticSearchTestInstance" init-method="startElasticSearch" destroy-method="stopElasticSearch"/>
 	<bean id="esClient" class="org.elasticsearch.client.Client" factory-bean ="esTestInstance" factory-method="buildLocalClient"/>
