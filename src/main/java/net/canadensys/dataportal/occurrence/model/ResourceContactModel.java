@@ -15,9 +15,12 @@ public class ResourceContactModel {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "resource_contact_id_seq")
 	private Integer id;
-	private String sourcefileid;
+	
+	private String dataset_shortname;
+	private String dataset_title;
 	
 	private String name;
+	private String position_name;
 	private String organization_name;
 	private String address;
 	private String city;
@@ -25,7 +28,6 @@ public class ResourceContactModel {
 	private String country;
 	private String postal_code;
 	
-	private String online_url;
 	private String phone;
 	private String email;
 	
@@ -36,11 +38,18 @@ public class ResourceContactModel {
 		this.id = id;
 	}
 	
-	public String getSourcefileid() {
-		return sourcefileid;
+	public String getDataset_shortname() {
+		return dataset_shortname;
 	}
-	public void setSourcefileid(String sourcefileid) {
-		this.sourcefileid = sourcefileid;
+	public void setDataset_shortname(String dataset_shortname) {
+		this.dataset_shortname = dataset_shortname;
+	}
+	
+	public String getDataset_title() {
+		return dataset_title;
+	}
+	public void setDataset_title(String dataset_title) {
+		this.dataset_title = dataset_title;
 	}
 	
 	public String getName() {
@@ -49,6 +58,14 @@ public class ResourceContactModel {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getPosition_name() {
+		return position_name;
+	}
+	public void setPosition_name(String position_name) {
+		this.position_name = position_name;
+	}
+	
 	public String getOrganization_name() {
 		return organization_name;
 	}
@@ -70,7 +87,7 @@ public class ResourceContactModel {
 	public String getAdministrative_area() {
 		return administrative_area;
 	}
-	public void setAdministrative_rea(String administrative_area) {
+	public void setAdministrative_area(String administrative_area) {
 		this.administrative_area = administrative_area;
 	}
 	public String getCountry() {
@@ -85,12 +102,7 @@ public class ResourceContactModel {
 	public void setPostal_code(String postal_code) {
 		this.postal_code = postal_code;
 	}
-	public String getOnline_url() {
-		return online_url;
-	}
-	public void setOnline_url(String online_url) {
-		this.online_url = online_url;
-	}
+
 	public String getPhone() {
 		return phone;
 	}

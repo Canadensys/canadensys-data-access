@@ -25,11 +25,11 @@ public interface ResourceContactDAO {
 	public ResourceContactModel load(Integer id);
 	
 	/**
-	 * Load a list of ResourceContactModel from a sourceFileId.
-	 * More than one contact could be linked to a sourceFileId.
-	 * @param sourceFileId
+	 * Load a list of ResourceContactModel from a datasetShortname.
+	 * More than one contact could be linked to a datasetShortname.
+	 * @param datasetShortname
 	 * @return ResourceContactModel list or an empty list if nothing is found
 	 */
-	public List<ResourceContactModel> load(String sourceFileId);
+	public List<ResourceContactModel> load(String datasetShortname);
 
 }

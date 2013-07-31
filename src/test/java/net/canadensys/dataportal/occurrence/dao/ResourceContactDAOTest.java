@@ -20,7 +20,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
  * -Save ResourceContactModel
  * -Get generated id
  * -Load ResourceContactModel from id
- * -Load ResourceContactModel list from sourcefileid
+ * -Load ResourceContactModel list from datasetShortname
  * @author canadensys
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,7 +36,7 @@ public class ResourceContactDAOTest extends AbstractTransactionalJUnit4SpringCon
 		ResourceContactModel testModel = new ResourceContactModel();
 		testModel.setName("Test Name");
 		testModel.setEmail("a@a.com");
-		testModel.setSourcefileid("test-resource");
+		testModel.setDataset_shortname("test-resource");
 		assertTrue(resourceContactDAO.save(testModel));
 		
 		Integer id = testModel.getId();		
