@@ -57,6 +57,7 @@ public class NameDAOTest {
 		        .setSource(jsonBuilder()
 		                    .startObject()
 		                        .field("taxonname", "Carex")
+		                        .field("sortname", "Carex")
 		                        .field("status", "accepted")
 		                        .field("namehtml", "<em>Carex</em>")
 		                        .field("namehtmlauthor", "<em>Carex</em> Linnaeus")
@@ -70,6 +71,7 @@ public class NameDAOTest {
         .setSource(jsonBuilder()
                     .startObject()
                         .field("taxonname", "Carex feta")
+                        .field("sortname", "Carex feta")
                         .field("status", "accepted")
                         .field("namehtml", "<em>Carex feta</em>")
                         .field("namehtmlauthor", "<em>Carex feta</em> L.H. Bailey")
@@ -84,6 +86,7 @@ public class NameDAOTest {
         .setSource(jsonBuilder()
                     .startObject()
                         .field("taxonname", "×Achnella")
+                        .field("sortname", "×Achnella")
                         .field("status", "accepted")
                         .field("namehtml", "<em>×Achnella</em>")
                         .field("namehtmlauthor", "<em>×Achnella</em> Barkworth")
@@ -98,11 +101,27 @@ public class NameDAOTest {
         .setSource(jsonBuilder()
                     .startObject()
                         .field("taxonname", "Carex straminea var. mixta")
+                        .field("sortname", "Carex straminea var. mixta")
                         .field("status", "synonym")
                         .field("namehtml", "<em>Carex straminea</em> var. <em>mixta</em>")
                         .field("namehtmlauthor", "<em>Carex straminea</em> var. <em>mixta</em> L.H. Bailey")
                         .field("parentid", 864)
                         .field("parentnamehtml", "<em>Carex feta</em>")
+                    .endObject()
+                  )
+        .execute()
+        .actionGet();
+		
+		client.prepareIndex("vascan", "taxon", "5064")
+        .setSource(jsonBuilder()
+                    .startObject()
+                        .field("taxonname", "Carex sabulosa")
+                        .field("sortname", "Carex sabulosa")
+                        .field("status", "accepted")
+                        .field("namehtml", "<em>Carex sabulosa</em>")
+                        .field("namehtmlauthor", "<em>Carex sabulosa</em> Turczaninow ex Kunth")
+                        .field("parentid", 2096)
+                        .field("parentnamehtml", "<em>Carex</em> sect. <em>Racemosae</em>")
                     .endObject()
                   )
         .execute()
@@ -114,6 +133,19 @@ public class NameDAOTest {
                         .field("taxonid", 7174)
                         .field("taxonnamehtml", "<em>Picea mariana</em>")
                         .field("vernacularname", "épinette")
+                        .field("sortname", "épinette")
+                    .endObject()
+                  )
+        .execute()
+        .actionGet();
+		
+		client.prepareIndex("vascan", "vernacular", "9583")
+        .setSource(jsonBuilder()
+                    .startObject()
+                        .field("taxonid", 4912)
+                        .field("taxonnamehtml", "<em>Carex illota</em>")
+                        .field("vernacularname", "carex sali")
+                        .field("sortname", "carex sali")
                     .endObject()
                   )
         .execute()
@@ -125,6 +157,7 @@ public class NameDAOTest {
                         .field("taxonid", 9208)
                         .field("taxonnamehtml", "<em>Acer palmatum</em>")
                         .field("vernacularname", "Japanese maple")
+                        .field("sortname", "Japanese maple")
                     .endObject()
                   )
         .execute()
@@ -139,7 +172,7 @@ public class NameDAOTest {
 		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("epi");
 		assertEquals(1,nameModeListLR.getRows().size());
 		assertEquals(1,nameModeListLR.getTotal_rows());
-		assertEquals(new Integer(7174), nameModeListLR.getRows().get(0).getTaxonId());
+		assertEquals("Ascii Folding, search vernacular with accent",new Integer(7174), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//Test search using carex f
 		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex f");
@@ -163,18 +196,10 @@ public class NameDAOTest {
 		//Test hybrids
 		//should work without the multiply sign
 		nameModeListLR = nameDAO.search("Achnella");
-		assertEquals(new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
+		assertEquals("Search hybrid without symbol",new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
 		//should also work with the multiply sign
 		nameModeListLR = nameDAO.search("×Achnella");
-		assertEquals(new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
-		
-		//Test with paging
-		//We should not use setPageSize outside testing
-		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
-		nameModeListLR = nameDAO.search("care",0);
-		assertEquals(1,nameModeListLR.getRows().size());
-		nameModeListLR = nameDAO.search("care",1);
-		assertEquals(1,nameModeListLR.getRows().size());
+		assertEquals("Search hybrid with symbol",new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//Test searching for a vernacular on taxon index
 		nameModeList = nameDAO.searchTaxon("epi");
@@ -184,6 +209,30 @@ public class NameDAOTest {
 		nameModeListLR = nameDAO.search("japanese m");
 		assertEquals(1,nameModeListLR.getRows().size());
 		nameModeListLR = nameDAO.search("maple");
+		assertEquals(1,nameModeListLR.getRows().size());
+		
+		//Test to make sure that taxon and vernacular are sorted correctly
+		nameModeListLR = nameDAO.search("carex");
+		int idx=0;
+		int carexSabulosaIdx=0;
+		int carexSaliIdx=0;
+		for(NameConceptModelIF currName : nameModeListLR.getRows()){
+			if("Carex sabulosa".equals(currName.getName())){
+				carexSabulosaIdx = idx;
+			}
+			else if("carex sali".equals(currName.getName())){
+				carexSaliIdx = idx;
+			}
+			idx++;
+		}
+		assertTrue("taxon and vernacular order",carexSabulosaIdx < carexSaliIdx);
+		
+		//Test with paging, do this one last since we change the behavior of the nameDAO
+		//We should not use setPageSize outside testing
+		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
+		nameModeListLR = nameDAO.search("care",0);
+		assertEquals(1,nameModeListLR.getRows().size());
+		nameModeListLR = nameDAO.search("care",1);
 		assertEquals(1,nameModeListLR.getRows().size());
 	}
 }

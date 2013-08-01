@@ -41,6 +41,8 @@ public class ElasticSearchNameDAO implements NameDAO{
 	private static final String TAXON_TYPE = "taxon";
 	private static final String VERNACULAR_TYPE = "vernacular";
 	
+	private static final String SORT_NAME_FIELD = "sortname";
+	
 	private static final String TAXON_NAME_FIELD = "taxonname";
 	private static final String VERNACULAR_NAME_FIELD = "vernacularname";
 	
@@ -122,9 +124,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 	}
 	
 	/**
-	 * Build a bool query using the name and name.ngrams fields.
-	 * SHOULD match the name
-	 * SHOULD match the name.ngrams
+	 * Build an ElasticSearch query using the name and name.ngrams fields.
 	 * Sorted by score then name (maybe it should be provided by the caller?)
 	 * @param text
 	 * @param pageSize
@@ -134,13 +134,21 @@ public class ElasticSearchNameDAO implements NameDAO{
 		return client.prepareSearch(INDEX_NAME)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(QueryBuilders
-	                .boolQuery()
-	                .should(QueryBuilders.multiMatchQuery(text, TAXON_NAME_FIELD,VERNACULAR_NAME_FIELD))
-	                .should(QueryBuilders.multiMatchQuery(text, TAXON_NAME_NGRAM_FIELD,VERNACULAR_NAME_NGRAM_FIELD,VERNACULAR_NAME_SPLIT_NGRAM_FIELD)))
-	                .setSize(pageSize)
-	                .addSort(SortBuilders.scoreSort())
-	                .addSort(SortBuilders.fieldSort(TAXON_NAME_FIELD).order(SortOrder.ASC))
-	                .addSort(SortBuilders.fieldSort(VERNACULAR_NAME_FIELD).order(SortOrder.ASC));
+		    			.boolQuery()
+		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text)).boost(1))
+		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text)).boost(1))
+		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text)).boost(1))
+		    			//Avoid giving a better score to vernacular ngrams if both query match
+		    			.should(QueryBuilders.constantScoreQuery(
+		    					QueryBuilders.boolQuery()
+		    						.should(QueryBuilders.matchQuery(VERNACULAR_NAME_NGRAM_FIELD,text))
+		    						.should(QueryBuilders.matchQuery(VERNACULAR_NAME_SPLIT_NGRAM_FIELD,text))
+		    					).boost(1)
+		    			)
+		    	)
+		    	.setSize(pageSize)
+	            .addSort(SortBuilders.scoreSort())
+	            .addSort(SortBuilders.fieldSort(SORT_NAME_FIELD).order(SortOrder.ASC));
 	}
 	
 	/**

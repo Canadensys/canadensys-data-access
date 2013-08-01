@@ -64,14 +64,24 @@
 						"taxonname":{
 							"type" : "string",
 							"index_analyzer" : "full_name_index",
-							"search_analyzer" : "name_search"
+							"search_analyzer" : "name_search",
+							"omit_norms" : true
 						},
 						"ngrams":{
 							"type" : "string",
 							"index_analyzer" : "scientificname_index",
-							"search_analyzer" : "scientificname_search"
+							"search_analyzer" : "scientificname_search",
+							"omit_norms" : true
 						}
 					}
+				},
+				"sortname":{
+					"type" : "string",
+					"index_options" : "docs",
+					"index_analyzer" : "full_name_index",
+					"search_analyzer" : "name_search",
+					"omit_norms" : true,
+					"index_options" : "docs"
 				},
 				"status":{
 					"index" : "not_analyzed",
@@ -107,19 +117,29 @@
 						"vernacularname":{
 							"type" : "string",
 							"index_analyzer" : "full_name_index",
-							"search_analyzer" : "name_search"
+							"search_analyzer" : "name_search",
+							"omit_norms" : true
 						},
 						"ngrams":{
 							"type" : "string",
 							"index_analyzer" : "name_index",
-							"search_analyzer" : "name_search"
+							"search_analyzer" : "name_search",
+							"omit_norms" : true
 						},
 						"split_ngrams":{
 							"type" : "string",
 							"index_analyzer" : "split_name_index",
-							"search_analyzer" : "name_search"
+							"search_analyzer" : "name_search",
+							"omit_norms" : true
 						}
 					}
+				},
+				"sortname":{
+					"type" : "string",
+					"index_analyzer" : "full_name_index",
+					"search_analyzer" : "name_search",
+					"omit_norms" : true,
+					"index_options" : "docs"
 				},
 				"taxonid":{
 					"index" : "not_analyzed",
