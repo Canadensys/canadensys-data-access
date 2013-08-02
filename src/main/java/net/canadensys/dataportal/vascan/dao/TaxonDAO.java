@@ -54,7 +54,7 @@ public interface TaxonDAO {
 	 * @param status
 	 * @param rank
 	 * @param includeHybrids
-	 * @return
+	 * @return the count or null if the query can not be completed
 	 */
 	public Integer countTaxonLookup(String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids);
 

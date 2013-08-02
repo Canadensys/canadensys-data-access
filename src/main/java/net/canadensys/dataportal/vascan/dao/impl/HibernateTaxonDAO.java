@@ -157,6 +157,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		//we only want to count
 		searchCriteria.setProjection(Projections.count(MANAGED_ID));
 		
+		// filter for a specific taxon
 		if(taxonid > 0){
 			searchCriteria.add(getTaxonCriterion(taxonid));
 		}
@@ -328,11 +329,12 @@ public class HibernateTaxonDAO implements TaxonDAO{
 
 	
 	/**
-	 * Returns a Criterion for a habit
+	 * Returns a Criterion for a habit against calhabit of the lookup table.
+	 * Since this is a calculated field, the calhabit shall 'contains' the habit.
 	 * @return
 	 */
 	private Criterion getHabitCriterion(String habit){
-		return Restrictions.eq("calhabit", habit.toLowerCase());
+		return Restrictions.like("calhabit", habit.toLowerCase(), MatchMode.ANYWHERE);
 	}
 	
 	/**
