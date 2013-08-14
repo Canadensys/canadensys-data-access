@@ -245,7 +245,7 @@ CREATE SEQUENCE resource_contact_id_seq;
 CREATE TABLE resource_contact
 (
 	id integer DEFAULT nextval('resource_contact_id_seq') NOT NULL,
-	dataset_shortname VARCHAR(50),
+	dataset_shortname character varying(50),
 	dataset_title character varying(100),
 	name character varying(100),
 	position_name character varying(100),
