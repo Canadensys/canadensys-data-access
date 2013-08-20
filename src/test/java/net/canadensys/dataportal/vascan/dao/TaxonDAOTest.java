@@ -1,6 +1,7 @@
 package net.canadensys.dataportal.vascan.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -8,12 +9,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -28,6 +33,26 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	
 	@Autowired
 	private TaxonDAO taxonDAO;
+	
+	private JdbcTemplate jdbcTemplate;
+	
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+    
+    @Before
+    public void testSetup(){
+    	//Used for test : testDeleteTaxon()
+    	jdbcTemplate.batchUpdate(new String[]{
+    			"INSERT INTO taxon (id,uninomial,binomial,author,statusid,rankid,referenceid) VALUES" +
+    			"(9470,'Verbena','×perriana','Moldenke',1,14,105),"+
+    			"(9460,'Hybrid ','Parent 1','Schkuhr ex Willdenow',1,14,105),(9466,'Hybrid ','Parent 2','Marshall',1,14,105)",
+    			"INSERT INTO taxonomy (parentid,childid) VALUES (73,9470)",
+    			"INSERT INTO taxonomy (parentid,childid) VALUES (9466,1)",
+    			"INSERT INTO taxonhybridparent (id,childid,parentid) VALUES (729,9470,9460),(730,9470,9466)",
+    			"INSERT INTO taxonhabit (id,taxonid,habitid) VALUES (730,9470,1)"});
+    }
 		
 	@Test
 	public void testSaveLoadTaxonLookupModel(){
@@ -146,4 +171,22 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		assertEquals(1,taxonInfo.size());
 		assertEquals(new Integer(73),taxonInfo.get(0)[0]);
 	}
+	
+	@Test
+	public void testDeleteTaxon(){
+		boolean success = taxonDAO.deleteTaxon(9466);
+		assertFalse("We should not be able to delete a taxon when this latter is used as a hybrid parent or a parent in taxonomy",success);
+		
+		//remove the hybridparent
+		jdbcTemplate.execute("DELETE FROM taxonhybridparent WHERE parentid = 9466");
+		success = taxonDAO.deleteTaxon(9466);
+		assertFalse("We should not be able to delete a taxon when this latter is used as a hybrid parent or a parent in taxonomy",success);
+		//remove it from taxonomy, this should never be done since it creates a broken tree. We only do this in testing for simplicity.
+		jdbcTemplate.execute("DELETE FROM taxonomy WHERE parentid = 9466");
+		
+		//now it should work
+		success = taxonDAO.deleteTaxon(9466);
+		assertTrue("We should be able to delete a taxon when the it's not used.",success);
+	}
+
 }

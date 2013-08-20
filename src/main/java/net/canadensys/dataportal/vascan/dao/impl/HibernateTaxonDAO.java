@@ -1,5 +1,6 @@
 package net.canadensys.dataportal.vascan.dao.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.BigIntegerType;
 import org.hibernate.type.CalendarType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
@@ -64,6 +66,43 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			e.printStackTrace();
 			return false;
 		}
+		return true;
+	}
+	
+	@Override
+	public boolean deleteTaxon(Integer taxonId){
+		TaxonModel taxonModelToDelete = loadTaxon(taxonId);
+		if(taxonModelToDelete != null){
+			Session hibernateSession = sessionFactory.getCurrentSession();
+			//check if some data are pointing on us
+			
+			//check if this taxon is a hybrid parent
+			Query query = hibernateSession.createSQLQuery("SELECT count(childid)noc FROM taxonhybridparent WHERE parentid = :taxonid")
+				.addScalar("noc",BigIntegerType.INSTANCE)
+				.setParameter("taxonid", taxonId);
+			BigInteger count = (BigInteger)query.uniqueResult();
+			if(count.intValue() > 0){
+				LOGGER.error("Could not delete taxonID :" + taxonId + ". This taxon is used as hybrid parent.");
+				return false;
+			}
+			
+			//check if this taxon is a parent in taxonomy
+			query = hibernateSession.createSQLQuery("SELECT count(childid)noc FROM taxonomy WHERE parentid = :taxonid")
+				.addScalar("noc",BigIntegerType.INSTANCE)
+				.setParameter("taxonid", taxonId);
+			count = (BigInteger)query.uniqueResult();
+			if(count.intValue() > 0){
+				LOGGER.error("Could not delete taxonID :" + taxonId + ". This taxon is used as parent in taxonomy.");
+				return false;
+			}
+			
+			hibernateSession.delete(taxonModelToDelete);
+			hibernateSession.flush();
+		 }
+		 else{
+			 LOGGER.error("Could not delete taxonID :" + taxonId + ". This taxon doesn't exist.");
+			 return false;
+		 }
 		return true;
 	}
 
