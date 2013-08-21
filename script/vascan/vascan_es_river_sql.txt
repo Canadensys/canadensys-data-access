@@ -1,0 +1,3 @@
+SELECT l1.taxonid as _id,l1.calname as taxonname,l1.calname as sortname,l1.calnamehtml as namehtml, l1.calnamehtmlauthor as namehtmlauthor, l1.status,parentid,l2.calnamehtml AS parentnamehtml, l1.rank as rankname FROM lookup l1  LEFT OUTER JOIN taxonomy on childid = taxonid LEFT OUTER JOIN lookup as l2 on l2.taxonid = parentid
+
+SELECT v.id AS _id, v.taxonid ,name as vernacularname,name as sortname,s.status,language,calnamehtml AS taxonnamehtml FROM vernacularname v INNER JOIN status s on statusid = s.id INNER JOIN lookup on lookup.taxonid=v.taxonid
