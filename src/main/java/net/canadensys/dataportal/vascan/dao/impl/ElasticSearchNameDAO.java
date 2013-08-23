@@ -171,8 +171,16 @@ public class ElasticSearchNameDAO implements NameDAO{
 				tNameModel.setNamehtml((String)esHitData.get("namehtml"));
 				tNameModel.setNamehtmlauthor((String)esHitData.get("namehtmlauthor"));
 				tNameModel.setRankname((String)esHitData.get("rankname"));
-				tNameModel.setParentid((Integer)esHitData.get("parentid"));
-				tNameModel.setParentnamehtml((String)esHitData.get("parentnamehtml"));
+				if(esHitData.get("parentid") != null){
+					//we can have more than one parent for a synonym even if it's rare
+					if(esHitData.get("parentid").getClass() == Integer.class){
+						tNameModel.setParentid((Integer)esHitData.get("parentid"));
+						tNameModel.setParentnamehtml((String)esHitData.get("parentnamehtml"));
+					}else{
+						tNameModel.setParentidlist((List<Integer>)esHitData.get("parentid"));
+						tNameModel.setParentnamehtmllist((List<String>)esHitData.get("parentnamehtml"));
+					}
+				}
 				newNameModelList.add(tNameModel);
 			}
 			else if(currHit.getType().equalsIgnoreCase(VERNACULAR_TYPE)){

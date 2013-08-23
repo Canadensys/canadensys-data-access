@@ -1,5 +1,7 @@
 package net.canadensys.dataportal.vascan.model;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -17,11 +19,15 @@ public class NameConceptTaxonModel implements NameConceptModelIF{
 	private String namehtmlauthor;
 	private String rankname;
 	
-	//Used for synonyms
+	//Used for synonyms with one parent (almost all of them)
 	private Integer parentid;
 	private String parentnamehtml;
 	
-
+	//Used for synonyms with more than one parent
+	//we do not always use an array since it's not common so we avoid unnecessary array creation
+	private List<Integer> parentidlist;
+	private List<String> parentnamehtmllist;
+	
 	@Override
 	public Integer getTaxonId() {
 		return taxonId;
@@ -31,6 +37,14 @@ public class NameConceptTaxonModel implements NameConceptModelIF{
 		this.taxonId=taxonId;
 	}
 
+	/**
+	 * Used to check if a taxon (a synonym) is linked to only one parent.
+	 * @return
+	 */
+	public boolean hasSingleParent(){
+		return (parentid != null);
+	}
+	
 	@Override
 	public String getName() {
 		return name;
@@ -76,12 +90,25 @@ public class NameConceptTaxonModel implements NameConceptModelIF{
 	public void setParentid(Integer parentid) {
 		this.parentid = parentid;
 	}
-	
 	public String getParentnamehtml() {
 		return parentnamehtml;
 	}
 	public void setParentnamehtml(String parentnamehtml) {
 		this.parentnamehtml = parentnamehtml;
+	}
+	
+	public List<Integer> getParentidlist() {
+		return parentidlist;
+	}
+	public void setParentidlist(List<Integer> parentidlist) {
+		this.parentidlist = parentidlist;
+	}
+	
+	public List<String> getParentnamehtmllist() {
+		return parentnamehtmllist;
+	}
+	public void setParentnamehtmllist(List<String> parentnamehtmllist) {
+		this.parentnamehtmllist = parentnamehtmllist;
 	}
 	
 	@Override

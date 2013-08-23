@@ -127,6 +127,22 @@ public class NameDAOTest {
         .execute()
         .actionGet();
 		
+		//add a synonym with 2 parents, not common but legit
+		client.prepareIndex("vascan", "taxon", "101010")
+        .setSource(jsonBuilder()
+                    .startObject()
+                        .field("taxonname", "SynonymWithTwoParents")
+                        .field("sortname", "SynonymWithTwoParents")
+                        .field("status", "synonym")
+                        .field("namehtml", "<em>SynonymWithTwoParents</em>")
+                        .field("namehtmlauthor", "<em>SynonymWithTwoParents</em> Turczaninow ex Kunth")
+                        .array("parentid", 2096,2097)
+                        .array("parentnamehtml", "<em>Carex</em> sect. <em>Racemosae</em>","<em>Carex</em> sect. <em>Racemosae</em>")
+                    .endObject()
+                  )
+        .execute()
+        .actionGet();
+		
 		client.prepareIndex("vascan", "vernacular", "3")
         .setSource(jsonBuilder()
                     .startObject()
@@ -226,6 +242,11 @@ public class NameDAOTest {
 			idx++;
 		}
 		assertTrue("taxon and vernacular order",carexSabulosaIdx < carexSaliIdx);
+		
+		//test a synonym with 2 parents
+		nameModeListLR = nameDAO.search("SynonymWithTwoParents");
+		assertEquals(new Integer(101010), nameModeListLR.getRows().get(0).getTaxonId());
+		assertFalse(((NameConceptTaxonModel)nameModeListLR.getRows().get(0)).hasSingleParent());
 		
 		//Test with paging, do this one last since we change the behavior of the nameDAO
 		//We should not use setPageSize outside testing
