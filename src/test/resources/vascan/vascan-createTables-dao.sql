@@ -127,6 +127,26 @@ CREATE TABLE `taxonomy` (
   KEY `parentid` (`parentid`)
 );
 
+CREATE TABLE `taxonhybridparent` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `childid` smallint(5) NOT NULL,
+  `parentid` smallint(5) NOT NULL,
+  `sort` tinyint(1) NOT NULL DEFAULT '1',
+  `cdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `mdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `taxonhabit` (
+  `id` smallint(5) NOT NULL AUTO_INCREMENT,
+  `taxonid` smallint(5) NOT NULL,
+  `habitid` tinyint(3) unsigned NOT NULL,
+  `sort` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `cdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `mdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+ );
+
 CREATE TABLE `taxon` (
   `id` smallint(5) NOT NULL AUTO_INCREMENT,
   `uninomial` varchar(255) NOT NULL,

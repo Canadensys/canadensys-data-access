@@ -1,6 +1,9 @@
 Version History
 ===============
 
+Version 2.0.1 2013-08-23
+* Add support for synonym with more than one parent in NameDAO and model
+
 Version 2.0 2013-08-14
 * No more GeneratedValue on OccurrenceRawModel
 * New Vascan package (dao and model)

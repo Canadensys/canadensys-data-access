@@ -3,10 +3,6 @@ package net.canadensys.dataportal.vascan.dao;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.type.CalendarType;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.StringType;
-
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
@@ -22,6 +18,14 @@ public interface TaxonDAO {
 	 * @return success or not
 	 */
 	public boolean saveTaxonLookup(TaxonLookupModel tlm);
+	
+	/**
+	 * Remove a taxon from the database. The taxon will not be deleted if it is used as a parent in taxonomy or a hybrid parent.
+	 *TODO : also check for verncular
+	 * @param taxonId
+	 * @return
+	 */
+	public boolean deleteTaxon(Integer taxonId);
 	
 	/**
 	 * Load a TaxonLookupModel from an identifier. TaxonLookupModel contains denormalized fields allowing faster access (than joining).

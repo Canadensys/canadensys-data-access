@@ -49,9 +49,9 @@ public class TaxonModel implements Comparable<TaxonModel>{
     private TaxonLookupModel		lookup;
 	private List<DistributionModel>		distribution;
 	private List<VernacularNameModel>	vernacularnames;
-	private List<TaxonModel>				children;
-	private List<TaxonModel>				parents;
-	private List<TaxonModel>				hybridparents;
+	private List<TaxonModel>			children;
+	private List<TaxonModel>			parents;
+	private List<TaxonModel>			hybridparents;
 	
 
 	/**
