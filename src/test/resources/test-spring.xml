@@ -25,9 +25,8 @@
 	</bean>
 	
 	<jdbc:initialize-database data-source="dataSource">
-    	<jdbc:script location="classpath:createTablesPublicSchema-dao.sql" />
+    	<jdbc:script location="classpath:occurrence/occurrence_database_create_tables.sql" />
   	</jdbc:initialize-database>
-  	
 
   	<bean id="occurrenceDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateOccurrenceDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
