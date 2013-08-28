@@ -31,7 +31,7 @@
 	            <property name="sqlScriptEncoding" value="UTF-8"/>
 	            <property name="scripts">
 	                <list>
-	                    <value>classpath:vascan/vascan-createTables-dao.sql</value>
+	                    <value>classpath:vascan/vascan_database_create_tables.sql</value>
 	                    <value>classpath:vascan/vascan-insertData-dao.sql</value>
 	                </list>
 	            </property>

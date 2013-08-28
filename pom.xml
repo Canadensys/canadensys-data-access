@@ -23,7 +23,16 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<testResources>
+			<testResource>
+	        	<directory>${project.basedir}/src/test/resources</directory>
+      		</testResource>
+		    <testResource>
+		      <directory>${project.basedir}/script</directory>
+		    </testResource>
+	  </testResources>
 	</build>
+
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
