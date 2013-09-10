@@ -226,6 +226,11 @@ public class NameDAOTest {
 		assertTrue(nameModeListLR.getRows().size() > 1);
 		//make sure carex the genus get the higher score
 		assertTrue(nameModeListLR.getRows().get(0).getScore() > nameModeListLR.getRows().get(1).getScore());
+		//same test with searchTaxon
+		nameModeList = nameDAO.searchTaxon("carex");
+		System.out.println("Score1."+nameModeList.get(0).getScore());
+		System.out.println("Score1."+nameModeList.get(1).getScore());
+		assertTrue(nameModeList.get(0).getScore() > nameModeList.get(1).getScore());
 		
 		//Search for carex feta using the genus first letter
 		nameModeListLR = nameDAO.search("C. feta");

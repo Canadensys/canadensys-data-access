@@ -94,8 +94,12 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setQuery(QueryBuilders
 	                .boolQuery()
 	                .should(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text))
-	                .should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
-	                .should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+	                //avoid giving the same score to "Carex" and "Carex Carex bigelowii"
+		    		.should(
+		    			QueryBuilders.boolQuery()
+		    				.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
+		    				.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+		    			)
 	                .should(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)))
 	            .setSize(pageSize)
 	            .addSort(SortBuilders.scoreSort())
@@ -143,10 +147,10 @@ public class ElasticSearchNameDAO implements NameDAO{
 		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text)).boost(1))
 		    			//avoid giving the same score to "Carex" and "Carex Carex bigelowii"
 		    			.should(QueryBuilders.constantScoreQuery(
-		    					QueryBuilders.boolQuery()
-		    						.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
-		    						.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
-		    					).boost(1)
+		    				QueryBuilders.boolQuery()
+		    					.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
+		    					.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+		    				).boost(1)
 		    			)
 //		    			
 //		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text)).boost(1))
