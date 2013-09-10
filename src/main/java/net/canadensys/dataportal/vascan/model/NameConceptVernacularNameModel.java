@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  */
 public class NameConceptVernacularNameModel implements NameConceptModelIF{
-
+	private float score;
 	private int id;
 	private String name;
 	private String status;
@@ -19,6 +19,13 @@ public class NameConceptVernacularNameModel implements NameConceptModelIF{
 	private Integer taxonId;
 	private String taxonnamehtml;
 
+	public float getScore() {
+		return score;
+	}
+	public void setScore(float score) {
+		this.score = score;
+	}
+	
 	public int getId() {
 		return id;
 	}

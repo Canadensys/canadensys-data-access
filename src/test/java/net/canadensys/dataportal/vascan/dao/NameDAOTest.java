@@ -53,6 +53,7 @@ public class NameDAOTest {
 		    .execute()
 		    .actionGet();
 
+		//TODO : move data to external file
 		client.prepareIndex("vascan", "taxon", "951")
 		        .setSource(jsonBuilder()
 		                    .startObject()
@@ -76,6 +77,21 @@ public class NameDAOTest {
                         .field("namehtml", "<em>Carex feta</em>")
                         .field("namehtmlauthor", "<em>Carex feta</em> L.H. Bailey")
                         .field("rankname", "species")
+                    .endObject()
+                  )
+        .execute()
+        .actionGet();
+		
+		//add taxon with genus = epithet
+		client.prepareIndex("vascan", "taxon", "26305")
+        .setSource(jsonBuilder()
+                    .startObject()
+                        .field("taxonname", "Carex Carex bigelowii × Carex saxatilis var. rhomalea")
+                        .field("sortname", "Carex Carex bigelowii × Carex saxatilis var. rhomalea")
+                        .field("status", "synonym")
+                        .field("namehtml", "<em>Carex Carex bigelowii × Carex saxatilis var. rhomalea</em>")
+                        .field("namehtmlauthor", "<em>Carex Carex bigelowii × Carex saxatilis var. rhomalea</em>")
+                        .field("rankname", "variety")
                     .endObject()
                   )
         .execute()
@@ -208,6 +224,22 @@ public class NameDAOTest {
 		assertEquals(new Integer(951), nameModeListLR.getRows().get(0).getTaxonId());
 		//make sure other carex are returned (carex feta)
 		assertTrue(nameModeListLR.getRows().size() > 1);
+		//make sure carex the genus get the higher score
+		assertTrue(nameModeListLR.getRows().get(0).getScore() > nameModeListLR.getRows().get(1).getScore());
+		
+		//Search for carex feta using the genus first letter
+		nameModeListLR = nameDAO.search("C. feta");
+		assertEquals(new Integer(4864), nameModeListLR.getRows().get(0).getTaxonId());
+		//same test with searchTaxon
+		nameModeList = nameDAO.searchTaxon("C. feta");
+		assertEquals(new Integer(4864), nameModeList.get(0).getTaxonId());
+		
+		//Search using the epithet
+		nameModeListLR = nameDAO.search("sabulosa");
+		assertEquals(new Integer(5064), nameModeListLR.getRows().get(0).getTaxonId());
+		//same test with searchTaxon
+		nameModeList = nameDAO.searchTaxon("sabulosa");
+		assertEquals(new Integer(5064), nameModeList.get(0).getTaxonId());
 		
 		//Test hybrids
 		//should work without the multiply sign

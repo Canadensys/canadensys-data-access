@@ -2,6 +2,13 @@
 	"settings":{
 		"index":{
 			"analysis":{
+				"tokenizer": {
+					"epithet_taxonomic_hierarchy":{
+						"type":"path_hierarchy",
+						"delimiter":" ",
+						"skip":1
+					}
+				},
 				"filter" : {
 					"name_nGram" : {
 						"max_gram" : 100,
@@ -11,6 +18,11 @@
 					"strip_hydrid_sign_filter":{ 
 	                    "pattern":"\u00D7",
 	                    "replacement":"",
+	                    "type": "pattern_replace"
+	                },
+	                "use_genus_first_letter":{ 
+	       				"pattern":"(^.)[^\\s]+",
+						"replacement":"$1.",
 	                    "type": "pattern_replace"
 	                }
 				},
@@ -36,6 +48,18 @@
 					"scientificname_index" : {
 						"filter" : [
 							"lowercase","asciifolding","strip_hydrid_sign_filter","name_nGram"
+						],
+						"tokenizer" : "keyword"
+					},
+					"scientificname_epithet_index" : {
+						"filter" : [
+							"trim","lowercase","asciifolding","strip_hydrid_sign_filter"
+						],
+						"tokenizer" : "epithet_taxonomic_hierarchy"
+					},
+					"scientificname_genus_firstletter_index" : {
+						"filter" : [
+							"use_genus_first_letter","lowercase","asciifolding","strip_hydrid_sign_filter"
 						],
 						"tokenizer" : "keyword"
 					},
@@ -70,6 +94,18 @@
 						"ngrams":{
 							"type" : "string",
 							"index_analyzer" : "scientificname_index",
+							"search_analyzer" : "scientificname_search",
+							"omit_norms" : true
+						},
+						"epithet":{
+							"type" : "string",
+							"index_analyzer" : "scientificname_epithet_index",
+							"search_analyzer" : "scientificname_search",
+							"omit_norms" : true
+						},
+						"genusfirstletter":{
+							"type" : "string",
+							"index_analyzer" : "scientificname_genus_firstletter_index",
 							"search_analyzer" : "scientificname_search",
 							"omit_norms" : true
 						}

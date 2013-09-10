@@ -47,6 +47,9 @@ public class ElasticSearchNameDAO implements NameDAO{
 	private static final String VERNACULAR_NAME_FIELD = "vernacularname";
 	
 	private static final String TAXON_NAME_NGRAM_FIELD = "taxonname.ngrams";
+	private static final String TAXON_NAME_EPITHET_FIELD = "taxonname.epithet";
+	private static final String TAXON_NAME_GENUS_FIRST_LETTER_FIELD = "taxonname.genusfirstletter";
+	
 	private static final String VERNACULAR_NAME_NGRAM_FIELD = "vernacularname.ngrams";
 	private static final String VERNACULAR_NAME_SPLIT_NGRAM_FIELD = "vernacularname.split_ngrams";
 	
@@ -91,7 +94,9 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setQuery(QueryBuilders
 	                .boolQuery()
 	                .should(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text))
-	                .should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text)))
+	                .should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
+	                .should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+	                .should(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)))
 	            .setSize(pageSize)
 	            .addSort(SortBuilders.scoreSort())
 	            .addSort(SortBuilders.fieldSort(TAXON_NAME_FIELD).order(SortOrder.ASC))
@@ -136,8 +141,19 @@ public class ElasticSearchNameDAO implements NameDAO{
 		        .setQuery(QueryBuilders
 		    			.boolQuery()
 		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text)).boost(1))
+		    			//avoid giving the same score to "Carex" and "Carex Carex bigelowii"
+		    			.should(QueryBuilders.constantScoreQuery(
+		    					QueryBuilders.boolQuery()
+		    						.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
+		    						.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+		    					).boost(1)
+		    			)
+//		    			
+//		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text)).boost(1))
+//		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text)).boost(1))
+		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)).boost(1))
+
 		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text)).boost(1))
-		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text)).boost(1))
 		    			//Avoid giving a better score to vernacular ngrams if both query match
 		    			.should(QueryBuilders.constantScoreQuery(
 		    					QueryBuilders.boolQuery()
@@ -165,6 +181,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 			esHitData = currHit.sourceAsMap();
 			if(currHit.getType().equalsIgnoreCase(TAXON_TYPE)){
 				tNameModel = new NameConceptTaxonModel();
+				tNameModel.setScore(currHit.getScore());
 				tNameModel.setTaxonId(Integer.valueOf(currHit.getId()));
 				tNameModel.setName((String)esHitData.get("taxonname"));
 				tNameModel.setStatus((String)esHitData.get("status"));
@@ -185,6 +202,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 			}
 			else if(currHit.getType().equalsIgnoreCase(VERNACULAR_TYPE)){
 				vNameModel = new NameConceptVernacularNameModel();
+				vNameModel.setScore(currHit.getScore());
 				vNameModel.setId(Integer.valueOf(currHit.getId()));
 				vNameModel.setName((String)esHitData.get("vernacularname"));
 				vNameModel.setStatus((String)esHitData.get("status"));

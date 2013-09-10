@@ -8,6 +8,8 @@ package net.canadensys.dataportal.vascan.model;
  *
  */
 public interface NameConceptModelIF {
+	public void setScore(float score);
+	public float getScore();
 	
 	public Integer getTaxonId();
 	public void setTaxonId(Integer taxonId);

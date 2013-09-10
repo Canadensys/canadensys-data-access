@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  */
 public class NameConceptTaxonModel implements NameConceptModelIF{
-	
+	private float score;
 	private Integer taxonId;
 	private String name;
 	private String status;
@@ -27,6 +27,15 @@ public class NameConceptTaxonModel implements NameConceptModelIF{
 	//we do not always use an array since it's not common so we avoid unnecessary array creation
 	private List<Integer> parentidlist;
 	private List<String> parentnamehtmllist;
+	
+	@Override
+	public void setScore(float score) {
+		this.score=score;
+	}
+	@Override
+	public float getScore() {
+		return score;
+	}
 	
 	@Override
 	public Integer getTaxonId() {
@@ -116,5 +125,4 @@ public class NameConceptTaxonModel implements NameConceptModelIF{
 		return new ToStringBuilder(this).append("taxonId", taxonId)
 		.append("name", name).toString();
 	}
-
 }
