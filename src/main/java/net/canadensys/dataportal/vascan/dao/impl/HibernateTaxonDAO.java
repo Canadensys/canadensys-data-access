@@ -128,6 +128,20 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<TaxonModel> loadTaxonList(List<Integer> taxonIdList){
+		try{
+			Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class);
+			searchCriteria.add(Restrictions.in("id", taxonIdList));
+			return (List<TaxonModel>)searchCriteria.list();
+		}
+		catch(HibernateException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<TaxonModel> loadTaxonByName(String taxonCalculatedName) {
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class).createCriteria("lookup").add(Restrictions.like("calname", taxonCalculatedName));
 		return (List<TaxonModel>)searchCriteria.list();

@@ -62,8 +62,15 @@ public class ElasticSearchNameDAO implements NameDAO{
 	private Client client;
 
 	@Override
-	public LimitedResult<List<NameConceptModelIF>> search(String text){
-		SearchRequestBuilder srb = buildSearchRequestBuilderFromText(text,pageSize);
+	public LimitedResult<List<NameConceptModelIF>> search(String text, boolean useAutocompletion){
+		SearchRequestBuilder srb;
+		if(useAutocompletion){
+			srb = buildSearchRequestBuilderFromText(text,pageSize);
+		}
+		else{
+			srb = buildSearchRequestBuilderFromTextNoNGram(text,pageSize);
+		}
+		
 		SearchResponse response = srb
 		        .execute()
 		        .actionGet();
@@ -74,8 +81,14 @@ public class ElasticSearchNameDAO implements NameDAO{
 	}
 	
 	@Override
-	public LimitedResult<List<NameConceptModelIF>> search(String text, int pageNumber) {
-		SearchRequestBuilder srb = buildSearchRequestBuilderFromText(text,pageSize);
+	public LimitedResult<List<NameConceptModelIF>> search(String text, boolean useAutocompletion, int pageNumber) {
+		SearchRequestBuilder srb;
+		if(useAutocompletion){
+			srb = buildSearchRequestBuilderFromText(text,pageSize);
+		}
+		else{
+			srb = buildSearchRequestBuilderFromTextNoNGram(text,pageSize);
+		}
 		srb.setFrom(pageNumber*pageSize);
 		
 		SearchResponse response = srb
@@ -169,6 +182,28 @@ public class ElasticSearchNameDAO implements NameDAO{
 		    	.setSize(pageSize)
 	            .addSort(SortBuilders.scoreSort())
 	            .addSort(SortBuilders.fieldSort(SORT_NAME_FIELD).order(SortOrder.ASC));
+	}
+	
+	/**
+	 * Build an ElasticSearch query using the name while ignoring the ngram (used for autocompletion).
+	 * Sorted by score then name (maybe it should be provided by the caller?)
+	 * @param text
+	 * @param pageSize
+	 * @return
+	 */
+	private SearchRequestBuilder buildSearchRequestBuilderFromTextNoNGram(String text, int pageSize){
+		return client.prepareSearch(INDEX_NAME)
+	        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+	        .setQuery(QueryBuilders
+	    			.boolQuery()
+	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text)))
+	    			.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)))
+	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text)))
+	    	)
+	    	.setSize(pageSize)
+            .addSort(SortBuilders.scoreSort())
+            .addSort(SortBuilders.fieldSort(SORT_NAME_FIELD).order(SortOrder.ASC));
 	}
 	
 	/**

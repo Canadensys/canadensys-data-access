@@ -10,10 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.sql.DataSource;
+import javax.swing.plaf.ListUI;
 
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
+import org.codehaus.jackson.map.ser.ArraySerializers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -111,6 +113,11 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		
 		List<TaxonModel> taxonList = taxonDAO.loadTaxonByName("Equisetopsida");
 		assertEquals(new Integer(73),taxonList.get(0).getId());
+		
+		//test loadTaxonList(...)
+		List<TaxonModel> taxonModelList = taxonDAO.loadTaxonList(Arrays.asList(new Integer[]{73,26}));
+		assertTrue(taxonModelList.get(0).getId().equals(73) || taxonModelList.get(0).getId().equals(26));
+		assertTrue(taxonModelList.get(1).getId().equals(73) || taxonModelList.get(1).getId().equals(26));
 	}
 	
 	@Test

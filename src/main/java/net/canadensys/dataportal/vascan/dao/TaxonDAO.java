@@ -77,6 +77,13 @@ public interface TaxonDAO {
 	public TaxonModel loadTaxon(Integer taxonId);
 	
 	/**
+	 * Load a TaxonModel list from a list of id
+	 * @param taxonIdList
+	 * @return
+	 */
+	public List<TaxonModel> loadTaxonList(List<Integer> taxonIdList);
+	
+	/**
 	 * Load a TaxonModel list from a taxon calculated name. More than one TaxonModel can share the same calculated name.
 	 * @param taxonName
 	 * @return

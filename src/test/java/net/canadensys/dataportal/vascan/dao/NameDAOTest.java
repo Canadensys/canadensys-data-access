@@ -201,7 +201,7 @@ public class NameDAOTest {
 	@Test
 	public void testSearch(){
 		//Test asciifolding filter
-		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("epi");
+		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("epi",true);
 		assertEquals(1,nameModeListLR.getRows().size());
 		assertEquals(1,nameModeListLR.getTotal_rows());
 		assertEquals("Ascii Folding, search vernacular with accent",new Integer(7174), nameModeListLR.getRows().get(0).getTaxonId());
@@ -220,7 +220,7 @@ public class NameDAOTest {
 		assertFalse(carexFound);
 		
 		//Test search carex
-		nameModeListLR = nameDAO.search("carex");
+		nameModeListLR = nameDAO.search("carex",true);
 		assertEquals(new Integer(951), nameModeListLR.getRows().get(0).getTaxonId());
 		//make sure other carex are returned (carex feta)
 		assertTrue(nameModeListLR.getRows().size() > 1);
@@ -233,14 +233,14 @@ public class NameDAOTest {
 		assertTrue(nameModeList.get(0).getScore() > nameModeList.get(1).getScore());
 		
 		//Search for carex feta using the genus first letter
-		nameModeListLR = nameDAO.search("C. feta");
+		nameModeListLR = nameDAO.search("C. feta",true);
 		assertEquals(new Integer(4864), nameModeListLR.getRows().get(0).getTaxonId());
 		//same test with searchTaxon
 		nameModeList = nameDAO.searchTaxon("C. feta");
 		assertEquals(new Integer(4864), nameModeList.get(0).getTaxonId());
 		
 		//Search using the epithet
-		nameModeListLR = nameDAO.search("sabulosa");
+		nameModeListLR = nameDAO.search("sabulosa",true);
 		assertEquals(new Integer(5064), nameModeListLR.getRows().get(0).getTaxonId());
 		//same test with searchTaxon
 		nameModeList = nameDAO.searchTaxon("sabulosa");
@@ -248,10 +248,10 @@ public class NameDAOTest {
 		
 		//Test hybrids
 		//should work without the multiply sign
-		nameModeListLR = nameDAO.search("Achnella");
+		nameModeListLR = nameDAO.search("Achnella",true);
 		assertEquals("Search hybrid without symbol",new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
 		//should also work with the multiply sign
-		nameModeListLR = nameDAO.search("×Achnella");
+		nameModeListLR = nameDAO.search("×Achnella",true);
 		assertEquals("Search hybrid with symbol",new Integer(23238), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//Test searching for a vernacular on taxon index
@@ -259,13 +259,13 @@ public class NameDAOTest {
 		assertEquals(0,nameModeList.size());
 		
 		//Test vernacular
-		nameModeListLR = nameDAO.search("japanese m");
+		nameModeListLR = nameDAO.search("japanese m",true);
 		assertEquals(1,nameModeListLR.getRows().size());
-		nameModeListLR = nameDAO.search("maple");
+		nameModeListLR = nameDAO.search("maple",true);
 		assertEquals(1,nameModeListLR.getRows().size());
 		
 		//Test to make sure that taxon and vernacular are sorted correctly
-		nameModeListLR = nameDAO.search("carex");
+		nameModeListLR = nameDAO.search("carex",true);
 		int idx=0;
 		int carexSabulosaIdx=0;
 		int carexSaliIdx=0;
@@ -281,16 +281,16 @@ public class NameDAOTest {
 		assertTrue("taxon and vernacular order",carexSabulosaIdx < carexSaliIdx);
 		
 		//test a synonym with 2 parents
-		nameModeListLR = nameDAO.search("SynonymWithTwoParents");
+		nameModeListLR = nameDAO.search("SynonymWithTwoParents",true);
 		assertEquals(new Integer(101010), nameModeListLR.getRows().get(0).getTaxonId());
 		assertFalse(((NameConceptTaxonModel)nameModeListLR.getRows().get(0)).hasSingleParent());
 		
 		//Test with paging, do this one last since we change the behavior of the nameDAO
 		//We should not use setPageSize outside testing
 		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
-		nameModeListLR = nameDAO.search("care",0);
+		nameModeListLR = nameDAO.search("care",true,0);
 		assertEquals(1,nameModeListLR.getRows().size());
-		nameModeListLR = nameDAO.search("care",1);
+		nameModeListLR = nameDAO.search("care",true,1);
 		assertEquals(1,nameModeListLR.getRows().size());
 	}
 }
