@@ -52,7 +52,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 	
 	private static final String VERNACULAR_NAME_NGRAM_FIELD = "vernacularname.ngrams";
 	private static final String VERNACULAR_NAME_SPLIT_NGRAM_FIELD = "vernacularname.split_ngrams";
-	
+	private static final String VERNACULAR_NAME_SPLIT_NAME_FIELD = "vernacularname.split_name";
 	
 	private static final int DEFAULT_PAGE_SIZE = 50;
 	private int pageSize = DEFAULT_PAGE_SIZE;
@@ -165,11 +165,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 		    					.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
 		    				).boost(1)
 		    			)
-//		    			
-//		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text)).boost(1))
-//		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text)).boost(1))
 		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)).boost(1))
-
 		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text)).boost(1))
 		    			//Avoid giving a better score to vernacular ngrams if both query match
 		    			.should(QueryBuilders.constantScoreQuery(
@@ -186,7 +182,8 @@ public class ElasticSearchNameDAO implements NameDAO{
 	
 	/**
 	 * Build an ElasticSearch query using the name while ignoring the ngram (used for autocompletion).
-	 * Sorted by score then name (maybe it should be provided by the caller?)
+	 * Perfect match on taxon or vernacular names will get higher scores.
+	 * Sorted by score then name.
 	 * @param text
 	 * @param pageSize
 	 * @return
@@ -196,10 +193,22 @@ public class ElasticSearchNameDAO implements NameDAO{
 	        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 	        .setQuery(QueryBuilders
 	    			.boolQuery()
-	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text)))
-	    			.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
-	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)))
-	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text)))
+	    			.disableCoord(true)//ignore coord similarity 
+	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_FIELD,text)).boost(1))
+	    			.should(QueryBuilders.constantScoreQuery(
+    					QueryBuilders.boolQuery()
+    						.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+    						.should(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text))
+    					).boost(0.5f)
+		    		)
+	    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text)).boost(1))
+	    			//constant query with 0.5 boost only if we do not have a complete match so scores will be comparable with taxon
+	    			.should(QueryBuilders.constantScoreQuery(
+    					QueryBuilders.boolQuery()
+    						.mustNot(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text))
+    						.must(QueryBuilders.matchQuery(VERNACULAR_NAME_SPLIT_NAME_FIELD,text))
+    					).boost(0.5f)
+		    		)
 	    	)
 	    	.setSize(pageSize)
             .addSort(SortBuilders.scoreSort())

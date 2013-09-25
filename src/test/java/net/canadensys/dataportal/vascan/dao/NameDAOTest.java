@@ -228,8 +228,6 @@ public class NameDAOTest {
 		assertTrue(nameModeListLR.getRows().get(0).getScore() > nameModeListLR.getRows().get(1).getScore());
 		//same test with searchTaxon
 		nameModeList = nameDAO.searchTaxon("carex");
-		System.out.println("Score1."+nameModeList.get(0).getScore());
-		System.out.println("Score1."+nameModeList.get(1).getScore());
 		assertTrue(nameModeList.get(0).getScore() > nameModeList.get(1).getScore());
 		
 		//Search for carex feta using the genus first letter
@@ -293,4 +291,53 @@ public class NameDAOTest {
 		nameModeListLR = nameDAO.search("care",true,1);
 		assertEquals(1,nameModeListLR.getRows().size());
 	}
+	
+	@Test
+	public void testSearchWithoutAutocomplete(){
+		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("car",false);
+		assertEquals(0,nameModeListLR.getRows().size());
+		
+		//test vernacular names when using a part of the name
+		nameModeListLR = nameDAO.search("sali",false);
+		assertEquals(1,nameModeListLR.getRows().size());
+	}
+	
+	@Test
+	public void testSearchScoringWithoutAutocomplete(){
+		//test vernacular names partial match
+		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("sali",false);
+		assertEquals(1,nameModeListLR.getRows().size());
+		float saliScore = nameModeListLR.getRows().get(0).getScore();
+				
+		//make sure that scores make sense
+		nameModeListLR = nameDAO.search("carex sali",false);
+		assertEquals(1,nameModeListLR.getRows().size());
+		float carexSaliScore = nameModeListLR.getRows().get(0).getScore();
+		assertTrue("Full match should have a better score than partial match",carexSaliScore > saliScore);
+		
+		nameModeListLR = nameDAO.search("carex feta",false);
+		assertEquals(1,nameModeListLR.getRows().size());
+		float carexFetaScore = nameModeListLR.getRows().get(0).getScore();
+		assertTrue("Full match should have the same score for taxon and vernacular",carexSaliScore == carexFetaScore);
+	}
+	
+	@Test
+	public void testSearchScoringWithAutocomplete(){
+		//test vernacular names partial match
+		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("sali",true);
+		assertEquals(1,nameModeListLR.getRows().size());
+		float saliScore = nameModeListLR.getRows().get(0).getScore();
+				
+		//make sure that scores make sense
+		nameModeListLR = nameDAO.search("carex sali",true);
+		assertEquals(1,nameModeListLR.getRows().size());
+		float carexSaliScore = nameModeListLR.getRows().get(0).getScore();
+		assertTrue("Full match should have a better score than partial match",carexSaliScore > saliScore);
+		
+		nameModeListLR = nameDAO.search("carex feta",true);
+		assertEquals(1,nameModeListLR.getRows().size());
+		float carexFetaScore = nameModeListLR.getRows().get(0).getScore();
+		assertTrue("Full match should have the same score for taxon and vernacular",carexSaliScore == carexFetaScore);
+	}
+	
 }
