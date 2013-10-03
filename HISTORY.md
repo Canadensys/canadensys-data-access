@@ -1,5 +1,8 @@
 Version History
 ===============
+Version 2.1.1 2013-20-03
+* Bug fix: HibernateTaxonDAO.getStatusRegionCriterion(...) String[] region parameter should not be case sensitive.
+
 Version 2.1.0 2013-09-27
 * ElasticSearchNameDAO search function can search with or without autocompletion.
 * ElasticSearchNameDAO search function now includes epithet and "genus first letter".

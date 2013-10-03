@@ -10,6 +10,7 @@ import net.canadensys.dataportal.vascan.dao.TaxonDAO;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -413,6 +414,16 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @return
 	 */
 	private Criterion getStatusRegionCriterion(String combination, String[] status, String[] region){
+		
+		//TODO: changed once canadensys-core 1.6 is available
+		String[] tmpRegion = new String[region.length];
+		int idx=0;
+		for(String currStr : region){
+			tmpRegion[idx] = currStr.toUpperCase();
+			idx++;
+		}
+		region = tmpRegion;
+		
 		if(combination.equals("allof")){
 			return getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.AND);
 		}
@@ -436,7 +447,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * Returns a Criterion to include all region with one of the status.
 	 * The operation determine if the have an OR or an AND between the regions
 	 * @param status
-	 * @param province
+	 * @param province uppercase
 	 * @param op
 	 * @return
 	 */
@@ -472,14 +483,14 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	/**
 	 * Returns a Criterion to include any of the regions with any of the status.
 	 * @param status
-	 * @param province
+	 * @param province uppercase
 	 * @return
 	 */
 	private Criterion getAnyRegionStatusCriterion(String[] status, String[] regions){
 		Disjunction disjunction = Restrictions.disjunction();
 		for(String currRegion : regions){
 			for(String currStatus: status){
-				disjunction.add( Restrictions.eq(currRegion, currStatus));
+				disjunction.add(Restrictions.eq(currRegion, currStatus));
 			}
 		}
 		return disjunction;
@@ -488,8 +499,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	/**
 	 * Returns a Criterion to exclude all regions with one of the provided status that are not in the provided region array.
 	 * @param status
-	 * @param province
-	 * @param allProvinces
+	 * @param province uppercase
+	 * @param allProvinces uppercase
 	 * @return
 	 */
 	private Criterion getExclusionCriterion(String[] status, String[] region, String[] allRegions){
