@@ -10,12 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.sql.DataSource;
-import javax.swing.plaf.ListUI;
 
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
-import org.codehaus.jackson.map.ser.ArraySerializers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

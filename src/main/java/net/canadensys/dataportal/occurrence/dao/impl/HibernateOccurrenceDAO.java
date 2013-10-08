@@ -23,9 +23,6 @@ import net.canadensys.query.interpreter.QueryPartInterpreterResolver;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -41,6 +38,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Implementation for accessing occurrence data through Hibernate technology.
