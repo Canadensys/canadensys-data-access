@@ -414,15 +414,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @return
 	 */
 	private Criterion getStatusRegionCriterion(String combination, String[] status, String[] region){
-		
-		//TODO: changed once canadensys-core 1.6 is available
-		String[] tmpRegion = new String[region.length];
-		int idx=0;
-		for(String currStr : region){
-			tmpRegion[idx] = currStr.toUpperCase();
-			idx++;
-		}
-		region = tmpRegion;
+		//TaxonLookupModel uses upper case for regions
+		region = net.canadensys.utils.StringUtils.allUpperCase(region);
 		
 		if(combination.equals("allof")){
 			return getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.AND);

@@ -1,6 +1,7 @@
 package net.canadensys.dataportal.occurrence.dwc;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import net.canadensys.dataportal.occurrence.model.OccurrenceRawModel;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 /**
@@ -34,6 +36,7 @@ public class OccurrenceDwcWriterTest {
 			e.printStackTrace();
 			fail();
 		}
+
 		OccurrenceModel occModel = new OccurrenceModel();
 		occModel.setAuto_id(1);
 		OccurrenceRawModel occRawModel = new OccurrenceRawModel();
@@ -61,8 +64,19 @@ public class OccurrenceDwcWriterTest {
 		File generatedMeta = new File(FilenameUtils.concat(destinationFolder.getAbsolutePath(), "meta.xml"));
 		
 		try {
-			assertTrue(FileUtils.contentEquals(expectedFile, generatedFile));
-			assertTrue(FileUtils.contentEquals(expectedMeta, generatedMeta));
+			List<String> expectedLines = FileUtils.readLines(expectedFile, "UTF-8");
+			List<String> actualLines = FileUtils.readLines(expectedFile, "UTF-8");
+			//use StringUtils.chomp to ignore the EOL char 
+			for(int i=0;i<expectedLines.size();i++){
+				assertEquals(StringUtils.chomp(expectedLines.get(i)),StringUtils.chomp(actualLines.get(i)));
+			}
+
+			expectedLines = FileUtils.readLines(expectedMeta, "UTF-8");
+			actualLines = FileUtils.readLines(generatedMeta, "UTF-8");
+			//use StringUtils.chomp to ignore the EOL char 
+			for(int i=0;i<expectedLines.size();i++){
+				assertEquals(StringUtils.chomp(expectedLines.get(i)),StringUtils.chomp(actualLines.get(i)));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
