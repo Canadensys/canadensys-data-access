@@ -3,6 +3,10 @@ canadensys-data-access
 
 Canandensys data access layer containing DAO and models.
 
+Code Status
+-----------
+[![Build Status](https://travis-ci.org/Canadensys/canadensys-data-access.png)](https://travis-ci.org/Canadensys/canadensys-data-access)
+
 Dependencies
 ------------
 * [Apache Maven 3](http://maven.apache.org/)
