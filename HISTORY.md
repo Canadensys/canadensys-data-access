@@ -1,6 +1,10 @@
 Version History
 ===============
-Version 2.1.1 2013-20-03
+Version 2.2.0 2013-10-16
+* Add DarwinCoreTermUtils
+* Update dependencies (Spring, Jackson, canadensys-core)
+
+Version 2.1.1 2013-10-03
 * Bug fix: HibernateTaxonDAO.getStatusRegionCriterion(...) String[] region parameter should not be case sensitive.
 
 Version 2.1.0 2013-09-27
