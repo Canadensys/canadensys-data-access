@@ -1,5 +1,8 @@
 Version History
 ===============
+Version 2.2.1 2013-12-04
+* Reorganize scripts
+
 Version 2.2.0 2013-10-16
 * Add DarwinCoreTermUtils
 * Update dependencies (Spring, Jackson, canadensys-core)

@@ -2,9 +2,12 @@ package net.canadensys.dataportal.vascan.dao;
 
 import static org.elasticsearch.client.Requests.refreshRequest;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import net.canadensys.databaseutils.ElasticSearchTestInstance;
@@ -47,9 +50,9 @@ public class NameDAOTest {
 			client.admin().indices().prepareDelete("vascan").execute().actionGet();
 		}
 		catch(IndexMissingException imEx){}//ignore
-		
+		URL indexCreationScriptURL = NameDAOTest.class.getResource("/script/vascan/vascan_index_creation.txt");
 		client.admin().indices().prepareCreate("vascan")
-		    .setSource(FileUtils.readFileToString(new File("script/vascan/vascan_index_creation.txt")))
+		    .setSource(FileUtils.readFileToString(new File(indexCreationScriptURL.toURI())))
 		    .execute()
 		    .actionGet();
 
