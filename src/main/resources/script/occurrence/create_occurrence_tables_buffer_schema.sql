@@ -52,6 +52,7 @@ dwcaid VARCHAR(25),
 CONSTRAINT occurrence_pkey PRIMARY KEY (auto_id )
 );
 
+CREATE SEQUENCE buffer.occurrence_raw_auto_id_seq;
 CREATE TABLE buffer.occurrence_raw (
 auto_id INTEGER NOT NULL,
 dwcaid VARCHAR(25),
@@ -218,7 +219,6 @@ year TEXT,
 CONSTRAINT occurrence_raw_pkey PRIMARY KEY (auto_id ),
 CONSTRAINT occurrence_raw_dwcaid_sourcefileid_key UNIQUE (dwcaid , sourcefileid)
 );
-
 
 CREATE SEQUENCE buffer.unique_values_id_seq;
 CREATE TABLE buffer.unique_values
