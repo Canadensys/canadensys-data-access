@@ -1,6 +1,7 @@
 CREATE TABLE occurrence (
 auto_id INTEGER NOT NULL,
 associatedmedia TEXT,
+associatedmediamime TEXT,
 catalogNumber TEXT,
 _references TEXT,
 collectionCode TEXT,

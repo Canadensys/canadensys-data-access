@@ -75,6 +75,7 @@ public class OccurrenceModel {
 	
 	private Boolean hascoordinates;
 	private Boolean hasmedia;
+	private String associatedmediamime;
 	
 	private String verbatimelevation;
 	private String habitat;
@@ -309,12 +310,21 @@ public class OccurrenceModel {
 	public void setInfraspecificepithet(String infraspecificepithet) {
 		this.infraspecificepithet = infraspecificepithet;
 	}
+	
 	public String getAssociatedmedia() {
 		return associatedmedia;
 	}
 	public void setAssociatedmedia(String associatedmedia) {
 		this.associatedmedia = associatedmedia;
 	}
+	
+	public String getAssociatedmediamime() {
+		return associatedmediamime;
+	}
+	public void setAssociatedmediamime(String associatedmediamime) {
+		this.associatedmediamime = associatedmediamime;
+	}
+	
 	public String getScientificnameauthorship() {
 		return scientificnameauthorship;
 	}
