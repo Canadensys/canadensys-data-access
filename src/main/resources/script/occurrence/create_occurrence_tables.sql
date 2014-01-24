@@ -48,13 +48,13 @@ averagealtituderounded integer,
 hascoordinates boolean,
 hasmedia boolean,
 sourcefileid VARCHAR(50),
-dwcaid VARCHAR(25),
+dwcaid VARCHAR(75),
 CONSTRAINT occurrence_pkey PRIMARY KEY (auto_id )
 );
 
 CREATE TABLE occurrence_raw (
 auto_id INTEGER NOT NULL,
-dwcaid VARCHAR(25),
+dwcaid VARCHAR(75),
 sourcefileid character varying(50) NOT NULL,
 acceptedNameUsage TEXT,
 acceptedNameUsageID TEXT,
