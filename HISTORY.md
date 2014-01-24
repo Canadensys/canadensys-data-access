@@ -1,5 +1,9 @@
 Version History
 ===============
+Version 2.2.2 2014-01-24
+* Update dependencies
+* Added associatedMediaMime
+
 Version 2.2.1 2013-12-04
 * Reorganize scripts
 
