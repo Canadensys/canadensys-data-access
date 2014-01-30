@@ -16,8 +16,8 @@ public class ResourceContactModel {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "resource_contact_id_seq")
 	private Integer id;
 	
-	private String dataset_shortname;
-	private String dataset_title;
+	private String sourcefileid;
+	private String resource_name;
 	
 	private String name;
 	private String position_name;
@@ -38,18 +38,18 @@ public class ResourceContactModel {
 		this.id = id;
 	}
 	
-	public String getDataset_shortname() {
-		return dataset_shortname;
+	public String getSourcefileid() {
+		return sourcefileid;
 	}
-	public void setDataset_shortname(String dataset_shortname) {
-		this.dataset_shortname = dataset_shortname;
+	public void setSourcefileid(String sourcefileid) {
+		this.sourcefileid = sourcefileid;
 	}
 	
-	public String getDataset_title() {
-		return dataset_title;
+	public String getResource_name() {
+		return resource_name;
 	}
-	public void setDataset_title(String dataset_title) {
-		this.dataset_title = dataset_title;
+	public void setResource_name(String resource_name) {
+		this.resource_name = resource_name;
 	}
 	
 	public String getName() {
@@ -115,6 +115,4 @@ public class ResourceContactModel {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
 }

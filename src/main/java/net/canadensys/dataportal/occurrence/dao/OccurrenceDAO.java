@@ -39,6 +39,14 @@ public interface OccurrenceDAO {
 	public OccurrenceModel load(String sourceFileId, String dwcaId, boolean deepLoad);
 	
 	/**
+	 * Load a specific Occurrence into an OccurrenceModel but only filled columns specified by columnList.
+	 * @param auto_id
+	 * @param columnList
+	 * @return partially filled OccurrenceModel according to columnList.
+	 */
+	public OccurrenceModel loadOccurrenceSummary(int auto_id, List<String> columnList);
+	
+	/**
 	 * Search based on the properties set in the searchCriteria
 	 * @param searchCriteria
 	 * @param limit (optional)
@@ -113,13 +121,12 @@ public interface OccurrenceDAO {
 	
 	/**
 	 * Get a summary (only some columns) of an occurrence as Json string.
-	 * Normally, a DOA should not format results but, for performance reasons we will tolerate this.
-	 * We want to avoid Object[]->Model->JSON when we can put the Object[] into JSON directly.
-	 * It's also easier to manage the column list and avoid the instantiation of unwanted column.
-	 * A good tradeoff could be to return result in a map.
+	 * DOA should not format results.
 	 * @param auto_id Occurrence unique id
 	 * @param columnList list of columns to include in the result
 	 * @return a summary (only the columns from columnList) as Json string
 	 */
+	@Deprecated
 	public String getOccurrenceSummaryJson(int auto_id, String idColumnName, List<String> columnList);
+	
 }

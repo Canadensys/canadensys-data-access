@@ -36,7 +36,7 @@ public class ResourceContactDAOTest extends AbstractTransactionalJUnit4SpringCon
 		ResourceContactModel testModel = new ResourceContactModel();
 		testModel.setName("Test Name");
 		testModel.setEmail("a@a.com");
-		testModel.setDataset_shortname("test-resource");
+		testModel.setSourcefileid("test-resource");
 		assertTrue(resourceContactDAO.save(testModel));
 		
 		Integer id = testModel.getId();		

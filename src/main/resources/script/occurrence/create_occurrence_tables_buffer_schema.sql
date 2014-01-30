@@ -247,8 +247,8 @@ CREATE SEQUENCE buffer.resource_contact_id_seq;
 CREATE TABLE buffer.resource_contact
 (
 	id integer DEFAULT nextval('buffer.resource_contact_id_seq') NOT NULL,
-	dataset_shortname character varying(50),
-	dataset_title character varying(100),
+	sourcefileid character varying(50),
+	resource_name character varying(100),
 	name character varying(100),
 	position_name character varying(100),
 	organization_name character varying(100),

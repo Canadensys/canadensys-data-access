@@ -1,6 +1,7 @@
 package net.canadensys.dataportal.occurrence.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.AbstractMap;
@@ -12,12 +13,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import net.canadensys.dataportal.occurrence.dao.OccurrenceDAO;
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
-import net.canadensys.query.TestSearchableFieldBuilder;
 import net.canadensys.query.LimitedResult;
 import net.canadensys.query.QueryOperatorEnum;
 import net.canadensys.query.SearchQueryPart;
+import net.canadensys.query.TestSearchableFieldBuilder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -180,6 +180,24 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		
 		assertTrue(json.startsWith("{"));
 		assertTrue(json.endsWith("}"));
+	}
+	
+	@Test
+	public void testLoadOccurrenceSummary(){
+		ArrayList<String> columnList = new ArrayList<String>();
+		columnList.add("auto_id");
+		columnList.add("country");
+		columnList.add("locality");
+		columnList.add("sourcefileid");
+		
+		OccurrenceModel occModel = occurrenceDAO.loadOccurrenceSummary(1, columnList);
+		
+		//this column is in the database but was not specified in column list
+		assertNull(occModel.getInstitutioncode());
+		
+		assertEquals("Mexico",occModel.getCountry());
+		assertEquals("Mexico",occModel.getLocality());
+		assertEquals("uom-occurrence", occModel.getSourcefileid());
 	}
 	
 	/**

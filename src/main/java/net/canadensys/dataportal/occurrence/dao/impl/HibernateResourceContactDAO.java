@@ -45,9 +45,9 @@ public class HibernateResourceContactDAO implements ResourceContactDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ResourceContactModel> load(String datasetShortname){
+	public List<ResourceContactModel> load(String sourcefileid){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(ResourceContactModel.class);
-		searchCriteria.add(Restrictions.eq("dataset_shortname", datasetShortname));
+		searchCriteria.add(Restrictions.eq("sourcefileid", sourcefileid));
 		return searchCriteria.list();
 	}
 	

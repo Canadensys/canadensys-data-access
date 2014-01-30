@@ -35,6 +35,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -88,6 +89,20 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 		return (OccurrenceModel)searchCriteria.uniqueResult();
 	}
 	
+	@Override
+	public OccurrenceModel loadOccurrenceSummary(int auto_id, List<String> columnList){
+		Criteria occCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceModel.class);
+		occCriteria.add(Restrictions.eq(MANAGED_ID, auto_id));
+		if(columnList != null && !columnList.isEmpty()){
+			ProjectionList projectionsList = Projections.projectionList();
+			for(String fieldName : columnList){
+				projectionsList.add(Projections.property(fieldName),fieldName);
+			}
+			occCriteria.setProjection(projectionsList);
+		}
+		occCriteria.setResultTransformer(Transformers.aliasToBean(OccurrenceModel.class));
+		return (OccurrenceModel)occCriteria.uniqueResult();
+	}
 	
 	@Override
 	public List<OccurrenceModel> search(OccurrenceModel searchCriteria, Integer limit){
@@ -356,6 +371,4 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 		}
 		return intepreter.toCriterion(queryPart);
 	}
-	
-	
 }

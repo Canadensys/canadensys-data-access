@@ -1,5 +1,9 @@
 Version History
 ===============
+Version 2.3.0 TBD
+* OccurrenceDAO: getOccurrenceSummaryJson is now deprecated, replaced by loadOccurrenceSummary
+
+
 Version 2.2.2 2014-01-24
 * Update dependencies
 * Added associatedMediaMime
