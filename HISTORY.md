@@ -1,8 +1,9 @@
 Version History
 ===============
 Version 2.3.0 TBD
+* Database Schema changes: [2.2.2_to_2.3.0.sql](https://github.com/Canadensys/canadensys-data-access/blob/dev/script/migrations/occurrence/2.2.2_to_2.3.0.sql)
+* Refactor ResourceContactModel
 * OccurrenceDAO: getOccurrenceSummaryJson is now deprecated, replaced by loadOccurrenceSummary
-
 
 Version 2.2.2 2014-01-24
 * Update dependencies
