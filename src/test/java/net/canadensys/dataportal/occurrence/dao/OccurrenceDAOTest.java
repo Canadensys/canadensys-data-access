@@ -15,9 +15,11 @@ import javax.sql.DataSource;
 
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
 import net.canadensys.query.LimitedResult;
+import net.canadensys.query.OrderByEnum;
 import net.canadensys.query.QueryOperatorEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.TestSearchableFieldBuilder;
+import net.canadensys.query.sort.SearchSortPart;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -234,6 +236,34 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		assertEquals(2, ids.size());
 		assertTrue(ids.contains(1));
 		assertTrue(ids.contains(4));
+	}
+	
+	/**
+	 * Test iterator feature of the Occurrence DAO using sorting option.
+	 */
+	@Test
+	public void testSearchWithSorting(){
+		
+		Map<String,List<SearchQueryPart>> searchCriteria = new HashMap<String, List<SearchQueryPart>>();
+		List<SearchQueryPart> queryPartListCountry = new ArrayList<SearchQueryPart>();
+		queryPartListCountry.add(sqpCountryMexico);
+		queryPartListCountry.add(sqpCountryUSA);
+		searchCriteria.put("country", queryPartListCountry);
+		
+		SearchSortPart sorting = new SearchSortPart();
+		sorting.setPageNumber(0);
+		sorting.setOrderByColumn("country");
+		sorting.setOrderBy(OrderByEnum.DESC);
+
+		LimitedResult<List<Map<String,String>>> result = 
+				occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
+		assertEquals(2, result.getRows().size());
+		assertEquals("United States", result.getRows().get(0).get("country"));
+		
+		sorting.setOrderBy(OrderByEnum.ASC);
+		result = occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
+		assertEquals(2, result.getRows().size());
+		assertEquals("Mexico", result.getRows().get(0).get("country"));
 	}
 	
 	@Test

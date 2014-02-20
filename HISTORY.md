@@ -1,5 +1,8 @@
 Version History
 ===============
+Version 2.4.0 TBD
+* OccurrenceDAO: added sorting and paging support for searchWithLimit
+
 Version 2.3.0 2014-01-31
 * Database Schema changes: [2.2.2_to_2.3.0.sql](https://github.com/Canadensys/canadensys-data-access/blob/dev/script/migrations/occurrence/2.2.2_to_2.3.0.sql)
 * Refactor ResourceContactModel

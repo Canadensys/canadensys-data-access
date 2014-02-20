@@ -16,12 +16,15 @@ import net.canadensys.databaseutils.ScrollableResultsIteratorWrapper;
 import net.canadensys.dataportal.occurrence.dao.OccurrenceDAO;
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
 import net.canadensys.query.LimitedResult;
+import net.canadensys.query.OrderByEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchQueryPartUtils;
 import net.canadensys.query.interpreter.QueryPartInterpreter;
 import net.canadensys.query.interpreter.QueryPartInterpreterResolver;
+import net.canadensys.query.sort.SearchSortPart;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
@@ -183,24 +186,38 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	@Override
 	public LimitedResult<List<Map<String, String>>> searchWithLimit(
 			Map<String, List<SearchQueryPart>> searchCriteriaMap, List<String> columnList) {
+		return searchWithLimit(searchCriteriaMap, columnList, null);
+	}
+	
+	@Override
+	public LimitedResult<List<Map<String, String>>> searchWithLimit(
+			Map<String, List<SearchQueryPart>> searchCriteriaMap, List<String> columnList, SearchSortPart sorting) {
 		
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceModel.class)
 				.setMaxResults(DEFAULT_LIMIT);
 		
+		fillCriteria(searchCriteria,searchCriteriaMap);
+		
+		//First, count all rows
+		searchCriteria.setProjection(Projections.count(MANAGED_ID));
+		Long total_rows = (Long)searchCriteria.uniqueResult();
+		
+		//Then set our projection, paging, order by ...
+		if(sorting != null){
+			handleSorting(searchCriteria, sorting, DEFAULT_LIMIT);
+		}
+
 		ProjectionList projectionsList = Projections.projectionList();
 		for(String fieldName : columnList){
 			projectionsList.add(Projections.property(fieldName));
 		}
 		searchCriteria.setProjection(projectionsList);
 		
-		//put searchCriteriaMap into the Criteria object
-		fillCriteria(searchCriteria,searchCriteriaMap);
-		
 		@SuppressWarnings("unchecked")    
 		List<Object[]> occurrenceList = searchCriteria.list();
 		List<Map<String, String>> searchResult = new ArrayList<Map<String,String>>(occurrenceList.size());
 		
-		//Put the result into an hashmap
+		//Put the result into a hashmap
 		for(Object[] row : occurrenceList){
 			HashMap<String,String> hm = new HashMap<String,String>();
 			for(int i=0;i<columnList.size();i++){
@@ -208,10 +225,6 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 			}
 			searchResult.add(hm);
 		}
-		
-		//count all rows
-		searchCriteria.setProjection(Projections.count(MANAGED_ID));
-		Long total_rows = (Long)searchCriteria.uniqueResult();
 		
 		LimitedResult<List<Map<String, String>>> qr = new LimitedResult<List<Map<String, String>>>();
 		qr.setRows(searchResult);
@@ -370,5 +383,51 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 			return null;
 		}
 		return intepreter.toCriterion(queryPart);
+	}
+	
+	/**
+	 * Handle paging and ORDER BY clause together.
+	 * The main reason is that paging requires a stable ordering.
+	 * @param searchCriteria
+	 * @param sorting
+	 * @param pageSize
+	 */
+	private void handleSorting(Criteria searchCriteria, SearchSortPart sorting, Integer pageSize){
+		
+		Integer pageNumber = sorting.getPageNumber();
+		String orderByColumn = sorting.getOrderByColumn();
+		OrderByEnum direction = sorting.getOrderBy();
+		
+		//if no paging and no ordering, there is nothing to do.
+		if(pageNumber == null && (StringUtils.isBlank(orderByColumn) || direction == null)){
+			return;
+		}
+		
+		//if we ask for paging, ensure the order by clause for consitent results
+		if(pageNumber != null && (StringUtils.isBlank(orderByColumn) || direction == null)){
+			//paging requires order by
+			if(StringUtils.isBlank(orderByColumn)){
+				orderByColumn = MANAGED_ID;
+			}
+			if(direction == null){
+				direction = OrderByEnum.ASC;
+			}
+		}
+		
+		//Handle paging
+		if(pageNumber != null && pageNumber.intValue() > 0){
+			if(pageSize == null){
+				pageSize = DEFAULT_LIMIT;
+			}
+			searchCriteria.setFirstResult(pageNumber*pageSize);
+		}
+		
+		switch(direction){
+			case ASC: searchCriteria.addOrder(Order.asc(orderByColumn));
+			break;
+			case DESC: searchCriteria.addOrder(Order.desc(orderByColumn));
+			break;
+			default: throw new IllegalArgumentException("Direction must be ASC or DESC");
+		}
 	}
 }

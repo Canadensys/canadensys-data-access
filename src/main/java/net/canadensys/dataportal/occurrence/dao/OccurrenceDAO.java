@@ -9,6 +9,7 @@ import java.util.Map;
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
 import net.canadensys.query.LimitedResult;
 import net.canadensys.query.SearchQueryPart;
+import net.canadensys.query.sort.SearchSortPart;
 
 /**
  * Interface for accessing occurrence data.
@@ -85,6 +86,15 @@ public interface OccurrenceDAO {
 	 */
 	public LimitedResult<List<Map<String, String>>> searchWithLimit(Map<String,List<SearchQueryPart>> searchCriteria, List<String> columnList);
 	
+
+	/**
+	 * See searchWithLimit
+	 * @param searchCriteria
+	 * @param columnList
+	 * @param sorting sorting options
+	 * @return
+	 */
+	public LimitedResult<List<Map<String, String>>> searchWithLimit(Map<String,List<SearchQueryPart>> searchCriteria, List<String> columnList, SearchSortPart sorting);
 
 	/**
 	 * Returns the count of all occurrences available for those criteria 
