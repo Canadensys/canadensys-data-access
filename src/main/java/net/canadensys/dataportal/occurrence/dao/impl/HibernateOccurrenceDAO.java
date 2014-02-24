@@ -16,7 +16,7 @@ import net.canadensys.databaseutils.ScrollableResultsIteratorWrapper;
 import net.canadensys.dataportal.occurrence.dao.OccurrenceDAO;
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
 import net.canadensys.query.LimitedResult;
-import net.canadensys.query.OrderByEnum;
+import net.canadensys.query.OrderEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchQueryPartUtils;
 import net.canadensys.query.interpreter.QueryPartInterpreter;
@@ -399,13 +399,13 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 		Integer pageNumber = sorting.getPageNumber();
 		Integer pageSize = sorting.getPageSize();
 		String orderByColumn = sorting.getOrderByColumn();
-		OrderByEnum direction = sorting.getOrderBy();
+		OrderEnum direction = sorting.getOrder();
 		
 		if(pageSize == null){
 			pageSize = DEFAULT_LIMIT;
 		}
 		if(direction == null){
-			direction = OrderByEnum.ASC;
+			direction = OrderEnum.ASC;
 		}
 		searchCriteria.setMaxResults(pageSize);
 		

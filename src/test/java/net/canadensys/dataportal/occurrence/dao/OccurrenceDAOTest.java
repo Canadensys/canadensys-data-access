@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
 import net.canadensys.query.LimitedResult;
-import net.canadensys.query.OrderByEnum;
+import net.canadensys.query.OrderEnum;
 import net.canadensys.query.QueryOperatorEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.TestSearchableFieldBuilder;
@@ -253,14 +253,14 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		SearchSortPart sorting = new SearchSortPart();
 		sorting.setPageNumber(0);
 		sorting.setOrderByColumn("country");
-		sorting.setOrderBy(OrderByEnum.DESC);
+		sorting.setOrder(OrderEnum.DESC);
 
 		LimitedResult<List<Map<String,String>>> result = 
 				occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
 		assertEquals(2, result.getRows().size());
 		assertEquals("United States", result.getRows().get(0).get("country"));
 		
-		sorting.setOrderBy(OrderByEnum.ASC);
+		sorting.setOrder(OrderEnum.ASC);
 		result = occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
 		assertEquals(2, result.getRows().size());
 		assertEquals("Mexico", result.getRows().get(0).get("country"));

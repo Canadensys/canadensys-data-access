@@ -5,6 +5,6 @@ package net.canadensys.query;
  * @author canadensys
  *
  */
-public enum OrderByEnum {
+public enum OrderEnum {
 	ASC,DESC;
 }

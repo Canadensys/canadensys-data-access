@@ -1,6 +1,6 @@
 package net.canadensys.query.sort;
 
-import net.canadensys.query.OrderByEnum;
+import net.canadensys.query.OrderEnum;
 
 /**
  * SearchSortPart represents the sorting part of a search query and is not tied to a specific technology.
@@ -13,7 +13,7 @@ public class SearchSortPart {
 	private Integer pageNumber;
 	private Integer pageSize;
 	private String orderByColumn;
-	private OrderByEnum orderBy;
+	private OrderEnum order;
 	
 	/**
 	 * Page number starts at 1.
@@ -41,10 +41,10 @@ public class SearchSortPart {
 		this.orderByColumn = orderByColumn;
 	}
 	
-	public OrderByEnum getOrderBy() {
-		return orderBy;
+	public OrderEnum getOrder() {
+		return order;
 	}
-	public void setOrderBy(OrderByEnum orderBy) {
-		this.orderBy = orderBy;
+	public void setOrder(OrderEnum order) {
+		this.order = order;
 	}
 }
