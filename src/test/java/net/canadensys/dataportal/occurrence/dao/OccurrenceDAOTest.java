@@ -264,6 +264,18 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		result = occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
 		assertEquals(2, result.getRows().size());
 		assertEquals("Mexico", result.getRows().get(0).get("country"));
+		
+		//test paging
+		sorting.setPageSize(1);
+		result = occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
+		assertEquals(1, result.getRows().size());
+		assertEquals("Mexico", result.getRows().get(0).get("country"));
+		
+		sorting.setPageSize(1);
+		sorting.setPageNumber(2);
+		result = occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
+		assertEquals(1, result.getRows().size());
+		assertEquals("United States", result.getRows().get(0).get("country"));
 	}
 	
 	@Test

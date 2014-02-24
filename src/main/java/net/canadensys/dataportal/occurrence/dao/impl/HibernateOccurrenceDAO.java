@@ -193,8 +193,7 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	public LimitedResult<List<Map<String, String>>> searchWithLimit(
 			Map<String, List<SearchQueryPart>> searchCriteriaMap, List<String> columnList, SearchSortPart sorting) {
 		
-		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceModel.class)
-				.setMaxResults(DEFAULT_LIMIT);
+		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceModel.class);
 		
 		fillCriteria(searchCriteria,searchCriteriaMap);
 		
@@ -204,7 +203,10 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 		
 		//Then set our projection, paging, order by ...
 		if(sorting != null){
-			handleSorting(searchCriteria, sorting, DEFAULT_LIMIT);
+			handleSorting(searchCriteria, sorting);
+		}
+		else{
+			searchCriteria.setMaxResults(DEFAULT_LIMIT);
 		}
 
 		ProjectionList projectionsList = Projections.projectionList();
@@ -392,34 +394,38 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	 * @param sorting
 	 * @param pageSize
 	 */
-	private void handleSorting(Criteria searchCriteria, SearchSortPart sorting, Integer pageSize){
+	private void handleSorting(Criteria searchCriteria, SearchSortPart sorting){
 		
 		Integer pageNumber = sorting.getPageNumber();
+		Integer pageSize = sorting.getPageSize();
 		String orderByColumn = sorting.getOrderByColumn();
 		OrderByEnum direction = sorting.getOrderBy();
 		
+		if(pageSize == null){
+			pageSize = DEFAULT_LIMIT;
+		}
+		if(direction == null){
+			direction = OrderByEnum.ASC;
+		}
+		searchCriteria.setMaxResults(pageSize);
+		
 		//if no paging and no ordering, there is nothing to do.
-		if(pageNumber == null && (StringUtils.isBlank(orderByColumn) || direction == null)){
+		if(pageNumber == null && StringUtils.isBlank(orderByColumn)){
 			return;
 		}
 		
-		//if we ask for paging, ensure the order by clause for consitent results
-		if(pageNumber != null && (StringUtils.isBlank(orderByColumn) || direction == null)){
+		//if we ask for paging, ensure the order by clause for consistent results
+		if(pageNumber != null && StringUtils.isBlank(orderByColumn)){
 			//paging requires order by
 			if(StringUtils.isBlank(orderByColumn)){
 				orderByColumn = MANAGED_ID;
-			}
-			if(direction == null){
-				direction = OrderByEnum.ASC;
 			}
 		}
 		
 		//Handle paging
 		if(pageNumber != null && pageNumber.intValue() > 0){
-			if(pageSize == null){
-				pageSize = DEFAULT_LIMIT;
-			}
-			searchCriteria.setFirstResult(pageNumber*pageSize);
+			//page number to record shift
+			searchCriteria.setFirstResult((pageNumber-1)*pageSize);
 		}
 		
 		switch(direction){

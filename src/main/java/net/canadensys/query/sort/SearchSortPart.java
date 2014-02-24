@@ -11,14 +11,27 @@ import net.canadensys.query.OrderByEnum;
 public class SearchSortPart {
 	
 	private Integer pageNumber;
+	private Integer pageSize;
 	private String orderByColumn;
 	private OrderByEnum orderBy;
 	
+	/**
+	 * Page number starts at 1.
+	 * First page is 1 but 0 is an accepted value.
+	 * @return
+	 */
 	public Integer getPageNumber() {
 		return pageNumber;
 	}
 	public void setPageNumber(Integer pageNumber) {
 		this.pageNumber = pageNumber;
+	}
+	
+	public Integer getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
 	}
 	
 	public String getOrderByColumn() {
