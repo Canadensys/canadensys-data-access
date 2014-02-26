@@ -43,6 +43,16 @@
 			<id>gbif-all</id>
 			<url>http://repository.gbif.org/content/groups/gbif</url>
 		</repository>
+		<repository>
+			<id>snapshots-repo</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
 	</repositories>
 
 	<dependencies>
