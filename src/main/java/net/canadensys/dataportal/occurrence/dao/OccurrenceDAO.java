@@ -105,7 +105,7 @@ public interface OccurrenceDAO {
 	
 	/**
 	 * Returns the different values and their count for this column and those criteria.
-	 * Ordered by count (descending)
+	 * Ordered by count (descending), null values are not included.
 	 * @param searchCriteriaMap
 	 * @param column
 	 * @param max optional

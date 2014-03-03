@@ -28,8 +28,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>3.2.8.RELEASE</spring.version>
-		<hibernate.version>4.2.8.Final</hibernate.version>
+		<spring.version>4.0.2.RELEASE</spring.version>
+		<hibernate.version>4.3.2.Final</hibernate.version>
 		<jackson.version>2.2.3</jackson.version>
 		<canadensys.core.version>1.7-SNAPSHOT</canadensys.core.version>
 	</properties>

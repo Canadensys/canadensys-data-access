@@ -68,6 +68,7 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
     	columnList = new ArrayList<String>();
     	columnList.add("auto_id");
 		columnList.add("country");
+		columnList.add("locality");
 		//make sure the table is empty
 		jdbcTemplate.update("DELETE FROM occurrence");
 		//add controlled rows
@@ -75,6 +76,11 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		jdbcTemplate.update("INSERT INTO occurrence (auto_id,country,locality,sourcefileid,institutioncode) VALUES (2,'Sweden','Stockholm','uos-occurrence','MT')");
 		jdbcTemplate.update("INSERT INTO occurrence (auto_id,country,locality,sourcefileid,institutioncode) VALUES (3,'Sweden','Uppsala','uou-occurrence','UBC')");
 		jdbcTemplate.update("INSERT INTO occurrence (auto_id,country,locality,sourcefileid,institutioncode) VALUES (4,'United States','Mexico','uow-occurrence','UBC')");
+		//record with no locality
+		jdbcTemplate.update("INSERT INTO occurrence (auto_id,country,locality,sourcefileid,institutioncode) VALUES (5,'Sweden',NULL,'uou-occurrence','UBC')");
+		//record with empty locality
+		jdbcTemplate.update("INSERT INTO occurrence (auto_id,country,locality,sourcefileid,institutioncode) VALUES (6,'Sweden','','uow-occurrence','UBC')");
+		
 		
 		sqpCountryMexico = new SearchQueryPart();
 		sqpCountryMexico.setSearchableField(TestSearchableFieldBuilder.buildSingleValueSearchableField(1,"country","country"));
@@ -115,7 +121,7 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		
 		//test searchWithLimit on one criteria
 		LimitedResult<List<Map<String,String>>> result = occurrenceDAO.searchWithLimit(searchCriteria, columnList);
-		assertEquals(2, result.getTotal_rows());
+		assertEquals(4, result.getTotal_rows());
 	}
 	
 	/**
@@ -278,6 +284,37 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		assertEquals("United States", result.getRows().get(0).get("country"));
 	}
 	
+	/**
+	 * Test iterator feature of the Occurrence DAO using sorting option.
+	 * Test the expected behavior with ORDER BY and empty and NULL values.
+	 */
+	@Test
+	public void testSearchWithSortingNullEmptyField(){
+		Map<String,List<SearchQueryPart>> searchCriteria = new HashMap<String, List<SearchQueryPart>>();
+		List<SearchQueryPart> queryPartListCountry = new ArrayList<SearchQueryPart>();
+		queryPartListCountry.add(sqpCountrySweden);
+		searchCriteria.put("country", queryPartListCountry);
+		
+		SearchSortPart sorting = new SearchSortPart();
+		sorting.setPageNumber(0);
+		sorting.setOrderByColumn("locality");
+		sorting.setOrder(OrderEnum.ASC);
+		
+		//Ascending, empty value should come first and NULL last
+		LimitedResult<List<Map<String,String>>> result = 
+				occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
+		assertEquals(4, result.getRows().size());
+		assertEquals("", result.getRows().get(0).get("locality"));
+		assertEquals("Stockholm", result.getRows().get(1).get("locality"));
+		
+		//Descending, NULL should be last
+		sorting.setOrder(OrderEnum.DESC);
+		result = occurrenceDAO.searchWithLimit(searchCriteria, columnList, sorting);
+		assertEquals(4, result.getRows().size());
+		assertEquals("Uppsala", result.getRows().get(0).get("locality"));
+		assertEquals("Stockholm", result.getRows().get(1).get("locality"));
+	}
+	
 	@Test
 	public void testSearchNoResult(){
 		Map<String,List<SearchQueryPart>> searchCriteria = new HashMap<String, List<SearchQueryPart>>();
@@ -327,7 +364,7 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		searchCriteria.put("country", queryPartList);
 		
 		List<AbstractMap.SimpleImmutableEntry<String,Integer>> result = occurrenceDAO.getValueCount(searchCriteria,"locality",10);
-		assertEquals(2, result.size());
+		assertEquals(3, result.size());
 	}
 	
 	@Test
@@ -338,7 +375,7 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 		searchCriteria.put("country", queryPartList);
 		
 		Integer count = occurrenceDAO.getCountDistinct(searchCriteria,"locality");
-		assertEquals(2, count.intValue());
+		assertEquals(3, count.intValue());
 	}
 
 }

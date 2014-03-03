@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.NullPrecedence;
 import org.hibernate.ScrollMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -390,6 +391,7 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	/**
 	 * Handle paging and ORDER BY clause together.
 	 * The main reason is that paging requires a stable ordering.
+	 * Null values are always last in the ordering.
 	 * @param searchCriteria
 	 * @param sorting
 	 * @param pageSize
@@ -429,9 +431,9 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 		}
 		
 		switch(direction){
-			case ASC: searchCriteria.addOrder(Order.asc(orderByColumn));
+			case ASC: searchCriteria.addOrder(Order.asc(orderByColumn).nulls(NullPrecedence.LAST));
 			break;
-			case DESC: searchCriteria.addOrder(Order.desc(orderByColumn));
+			case DESC: searchCriteria.addOrder(Order.desc(orderByColumn).nulls(NullPrecedence.LAST));
 			break;
 			default: throw new IllegalArgumentException("Direction must be ASC or DESC");
 		}
