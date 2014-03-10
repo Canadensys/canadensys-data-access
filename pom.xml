@@ -31,7 +31,7 @@
 		<spring.version>4.0.2.RELEASE</spring.version>
 		<hibernate.version>4.3.2.Final</hibernate.version>
 		<jackson.version>2.2.3</jackson.version>
-		<canadensys.core.version>1.7-SNAPSHOT</canadensys.core.version>
+		<canadensys.core.version>1.8</canadensys.core.version>
 	</properties>
 
 	<prerequisites>
