@@ -20,7 +20,7 @@ public class PostgresUtils {
 	 */
 	public static String getOptimizedCountDistinctQuery(String column, String whereClause, String table, String alias){
 		if(StringUtils.isBlank(whereClause)){
-			return "SELECT COUNT(*)"+alias+" FROM(SELECT 1 FROM "+table+" WHERE " + column + "IS NOT NULL GROUP BY " + column + ")cc";
+			return "SELECT COUNT(*)"+alias+" FROM(SELECT 1 FROM "+table+" WHERE " + column + " IS NOT NULL GROUP BY " + column + ")cc";
 		}
 		else{
 			return "SELECT COUNT(*)"+alias+" FROM(SELECT 1 FROM "+table+" WHERE " + whereClause +

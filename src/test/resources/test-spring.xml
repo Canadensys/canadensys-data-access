@@ -40,6 +40,10 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
+	<bean id="importLogDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateImportLogDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
 	<bean id="resourceContactDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateResourceContactDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>

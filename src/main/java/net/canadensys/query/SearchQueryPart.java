@@ -34,6 +34,30 @@ public class SearchQueryPart {
 		parsedValuesMap = new HashMap<String,Map<String, Object>>();
 	}
 	
+	/**
+	 * Copy constructor
+	 * Creates a new SearchQueryPart based on the provided SearchQueryPart.
+	 * All the content of the provided object is copied except the parsed Object in parsedValuesMap
+	 * since we don't know what it is so it must be immutable objects (even if we can not enforce it).
+	 * @param toCopy
+	 */
+	public SearchQueryPart(SearchQueryPart toCopy){
+		this();
+		this.searchableField = toCopy.searchableField;
+		this.op = toCopy.op;
+		this.autoKey = toCopy.autoKey;
+		this.usedKey.addAll(toCopy.usedKey);
+		this.valuesTree.putAll(toCopy.valuesTree);
+		Map<String,Object> values;
+		for(String key: parsedValuesMap.keySet()){
+			values = new HashMap<String, Object>();
+			for(String parsedKey : parsedValuesMap.get(key).keySet()){
+				values.put(parsedKey, parsedValuesMap.get(key).get(parsedKey));
+			}
+			this.parsedValuesMap.put(key, values);
+		}
+	}
+	
 	public void setSearchableField(SearchableField searchableField) {
 		this.searchableField = searchableField;
 	}
@@ -152,7 +176,7 @@ public class SearchQueryPart {
 	 * A single value in the valuesTree can lead to multiple values in the parsedValuesMap.
 	 * @param value raw value of this search
 	 * @param searchableFieldKey name of the SearchableField
-	 * @param parsedValue
+	 * @param parsedValue should be immutable object (Integer, String, ...)
 	 * @return the value was successfully added
 	 */
 	public boolean addParsedValue(String value, String searchableFieldKey, Object parsedValue){
