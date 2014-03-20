@@ -21,4 +21,10 @@ public interface ImportLogDAO {
 	 * @return ImportLogModel or null if nothing is found
 	 */
 	public ImportLogModel load(Integer id);
+	
+	/**
+	 * Load the last inserted ImportLogModel.
+	 * @return ImportLogModel or null if nothing is found
+	 */
+	public ImportLogModel loadLast();
 }
