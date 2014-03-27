@@ -1,7 +1,10 @@
 Version History
 ===============
-Version 2.4.0 TBD
+Version 2.4.0 2014-03-27
 * OccurrenceDAO: added sorting and paging support for searchWithLimit
+* Added ImportLogModel handling
+* Database Schema changes: [2.3.0_to_2.4.0.sql](https://github.com/Canadensys/canadensys-data-access/blob/dev/script/migrations/occurrence/2.3.0_to_2.4.0.sql)
+* Now using Spring 4.0.2 and Hibernate 4.3.2
 
 Version 2.3.0 2014-01-31
 * Database Schema changes: [2.2.2_to_2.3.0.sql](https://github.com/Canadensys/canadensys-data-access/blob/dev/script/migrations/occurrence/2.2.2_to_2.3.0.sql)

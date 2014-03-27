@@ -10,13 +10,13 @@ Code Status
 Dependencies
 ------------
 * [Apache Maven 3](http://maven.apache.org/)
-* [Spring Framework 3.2.6.RELEASE](http://www.springsource.org/spring-framework)
-* [Hibernate 4.2.8.Final](http://www.hibernate.org/)
+* [Spring Framework 4.0.2.RELEASE](http://www.springsource.org/spring-framework)
+* [Hibernate 4.3.2.Final](http://www.hibernate.org/)
 * [Apache Commons BeanUtils 1.8.3](http://commons.apache.org/beanutils/)
 * [Jackson 2.2.3](http://wiki.fasterxml.com/JacksonHome)
 * [GBIF DarwinCoreArchiveReader 1.9.1](http://code.google.com/p/darwincore/wiki/DarwinCoreArchiveReader)
 * [JSON.org](http://www.json.org/java/)
-* [Canadensys Core 1.7](https://github.com/Canadensys/canadensys-core)
+* [Canadensys Core 1.8](https://github.com/Canadensys/canadensys-core)
 
 Optional
 * [Elastic Search 0.90.2](http://www.elasticsearch.org/)

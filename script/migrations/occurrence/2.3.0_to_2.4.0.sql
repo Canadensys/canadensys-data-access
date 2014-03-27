@@ -9,3 +9,8 @@ CREATE TABLE import_log
   event_end_date_time timestamp,
   CONSTRAINT import_log_pkey PRIMARY KEY (id )
 );
+
+ALTER TABLE occurrence ALTER COLUMN specificepithet TYPE character varying(250);
+ALTER TABLE buffer.occurrence ALTER COLUMN specificepithet TYPE character varying(250);
+ALTER TABLE occurrence ALTER COLUMN infraspecificepithet TYPE character varying(250);
+ALTER TABLE buffer.occurrence ALTER COLUMN infraspecificepithet TYPE character varying(250);
