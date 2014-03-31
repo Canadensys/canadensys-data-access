@@ -52,6 +52,7 @@ public class TaxonomyDAOTest extends AbstractTransactionalJUnit4SpringContextTes
 		boolean found = false;
 		for(TaxonLookupModel curr : childObjList){
 			if(curr.getTaxonId().equals(new Integer(26))){
+				assertTrue(curr.getParentID().equals(73));
 				found = true;
 				break;
 			}

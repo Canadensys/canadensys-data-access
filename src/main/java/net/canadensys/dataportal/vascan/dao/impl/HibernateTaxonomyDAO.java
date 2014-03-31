@@ -81,7 +81,7 @@ public class HibernateTaxonomyDAO implements TaxonomyDAO {
 	
 	@Override
 	public void buildNestedSets(Integer taxonId){
-		internalBuildNestedSets(taxonId,new AtomicInteger(0),0);
+		internalBuildNestedSets(taxonId,new AtomicInteger(0),null,0);
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class HibernateTaxonomyDAO implements TaxonomyDAO {
 	 * Using direct SQL to avoid loading the entire object to update the left and right values only.
 	 * See : http://www.evanpetersen.com/item/nested-sets.html
 	 */
-	private void internalBuildNestedSets(Integer taxonId, AtomicInteger currCounter, Integer depth){
+	private void internalBuildNestedSets(Integer taxonId, AtomicInteger currCounter,Integer parentID, Integer depth){
 		List<Integer> childrenIdSet = getAcceptedChildrenIdList(taxonId);
 
 		//set left value
@@ -99,7 +99,7 @@ public class HibernateTaxonomyDAO implements TaxonomyDAO {
 		currCounter.incrementAndGet();
 		for(Integer currChildId : childrenIdSet){
 			depth++;
-			internalBuildNestedSets(currChildId,currCounter,depth);
+			internalBuildNestedSets(currChildId,currCounter,taxonId,depth);
 			depth--;
 		}
 		
@@ -109,10 +109,11 @@ public class HibernateTaxonomyDAO implements TaxonomyDAO {
 		currCounter.incrementAndGet();
 		
 		//Update the taxon table
-		SQLQuery updateCmd = sessionFactory.getCurrentSession().createSQLQuery("UPDATE lookup SET _left = :left, _right = :right WHERE taxonid = :id");
+		SQLQuery updateCmd = sessionFactory.getCurrentSession().createSQLQuery("UPDATE lookup SET _left = :left, _right = :right, parentid = :parentid WHERE taxonid = :id");
 		updateCmd.setParameter("left", left);
 		updateCmd.setParameter("right", right);
 		updateCmd.setParameter("id", taxonId);
+		updateCmd.setParameter("parentid", parentID);
 		updateCmd.executeUpdate();
 	}
 	
