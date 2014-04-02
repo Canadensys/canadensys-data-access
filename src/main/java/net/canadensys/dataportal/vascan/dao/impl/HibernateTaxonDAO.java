@@ -10,7 +10,6 @@ import net.canadensys.dataportal.vascan.dao.TaxonDAO;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -356,7 +355,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @return
 	 */
 	private Criterion getTaxonCriterion(int taxonId){
-		 List<Integer> idList = new ArrayList<Integer>();
+		List<Integer> idList = new ArrayList<Integer>();
 		getTaxonIdTree(taxonId, idList);
 		//add the taxon itself
 		idList.add(taxonId);
@@ -369,16 +368,11 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @return
 	 */	
 	private Criterion getRankCriterion(String[] rank){
-		Criterion fieldCriterion = null;
+		Disjunction disjunction = Restrictions.disjunction();
 		for(String r : rank){
-			if(fieldCriterion == null){
-				fieldCriterion = Restrictions.eq("rank", r.toLowerCase());
-			}
-			else{ //separate different values with an OR statement
-				fieldCriterion = Restrictions.or(fieldCriterion, Restrictions.eq("rank", r.toLowerCase()));
-			}
+			disjunction.add(Restrictions.eq("rank", r.toLowerCase()));
 		}
-		return fieldCriterion;
+		return disjunction;
 	}
 
 	
@@ -446,27 +440,22 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 */
 	private Criterion getAllRegionStatusCriterion(String[] status, String[] region, RegionCriterionOperatorEnum op){
 		Criterion regionStatusCriterion = null;
+		Disjunction disjunction = null;
 		for(String prov : region){
 			// match against all the statuses checked in the checklist builder
-			// fill an array list of clauses that will be joined into a string by an sql operator
-			Criterion fieldCriterion = null;
+			disjunction = Restrictions.disjunction();
 			for(String currStatus: status){
-				if(fieldCriterion == null){
-					fieldCriterion = Restrictions.eq(prov, currStatus);
-				}
-				else{ //separate different values with an OR statement
-					fieldCriterion = Restrictions.or(fieldCriterion, Restrictions.eq(prov, currStatus));
-				}
+				disjunction.add(Restrictions.eq(prov, currStatus));
 			}
 			if(regionStatusCriterion == null){
-				regionStatusCriterion = fieldCriterion;
+				regionStatusCriterion = disjunction;
 			}
 			else{
 				if(op == RegionCriterionOperatorEnum.AND){
-					regionStatusCriterion = Restrictions.and(regionStatusCriterion, fieldCriterion);
+					regionStatusCriterion = Restrictions.and(regionStatusCriterion, disjunction);
 				}
 				else if(op == RegionCriterionOperatorEnum.OR){
-					regionStatusCriterion = Restrictions.or(regionStatusCriterion, fieldCriterion);
+					regionStatusCriterion = Restrictions.or(regionStatusCriterion, disjunction);
 				}
 			}
 		}
@@ -490,7 +479,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	}
 	
 	/**
-	 * Returns a Criterion to exclude all regions with one of the provided status that are not in the provided region array.
+	 * Returns a Criterion to exclude all regions with one of the provided statuses that are not in the provided region array.
 	 * @param status
 	 * @param province uppercase
 	 * @param allProvinces uppercase
@@ -498,19 +487,17 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 */
 	private Criterion getExclusionCriterion(String[] status, String[] region, String[] allRegions){
 		Conjunction exclusionCriterion = Restrictions.conjunction();
-		for(String stat: status){
-			for(String excludeProvince : allRegions){
-				boolean exclude = true;
-				for(String prov : region){
-					if(prov.equals(excludeProvince)){
-						exclude = false;
-						break;
-					}
+		for(String currRegion : allRegions){
+			boolean exclude = true;
+			for(String prov : region){
+				if(prov.equals(currRegion)){
+					exclude = false;
+					break;
 				}
-				// if province is not checked in builder, exclude that province for that status
-				if(exclude){
-					exclusionCriterion.add(Restrictions.ne(excludeProvince, stat));
-				}
+			}
+			
+			if(exclude){
+				exclusionCriterion.add(Restrictions.not(Restrictions.in(currRegion, status)));
 			}
 		}
 		return exclusionCriterion;

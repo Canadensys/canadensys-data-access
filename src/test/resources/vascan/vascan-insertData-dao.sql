@@ -92,7 +92,7 @@ INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor
 'accepted','herb,shrub,tree,vine','class','native','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (4,'_Mock4','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
-'accepted','herb,shrub,tree,vine','class','native','native','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
+'accepted','herb,shrub,tree,vine','order','native','native','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
 
 INSERT INTO vernacularname (id,name,statusid,taxonid,language,referenceid) VALUES
 (1,'Fougères',1,33,'fr',1),

@@ -154,7 +154,17 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4"})));
 		assertEquals(2, mockTaxonList.size());
-
+	}
+	
+	/**
+	 * Test TaxonLookupModel loading using status and rank.
+	 */
+	@Test
+	public void loadTaxonLookupModelStatusRankCriteria(){
+		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,"anyof", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, new String[]{"class","variety"}, false, null);
+		List<String> mockTaxonList = extractMockTaxon(it);
+		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3"})));
+		assertTrue(!mockTaxonList.contains("_Mock4"));
 	}
 	
 	private List<String> extractMockTaxon(Iterator<TaxonLookupModel> it){
