@@ -146,14 +146,14 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		//only should be read : give me the native and ephemere that are only native or ephemere in AB or BC
 		it = taxonDAO.loadTaxonLookup(200, null, -1,"only", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxon(it);
-		assertTrue(mockTaxonList.contains("_Mock3"));
-		assertEquals(1, mockTaxonList.size());
+		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock5"})));
+		assertEquals(2, mockTaxonList.size());
 		
 		//only_ca should be read : give me the native and ephemere that are only native or ephemere in AB or BC (ignoring Greenland and St-Pierre)
 		it = taxonDAO.loadTaxonLookup(200, null, -1, "only_ca", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxon(it);
-		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4"})));
-		assertEquals(2, mockTaxonList.size());
+		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4","_Mock5","_Mock6"})));
+		assertEquals(4, mockTaxonList.size());
 	}
 	
 	/**
