@@ -1,7 +1,8 @@
 Version History
 ===============
-Version 2.5.0 2014-MM-DD
-* Added parentid to Vascan lookup nested sets
+Version 2.5.0 2014-04-03
+* Added 'parentid' to Vascan lookup nested sets
+* Some optimizations in HibernateTaxonDAO
 
 Version 2.4.0 2014-03-27
 * OccurrenceDAO: added sorting and paging support for searchWithLimit
