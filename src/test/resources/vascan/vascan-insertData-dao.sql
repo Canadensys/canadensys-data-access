@@ -100,7 +100,6 @@ INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor
 (6,'_Mock6','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','order','native','introduced','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
 
-
 INSERT INTO vernacularname (id,name,statusid,taxonid,language,referenceid) VALUES
 (1,'Fougères',1,33,'fr',1),
 (26256,'if du Canada',1,9401,'fr',1),

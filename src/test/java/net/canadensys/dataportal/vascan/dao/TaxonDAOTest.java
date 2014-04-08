@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart;
+import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart.RegionSelector;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
@@ -120,40 +122,64 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	
 	@Test
 	public void loadTaxonLookupModelCriteria(){
-		int count = taxonDAO.countTaxonLookup(null, -1, null, null, null, new String[]{"class"}, false);
+		int count = taxonDAO.countTaxonLookup(null, -1, null, null, new String[]{"class"}, false);
 		assertTrue(count > 0);
 	}
 	
 	@Test
 	public void loadTaxonLookupModelTaxonIdCriteria(){
-		int count = taxonDAO.countTaxonLookup(null, 73, null, null, null, null, false);
+		int count = taxonDAO.countTaxonLookup(null, 73, null, null, null, false);
 		assertTrue(count > 0);
 	}
 	
 	@Test
 	public void loadTaxonLookupModelStatusRegionCriteria(){
+		RegionQueryPart regionQueryPart = new RegionQueryPart();
+		regionQueryPart.setRegion(new String[]{"AB","bc"});
+		
 		//always make sure that region is case insensitive
 		//allof should be read : give me all the native and ephemere of AB and BC
-		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,"allof", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, null, false, null);
+		regionQueryPart.setRegionSelector(RegionSelector.ALL_OF);
+		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		List<String> mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock1","_Mock3"})));
 		assertTrue(!mockTaxonList.contains("_Mock2"));
 
 		//anyof should be read : give me any of the native and ephemere of AB or BC
-		it = taxonDAO.loadTaxonLookup(200, null, -1, "anyof", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, null, false, null);
+		regionQueryPart.setRegionSelector(RegionSelector.ANY_OF);
+		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		assertTrue(extractMockTaxon(it).containsAll(Arrays.asList(new String[]{"_Mock1","_Mock2","_Mock3"})));
 		
-		//only should be read : give me the native and ephemere that are only native or ephemere in AB or BC
-		it = taxonDAO.loadTaxonLookup(200, null, -1,"only", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, null, false, null);
+		//only_in should be read : give me the native and ephemere that are only native or ephemere in AB or BC
+		regionQueryPart.setRegionSelector(RegionSelector.ONLY_IN);
+		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock5"})));
 		assertEquals(2, mockTaxonList.size());
 		
-		//only_ca should be read : give me the native and ephemere that are only native or ephemere in AB or BC (ignoring Greenland and St-Pierre)
-		it = taxonDAO.loadTaxonLookup(200, null, -1, "only_ca", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, null, false, null);
+		//only_in and setSearchOnlyInCanada  should be read : give me the native and ephemere that are only native or ephemere in AB or BC (ignoring Greenland and St-Pierre)
+		regionQueryPart.setRegionSelector(RegionSelector.ONLY_IN);
+		regionQueryPart.setSearchOnlyInCanada(true);
+		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4","_Mock5","_Mock6"})));
 		assertEquals(4, mockTaxonList.size());
+		
+		//all of, only in and setSearchOnlyInCanada  should be read : give me the native,ephemere that are only native or ephemere in AB and BC (ignoring Greenland and St-Pierre status)
+		regionQueryPart.setRegionSelector(RegionSelector.ALL_OF_ONLY_IN);
+		regionQueryPart.setSearchOnlyInCanada(true);
+		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		mockTaxonList = extractMockTaxon(it);
+		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4","_Mock5"})));
+		assertEquals(3, mockTaxonList.size());
+		
+		//all of, only in should be read : give me the native,ephemere that are only native or ephemere in AB and BC (including Greenland and St-Pierre status)
+		regionQueryPart.setRegionSelector(RegionSelector.ALL_OF_ONLY_IN);
+		regionQueryPart.setSearchOnlyInCanada(false);
+		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		mockTaxonList = extractMockTaxon(it);
+		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock5"})));
+		assertEquals(2, mockTaxonList.size());
 	}
 	
 	/**
@@ -161,7 +187,11 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	 */
 	@Test
 	public void loadTaxonLookupModelStatusRankCriteria(){
-		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,"anyof", new String[]{"AB","bc"}, new String[]{"native","ephemere"}, new String[]{"class","variety"}, false, null);
+		RegionQueryPart regionQueryPart = new RegionQueryPart();
+		regionQueryPart.setRegion(new String[]{"AB","bc"});
+		regionQueryPart.setRegionSelector(RegionSelector.ANY_OF);
+		
+		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,regionQueryPart, new String[]{"native","ephemere"}, new String[]{"class","variety"}, false, null);
 		List<String> mockTaxonList = extractMockTaxon(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3"})));
 		assertTrue(!mockTaxonList.contains("_Mock4"));

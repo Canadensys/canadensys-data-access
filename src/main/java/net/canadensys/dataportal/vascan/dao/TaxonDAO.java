@@ -3,6 +3,7 @@ package net.canadensys.dataportal.vascan.dao;
 import java.util.Iterator;
 import java.util.List;
 
+import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
@@ -39,28 +40,26 @@ public interface TaxonDAO {
 	 * @param limitResultsTo 
 	 * @param habitus
 	 * @param taxonid
-	 * @param combination
-	 * @param region
+	 * @param rqp
 	 * @param status
 	 * @param rank
 	 * @param includeHybrids
 	 * @param sort
 	 * @return
 	 */
-	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids, String sort);
+	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
 	
 	/**
 	 * Count the taxon matching the criteria 
 	 * @param habitus
 	 * @param taxonid
-	 * @param combination
-	 * @param region
+	 * @param rqp
 	 * @param status
 	 * @param rank
 	 * @param includeHybrids
 	 * @return the count or null if the query can not be completed
 	 */
-	public Integer countTaxonLookup(String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids);
+	public Integer countTaxonLookup(String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids);
 
 	/**
 	 * 

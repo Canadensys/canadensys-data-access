@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.canadensys.databaseutils.ScrollableResultsIteratorWrapper;
 import net.canadensys.dataportal.vascan.dao.TaxonDAO;
+import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
@@ -151,12 +152,12 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @see TaxonDAO
 	 */
 	@Override
-	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids, String sort){
+	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
 
 		// don't go any further if no region & status
 		// Make sure this request is looking for something
-		if((status == null || region == null) && taxonid == 0 && habitus.equals("all")){
+		if((status == null || rqp == null || rqp.getRegion() == null) && taxonid == 0 && habitus.equals("all")){
 			return null;
 		}
 		
@@ -165,8 +166,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 		
 		// filter by status in region
-		if(status != null && region != null && combination != null){
-			searchCriteria.add(getStatusRegionCriterion(combination, status, region));
+		if(status != null && rqp != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
+			searchCriteria.add(getStatusRegionCriterion(rqp, status));
 		}
 		
 		// filter by habitus
@@ -199,12 +200,12 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @see TaxonDAO
 	 */
 	@Override
-	public Integer countTaxonLookup(String habitus, int taxonid, String combination, String[] region, String[] status, String[] rank, boolean includeHybrids){
+	public Integer countTaxonLookup(String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
 
 		// don't go any further if no region & status
 		// Make sure this request is looking for something
-		if((status == null || region == null) && taxonid == 0 && habitus.equals("all")){
+		if((status == null || rqp == null || rqp.getRegion() == null) && taxonid == 0 && habitus.equals("all")){
 			return null;
 		}
 		//we only want to count
@@ -216,8 +217,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 		
 		// filter by status in region
-		if(status != null && region != null && combination != null){
-			searchCriteria.add(getStatusRegionCriterion(combination, status, region));
+		if(status != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
+			searchCriteria.add(getStatusRegionCriterion(rqp, status));
 		}
 		
 		// filter by habitus
@@ -398,36 +399,40 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * AND (p_ON = 'native' OR p_ON = 'ephemere') OR (p_QC = 'native' OR p_QC = 'ephemere') 
 	 * AND p_BC <> 'native' AND p_BC <> 'ephemere' AND p_PM <> 'native' AND p_PM <> 'ephemere' [and so on for all provinces & territories] ... 
 	 * 
-	 * (only_ca), (native,ephemere), (qc,on):
-	 * AND (p_ON = 'native' OR p_ON = 'ephemere') OR (p_QC = 'native' OR p_QC = 'ephemere') 
+	 * (all of, only in), (native,ephemere), (qc,on):
+	 * AND (p_ON = 'native' OR p_ON = 'ephemere') AND (p_QC = 'native' OR p_QC = 'ephemere') 
 	 * AND p_BC <> 'native' AND p_BC <> 'ephemere' AND p_PM <> 'native' AND p_MB <> 'ephemere' [and so on for all provinces & territories, except p_PM & p_GL] ...
 	 * 
-	 * @param combination
+	 * @param rqp
 	 * @param status
-	 * @param province
 	 * @return
 	 */
-	private Criterion getStatusRegionCriterion(String combination, String[] status, String[] region){
+	private Criterion getStatusRegionCriterion(RegionQueryPart rqp, String[] status){
 		//TaxonLookupModel uses upper case for regions
-		region = net.canadensys.utils.StringUtils.allUpperCase(region);
+		String[] region = net.canadensys.utils.StringUtils.allUpperCase(rqp.getRegion());
 		
-		if(combination.equals("allof")){
-			return getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.AND);
+		Criterion onlyInCriteria = null;
+		switch(rqp.getRegionSelector()){
+			case ALL_OF : return getAllRegionStatusCriterion(status, region, RegionCriterionOperatorEnum.AND);
+			case ANY_OF : return getAnyRegionStatusCriterion(status, region);
+			case ONLY_IN:
+				onlyInCriteria = getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.OR);
+				break;
+			case ALL_OF_ONLY_IN:
+				onlyInCriteria = getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.AND);
+				break;
 		}
-		else if(combination.equals("anyof")){
-			return getAnyRegionStatusCriterion(status, region);
+		//sanity check
+		if(onlyInCriteria == null){
+			LOGGER.fatal("Unhandled rqp.getRegionSelector() case");
 		}
-		else if(combination.equals("only")){
-			return Restrictions.and(getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.OR), 
-					getExclusionCriterion(status,region,ALL_PROVINCES));
+		
+		if(rqp.isSearchOnlyInCanada()){
+			return Restrictions.and(onlyInCriteria, getExclusionCriterion(status,region,CANADA_PROVINCES));
 		}
-		else if(combination.equals("only_ca")){
-			// we are looking to query only canadian provinces, and ignore greenland and saint-pierre miquelon 
-			// (may or may not have a status that must be excluded in other canadian provinces)
-			return Restrictions.and(getAllRegionStatusCriterion(status, region,RegionCriterionOperatorEnum.OR), 
-					getExclusionCriterion(status,region,CANADA_PROVINCES));
+		else{
+			return Restrictions.and(onlyInCriteria, getExclusionCriterion(status,region,ALL_PROVINCES));
 		}
-		return null;
 	}
 	
 	/**
