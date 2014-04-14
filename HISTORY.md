@@ -1,5 +1,8 @@
 Version History
 ===============
+Version 2.6.0 2014-04-14
+* Minor improvements in TaxonDAO introducing new method signatures.
+
 Version 2.5.0 2014-04-03
 * Added 'parentid' to Vascan lookup nested sets
 * Some optimizations in HibernateTaxonDAO
