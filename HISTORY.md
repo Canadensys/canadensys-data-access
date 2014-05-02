@@ -1,5 +1,8 @@
 Version History
 ===============
+Version 2.7.0 2014-??-??
+* Added hasTypeStatus
+
 Version 2.6.0 2014-04-14
 * Minor improvements in TaxonDAO introducing new method signatures.
 
