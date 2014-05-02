@@ -75,6 +75,7 @@ public class OccurrenceModel {
 	
 	private Boolean hascoordinates;
 	private Boolean hasmedia;
+	private Boolean hastypestatus;
 	private String associatedmediamime;
 	
 	private String verbatimelevation;
@@ -342,6 +343,12 @@ public class OccurrenceModel {
 	}
 	public void setHasmedia(Boolean hasmedia) {
 		this.hasmedia = hasmedia;
+	}
+	public Boolean getHastypestatus() {
+		return hastypestatus;
+	}
+	public void setHastypestaus(Boolean hastypestatus) {
+		this.hastypestatus = hastypestatus;
 	}
 	public String getInstitutioncode() {
 		return institutioncode;
