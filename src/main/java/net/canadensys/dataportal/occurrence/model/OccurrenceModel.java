@@ -54,6 +54,7 @@ public class OccurrenceModel {
 	private String scientificnameauthorship;
 	private String stateprovince;
 	private String taxonrank;
+	private String typestatus;
 	
 	private String eventdate;
 	private Date starteventdate;
@@ -215,6 +216,14 @@ public class OccurrenceModel {
 	public void setTaxonrank(String taxonrank) {
 		this.taxonrank = taxonrank;
 	}
+	
+	public String getTypestatus() {
+		return typestatus;
+	}
+	public void setTypestatus(String typestatus) {
+		this.typestatus = typestatus;
+	}
+	
 	public Double getMinimumelevationinmeters() {
 		return minimumelevationinmeters;
 	}
