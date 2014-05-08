@@ -19,6 +19,7 @@ public class PostgisUtils {
 	private static final String CENTROID_SQL = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s";
 	private static final String CENTROID_SQL_WHERE = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s WHERE %s";
 	private static final String MAKE_POLYGON_SQL = "ST_Polygon(ST_GeomFromText('LINESTRING(%s)'),%s)";
+	private static final String MAKE_ENVELOPE_SQL = "ST_MakeEnvelope(%s,%s)";
 	
 	/**
 	 * Generates a Postgis command to create a geom value based on the longitude and latitude.
@@ -61,16 +62,33 @@ public class PostgisUtils {
 	}
 	
 	/**
-	 * Generates a Postgis SQL clause to select a column within a bounding box.
+	 * Generates a Postgis SQL clause to select a column within a polygon.
 	 * @param geomColumn
-	 * @param polygon List of Pair<long,lat>
+	 * @param polygon List of Pair<lat,lng>
 	 * @return
 	 */
-	public static String getBoundingBoxSQLClause(String geomColumn, List<Pair<String,String>> polygon){
-		List<String> polygonPoints = new ArrayList<String>();
+	public static String getInsidePolygonSQLClause(String geomColumn, List<Pair<String,String>> polygon){
+		List<String> polygonPoints = new ArrayList<String>(polygon.size());
 		for(Pair<String,String> curr : polygon){
-			polygonPoints.add(curr.getLeft() + " " + curr.getRight());
+			//add right (longitude) before left(latitude) since PostGIS wants X,Y
+			polygonPoints.add(curr.getRight() + " " + curr.getLeft());
 		}
 		return geomColumn + OVERLAPS_OPERATOR + String.format(MAKE_POLYGON_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID);
+	}
+	
+	/**
+	 * Generates a Postgis SQL clause to select a column within an envelope.
+	 * @param geomColumn
+	 * @param polygon List of Pair<lat,lng>
+	 * @return
+	 */
+	public static String getInsideEnvelopeSQLClause(String geomColumn, List<Pair<String,String>> polygon){
+		List<String> polygonPoints = new ArrayList<String>(4);
+		for(Pair<String,String> curr : polygon){
+			//add right (longitude) before left(latitude) since PostGIS wants X,Y
+			polygonPoints.add(curr.getRight());
+			polygonPoints.add(curr.getLeft());
+		}
+		return geomColumn + OVERLAPS_OPERATOR + String.format(MAKE_ENVELOPE_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID);
 	}
 }

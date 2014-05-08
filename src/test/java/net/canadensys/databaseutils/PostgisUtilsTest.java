@@ -37,14 +37,23 @@ public class PostgisUtilsTest {
 	}
 	
 	@Test
-	public void testGetBoudingBoxSQLClause(){
+	public void testGetInsidePolygonSQLClause(){
 		List<Pair<String,String>> polygon = new ArrayList<Pair<String,String>>();
-		polygon.add(Pair.of("75.15", "29.53"));
-		polygon.add(Pair.of("77", "29"));
-		polygon.add(Pair.of("77.6","29.5"));
-		polygon.add(Pair.of("75.15","29.53"));
+		polygon.add(Pair.of("29.53","75.15"));
+		polygon.add(Pair.of("29","77"));
+		polygon.add(Pair.of("29.5","77.6"));
+		polygon.add(Pair.of("29.53","75.15"));
 		assertEquals("the_geom && ST_Polygon(ST_GeomFromText('LINESTRING(75.15 29.53,77 29,77.6 29.5,75.15 29.53)'),4326)",
-				PostgisUtils.getBoundingBoxSQLClause("the_geom", polygon));
+				PostgisUtils.getInsidePolygonSQLClause("the_geom", polygon));
+	}
+	
+	@Test
+	public void testGetInsideEnvelopeSQLClause(){
+		List<Pair<String,String>> envelope = new ArrayList<Pair<String,String>>();
+		envelope.add(Pair.of("75.15", "29.53"));
+		envelope.add(Pair.of("77", "29"));
+		assertEquals("the_geom && ST_MakeEnvelope(29.53,75.15,29,77,4326)",
+				PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope));
 	}
 
 }

@@ -3,10 +3,6 @@ package net.canadensys.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.canadensys.query.QueryOperatorEnum;
-import net.canadensys.query.SearchableField;
-import net.canadensys.query.SearchableFieldTypeEnum;
-
 /**
  * Utility class to build SearchableField for testing purpose.
  * @author canadensys
@@ -244,7 +240,7 @@ public class TestSearchableFieldBuilder {
 		};
 	}
 	
-	public static SearchableField buildGeoCoordinatesSearchableField(){
+	public static SearchableField buildInsidePolygonSearchableField(){
 		return new SearchableField(){
 
 			@Override
@@ -259,7 +255,7 @@ public class TestSearchableFieldBuilder {
 
 			@Override
 			public SearchableFieldTypeEnum getSearchableFieldTypeEnum() {
-				return SearchableFieldTypeEnum.GEO_COORDINATES;
+				return SearchableFieldTypeEnum.INSIDE_POLYGON_GEO;
 			}
 
 			@Override

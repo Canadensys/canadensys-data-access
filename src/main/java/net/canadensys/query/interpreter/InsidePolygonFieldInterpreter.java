@@ -14,20 +14,19 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 /**
- * Interprets a SearchQueryPart representing a geospatial query with specific coordinates
+ * Interprets a SearchQueryPart representing a geospatial query.
  * @author canadensys
  *
  */
-public class GeoCoordinatesFieldInterpreter implements QueryPartInterpreter{
+public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 	
 	//get log4j handler
-	private static final Logger LOGGER = Logger.getLogger(GeoCoordinatesFieldInterpreter.class);
+	private static final Logger LOGGER = Logger.getLogger(InsidePolygonFieldInterpreter.class);
 	
 	@Override
 	public boolean canHandleSearchableField(SearchableField searchableField) {
 		return (searchableField.getRelatedFields() != null && 
-				searchableField.getRelatedFields().size() == 1 &&
-				searchableField.getType() == null);
+				searchableField.getRelatedFields().size() == 1);
 	}
 	
 	@Override
@@ -82,6 +81,6 @@ public class GeoCoordinatesFieldInterpreter implements QueryPartInterpreter{
 			polygon.add((Pair<String,String>)parsedValue);
 		}
 		String geomColumn = searchableField.getRelatedField();
-		return PostgisUtils.getBoundingBoxSQLClause(geomColumn, polygon);
+		return PostgisUtils.getInsidePolygonSQLClause(geomColumn, polygon);
 	}
 }
