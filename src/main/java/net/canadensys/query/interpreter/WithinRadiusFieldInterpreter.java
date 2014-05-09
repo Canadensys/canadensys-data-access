@@ -1,6 +1,5 @@
 package net.canadensys.query.interpreter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.canadensys.databaseutils.PostgisUtils;
@@ -13,15 +12,13 @@ import org.apache.log4j.Logger;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-/**
- * Interprets a SearchQueryPart representing a geospatial query where we target a polygon. 
- * @author canadensys
- *
- */
-public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
+public class WithinRadiusFieldInterpreter implements QueryPartInterpreter{
 	
+	public static final int POINT_IDX = 0;
+	public static final int RADIUS_IDX = 1;
+
 	//get log4j handler
-	private static final Logger LOGGER = Logger.getLogger(InsidePolygonFieldInterpreter.class);
+	private static final Logger LOGGER = Logger.getLogger(WithinRadiusFieldInterpreter.class);
 	
 	/**
 	 * Needs exactly one related field and type can not be specified.
@@ -43,26 +40,24 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 		
 		//validate that the parsedValue are in the right type(class)
 		List<String> valueList = searchQueryPart.getValueList();
-		Object parsedValue = null;
-		for(String currValue : valueList){
-			parsedValue = searchQueryPart.getParsedValue(currValue);
-			if(parsedValue instanceof Pair){
-				Pair<?,?> a = (Pair<?,?>)parsedValue;
-				if(!String.class.equals(a.getLeft().getClass()) ||
-						!String.class.equals(a.getRight().getClass())){
-					return false;
-				}
-			}
-			else{
-				return false;
-			}
+		if(valueList.size() != 2){
+			return false;
 		}
-		return true;
+		
+		//check that we have a coordinate as Pair and a radius as Integer.
+		Object parsedValue = null;
+		parsedValue = searchQueryPart.getParsedValue(valueList.get(POINT_IDX));
+		boolean isValid = (parsedValue instanceof Pair);
+		
+		parsedValue = searchQueryPart.getParsedValue(valueList.get(RADIUS_IDX));
+		isValid = isValid && Integer.class.equals(parsedValue.getClass());
+		return isValid;
 	}
 	
 	@Override
 	public Criterion toCriterion(SearchQueryPart searchQueryPart) {
 		String sqlCmd = toSQL(searchQueryPart);
+		System.out.println("sqlCmd:"+sqlCmd);
 		if(sqlCmd == null){
 			return null;
 		}
@@ -78,16 +73,15 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 			return null;
 		}	
 		
-		List<Pair<String,String>> polygon = new ArrayList<Pair<String,String>>();
-		SearchableField searchableField = searchQueryPart.getSearchableField();
-		
 		List<String> valueList = searchQueryPart.getValueList();
+		
 		Object parsedValue = null;
-		for(String currValue : valueList){
-			parsedValue = searchQueryPart.getParsedValue(currValue);
-			polygon.add((Pair<String,String>)parsedValue);
-		}
+		parsedValue = searchQueryPart.getParsedValue(valueList.get(POINT_IDX));
+		Pair<String,String> coord = (Pair<String,String>)parsedValue;
+		parsedValue = searchQueryPart.getParsedValue(valueList.get(RADIUS_IDX));
+		Integer radius = (Integer)parsedValue;
+		SearchableField searchableField = searchQueryPart.getSearchableField();
 		String geomColumn = searchableField.getRelatedField();
-		return PostgisUtils.getInsidePolygonSQLClause(geomColumn, polygon);
+		return PostgisUtils.getFromWithinRadius(geomColumn, coord.getLeft(), coord.getRight(), radius);
 	}
 }

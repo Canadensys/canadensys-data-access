@@ -21,6 +21,9 @@ public class PostgisUtils {
 	private static final String MAKE_POLYGON_SQL = "ST_Polygon(ST_GeomFromText('LINESTRING(%s)'),%s)";
 	private static final String MAKE_ENVELOPE_SQL = "ST_MakeEnvelope(%s,%s)";
 	
+	//ST_DWithin(ST_SetSRID(ST_MakePoint(<lng>, <lat>),<srid>), <geom>, <dist_meters>)";
+	private static final String WITHIN_DISTANCE_SQL = "ST_DWithin(Geography(ST_SetSRID(ST_MakePoint(%s,%s),%s)),Geography(%s),%d)";
+	
 	/**
 	 * Generates a Postgis command to create a geom value based on the longitude and latitude.
 	 * This function uses SRID 4326.
@@ -62,7 +65,7 @@ public class PostgisUtils {
 	}
 	
 	/**
-	 * Generates a Postgis SQL clause to select a column within a polygon.
+	 * Generates a Postgis SQL clause to select within a polygon.
 	 * @param geomColumn
 	 * @param polygon List of Pair<lat,lng>
 	 * @return
@@ -77,7 +80,7 @@ public class PostgisUtils {
 	}
 	
 	/**
-	 * Generates a Postgis SQL clause to select a column within an envelope.
+	 * Generates a Postgis SQL clause to select within an envelope.
 	 * @param geomColumn
 	 * @param polygon List of Pair<lat,lng>
 	 * @return
@@ -90,5 +93,18 @@ public class PostgisUtils {
 			polygonPoints.add(curr.getLeft());
 		}
 		return geomColumn + OVERLAPS_OPERATOR + String.format(MAKE_ENVELOPE_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID);
+	}
+	
+	/**
+	 * Generates a Postgis SQL clause to select records from a coordinates and a radius in meters.
+	 * ST_DWithin is used since it can run on the index. But, the ::geography cast has a certain cost.
+	 * @param geomColumn
+	 * @param lat
+	 * @param lng
+	 * @param radiusInMeter
+	 * @return
+	 */
+	public static String getFromWithinRadius(String geomColumn, String lat, String lng, int radiusInMeter){
+		return String.format(WITHIN_DISTANCE_SQL,lng,lat,WSG84_SRID,geomColumn,radiusInMeter);
 	}
 }

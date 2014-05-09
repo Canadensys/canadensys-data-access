@@ -284,4 +284,47 @@ public class TestSearchableFieldBuilder {
 			
 		};
 	}
+	
+	public static SearchableField buildWithinRadiusSearchableField(){
+		return new SearchableField(){
+			@Override
+			public int getSearchableFieldId() {
+				return 9; //random number
+			}
+
+			@Override
+			public String getSearchableFieldName() {
+				return "Circle";
+			}
+
+			@Override
+			public SearchableFieldTypeEnum getSearchableFieldTypeEnum() {
+				return SearchableFieldTypeEnum.WITHIN_RADIUS_GEO;
+			}
+
+			@Override
+			public Class<?> getType() {
+				return null;
+			}
+
+			@Override
+			public List<QueryOperatorEnum> getSupportedOperator() {
+				List<QueryOperatorEnum> supportedOperator = new ArrayList<QueryOperatorEnum>();
+				supportedOperator.add(QueryOperatorEnum.IN);
+				return supportedOperator;
+			}
+
+			@Override
+			public List<String> getRelatedFields() {
+				List<String> relatedFields = new ArrayList<String>();
+				relatedFields.add("the_geom");
+				return relatedFields;
+			}
+
+			@Override
+			public String getRelatedField() {
+				return "the_geom";
+			}
+		};
+	}
 }

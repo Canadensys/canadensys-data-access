@@ -55,5 +55,10 @@ public class PostgisUtilsTest {
 		assertEquals("the_geom && ST_MakeEnvelope(29.53,75.15,29,77,4326)",
 				PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope));
 	}
-
+	
+	@Test
+	public void testGetFromWithinRadius(){
+		assertEquals("ST_DWithin(Geography(ST_SetSRID(ST_MakePoint(29.53,75.15),4326)),Geography(the_geom),250)",
+				PostgisUtils.getFromWithinRadius("the_geom", "75.15", "29.53", 250));
+	}
 }

@@ -17,6 +17,7 @@ public class QueryPartInterpreterResolver {
 	private static final QueryPartInterpreter START_END_DATE_INTERPRETER = new StartEndDateFieldInterpreter();
 	private static final QueryPartInterpreter INSIDE_ENVELOPE_INTERPRETER = new InsideEnvelopeFieldInterpreter();
 	private static final QueryPartInterpreter INSIDE_POLYGON_INTERPRETER = new InsidePolygonFieldInterpreter();
+	private static final QueryPartInterpreter WITHIN_RADIUS_INTERPRETER = new WithinRadiusFieldInterpreter();
 		
 	public static QueryPartInterpreter getQueryPartInterpreter(SearchableFieldTypeEnum searchableFieldTypeEnum){
 		switch(searchableFieldTypeEnum){
@@ -25,6 +26,7 @@ public class QueryPartInterpreterResolver {
 			case START_END_DATE : return START_END_DATE_INTERPRETER;
 			case INSIDE_ENVELOPE_GEO : return INSIDE_ENVELOPE_INTERPRETER;
 			case INSIDE_POLYGON_GEO : return INSIDE_POLYGON_INTERPRETER;
+			case WITHIN_RADIUS_GEO : return WITHIN_RADIUS_INTERPRETER;
 			default : return null;
 		}
 	}
