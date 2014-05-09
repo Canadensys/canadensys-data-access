@@ -12,6 +12,11 @@ import org.apache.log4j.Logger;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
+/**
+ * Interprets a SearchQueryPart representing a geospatial query where we target a point, with a radius. 
+ * @author canadensys
+ *
+ */
 public class WithinRadiusFieldInterpreter implements QueryPartInterpreter{
 	
 	public static final int POINT_IDX = 0;
