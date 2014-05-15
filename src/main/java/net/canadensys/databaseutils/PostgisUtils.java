@@ -13,7 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class PostgisUtils {
 	private static final String WSG84_SRID = "4326";
-	private static final String OVERLAPS_OPERATOR = " && ";
+	private static final String BBOX_INTERSECT_OPERATOR = " && ";
 	
 	private static final String GEOMETRYFROMTEXT_CMD = "GEOMETRYFROMTEXT('POINT(%s %s)',%s)";
 	private static final String CENTROID_SQL = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s";
@@ -93,7 +93,7 @@ public class PostgisUtils {
 			polygonPoints.add(curr.getRight());
 			polygonPoints.add(curr.getLeft());
 		}
-		return geomColumn + OVERLAPS_OPERATOR + String.format(MAKE_ENVELOPE_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID);
+		return geomColumn + BBOX_INTERSECT_OPERATOR + String.format(MAKE_ENVELOPE_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID);
 	}
 	
 	/**

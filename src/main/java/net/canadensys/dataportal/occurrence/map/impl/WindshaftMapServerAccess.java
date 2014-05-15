@@ -84,6 +84,7 @@ public class WindshaftMapServerAccess implements MapServerAccess {
 		return SQLStatementBuilder.generateSQLStatement(tableUsed, columns, whereClause);
 	}
 	
+	@Override
 	public String[] getMapCenter(String searchCriteria){
 		String lowerSearchCriteria = searchCriteria.toLowerCase();
 		String[] coordinates = null;
@@ -102,7 +103,8 @@ public class WindshaftMapServerAccess implements MapServerAccess {
 			coordinates = PostgisUtils.extractPoint(point);
 		}
 		else{
-			LOGGER.error("getMapCenter could not get the center point of " + sql);
+			coordinates = new String[]{"",""};
+			LOGGER.debug("getMapCenter could not get the center point of " + sql);
 		}
 		return coordinates;
 	}

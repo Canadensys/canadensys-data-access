@@ -29,10 +29,10 @@ public interface MapServerAccess {
 	public int getGeoreferencedRecordCount(Map<String,List<SearchQueryPart>> searchCriteria);
 	
 	/**
-	 * The the center of the map based in the searchCriteria.
+	 * The center of the map based in the searchCriteria.
 	 * The center is based on the centroid
 	 * @param sqlString
-	 * @return long1,lat1
+	 * @return long,lat or an empty array if not found, never null.
 	 */
 	public String[] getMapCenter(String searchCriteria);
 	
