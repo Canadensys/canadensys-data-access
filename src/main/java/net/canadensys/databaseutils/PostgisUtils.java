@@ -18,7 +18,8 @@ public class PostgisUtils {
 	private static final String GEOMETRYFROMTEXT_CMD = "GEOMETRYFROMTEXT('POINT(%s %s)',%s)";
 	private static final String CENTROID_SQL = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s";
 	private static final String CENTROID_SQL_WHERE = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s WHERE %s";
-	private static final String MAKE_POLYGON_SQL = "ST_Polygon(ST_GeomFromText('LINESTRING(%s)'),%s)";
+
+	private static final String INSIDE_POLYGON_SQL = "ST_Contains(ST_GeomFromText('POLYGON((%s))',%s),%s)";
 	private static final String MAKE_ENVELOPE_SQL = "ST_MakeEnvelope(%s,%s)";
 	
 	//ST_DWithin(ST_SetSRID(ST_MakePoint(<lng>, <lat>),<srid>), <geom>, <dist_meters>)";
@@ -76,7 +77,7 @@ public class PostgisUtils {
 			//add right (longitude) before left(latitude) since PostGIS wants X,Y
 			polygonPoints.add(curr.getRight() + " " + curr.getLeft());
 		}
-		return geomColumn + OVERLAPS_OPERATOR + String.format(MAKE_POLYGON_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID);
+		return String.format(INSIDE_POLYGON_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID,geomColumn);
 	}
 	
 	/**

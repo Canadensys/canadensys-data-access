@@ -43,7 +43,7 @@ public class PostgisUtilsTest {
 		polygon.add(Pair.of("29","77"));
 		polygon.add(Pair.of("29.5","77.6"));
 		polygon.add(Pair.of("29.53","75.15"));
-		assertEquals("the_geom && ST_Polygon(ST_GeomFromText('LINESTRING(75.15 29.53,77 29,77.6 29.5,75.15 29.53)'),4326)",
+		assertEquals("ST_Contains(ST_GeomFromText('POLYGON((75.15 29.53,77 29,77.6 29.5,75.15 29.53))',4326),the_geom)",
 				PostgisUtils.getInsidePolygonSQLClause("the_geom", polygon));
 	}
 	
