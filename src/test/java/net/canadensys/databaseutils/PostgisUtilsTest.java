@@ -23,10 +23,35 @@ public class PostgisUtilsTest {
 	}
 	
 	@Test
+	public void testExtractPoints(){
+		List<String[]> points = PostgisUtils.extractPoints("BOX(-40.0833333 -44,103.4166667 39)");
+		
+		assertEquals(points.get(0)[0],"-40.0833333");
+		assertEquals(points.get(0)[1],"-44");
+		assertEquals(points.get(1)[0],"103.4166667");
+		assertEquals(points.get(1)[1],"39");
+	}
+	
+	@Test
 	public void testGetCentroidSQLQuery(){
 		String sql = PostgisUtils.getCentroidSQLQuery("the_geom", "table", "a = '3'");
 		assertEquals("SELECT ST_AsText(st_centroid(st_collect(the_geom))) point FROM table WHERE a = '3'",
 				sql);
+	}
+	
+	@Test
+	public void testGetCentroidSQL(){
+		String sql = PostgisUtils.getCentroidSQL("the_geom",false);
+		assertEquals("ST_centroid(the_geom)", sql);
+		
+		sql = PostgisUtils.getCentroidSQL("the_geom", true);
+		assertEquals("ST_AsText(ST_centroid(the_geom))", sql);
+	}
+	
+	@Test
+	public void testGetExtentSQL(){
+		String sql = PostgisUtils.getExtentSQL("the_geom");
+		assertEquals("ST_extent(the_geom)", sql);
 	}
 	
 	@Test

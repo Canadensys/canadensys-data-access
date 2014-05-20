@@ -11,7 +11,6 @@ import net.canadensys.dataportal.occurrence.model.MapInfoModel;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchQueryPartUtils;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
@@ -132,20 +131,23 @@ public class WindshaftMapServerAccess implements MapServerAccess {
 		
 		Object[] results = (Object[])sqlQuery.uniqueResult();
 		MapInfoModel mapInfoModel = new MapInfoModel();
-		if(ArrayUtils.isNotEmpty(results)){
+		//Initialize with empty data
+		mapInfoModel.setCentroid("", "");
+		mapInfoModel.setExtent("", "", "", "");
+		
+		if(results != null && results.length == 2){
 			List<String[]> extent = PostgisUtils.extractPoints((String)results[0]);
-			String[] extentMin = extent.get(0);
-			String[] extentMax = extent.get(1);
-			String[] centroid = PostgisUtils.extractPoint((String)results[1]);
+			if(extent != null && extent.size() == 2){
+				String[] extentMin = extent.get(0);
+				String[] extentMax = extent.get(1);
+				mapInfoModel.setExtent(extentMin[1], extentMin[0], extentMax[1], extentMax[0]);
+			}
 			
-			//Postgis works in X,Y so invert coordinates to get lat,lng
-			mapInfoModel.setCentroid(centroid[1], centroid[0]);
-			mapInfoModel.setExtent(extentMin[1], extentMin[0], extentMax[1], extentMax[0]);
-		}
-		else{
-			//Provide empty data
-			mapInfoModel.setCentroid("", "");
-			mapInfoModel.setExtent("", "", "", "");
+			String[] centroid = PostgisUtils.extractPoint((String)results[1]);
+			if(centroid !=null && centroid.length == 2){
+				//Postgis works in X,Y so invert coordinates to get lat,lng
+				mapInfoModel.setCentroid(centroid[1], centroid[0]);
+			}
 		}
 		return mapInfoModel;
 	}
