@@ -39,6 +39,9 @@ public class SQLStatementBuilder {
 	 * @return
 	 */
 	public static String generateSQLStatement(String table, String columns, String criteria){
+		if(StringUtils.isBlank(criteria)){
+			return SQLHelper.SELECT+columns+SQLHelper.FROM+table;
+		}
 		return SQLHelper.SELECT+columns+SQLHelper.FROM+table+SQLHelper.WHERE+criteria;
 	}
 	

@@ -7,9 +7,11 @@ import net.canadensys.databaseutils.PostgisUtils;
 import net.canadensys.databaseutils.SQLHelper;
 import net.canadensys.databaseutils.SQLStatementBuilder;
 import net.canadensys.dataportal.occurrence.map.MapServerAccess;
+import net.canadensys.dataportal.occurrence.model.MapInfoModel;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchQueryPartUtils;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
@@ -107,6 +109,45 @@ public class WindshaftMapServerAccess implements MapServerAccess {
 			LOGGER.debug("getMapCenter could not get the center point of " + sql);
 		}
 		return coordinates;
+	}
+	
+	@Override
+	public MapInfoModel getMapInfo(String searchCriteria){
+		String lowerSearchCriteria = searchCriteria.toLowerCase();
+		int whereIdx = lowerSearchCriteria.indexOf(" where");
+		String whereClause = null;
+		if(whereIdx>0){ // 6 = length of " where"
+			whereClause = searchCriteria.substring(whereIdx+6, searchCriteria.length());
+		}
+		
+		//select the extent and the centroid of that extent
+		String extentSql = PostgisUtils.getExtentSQL(GEOSPATIAL_COLUMN);
+		String sqlColumns = extentSql + " as ext";
+		sqlColumns = sqlColumns +","+PostgisUtils.getCentroidSQL(extentSql,true) + " as cent";
+		
+		String sqlStr = SQLStatementBuilder.generateSQLStatement(tableUsed, sqlColumns, whereClause);
+		SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(sqlStr);
+		sqlQuery.addScalar("ext", StringType.INSTANCE);
+		sqlQuery.addScalar("cent", StringType.INSTANCE);
+		
+		Object[] results = (Object[])sqlQuery.uniqueResult();
+		MapInfoModel mapInfoModel = new MapInfoModel();
+		if(ArrayUtils.isNotEmpty(results)){
+			List<String[]> extent = PostgisUtils.extractPoints((String)results[0]);
+			String[] extentMin = extent.get(0);
+			String[] extentMax = extent.get(1);
+			String[] centroid = PostgisUtils.extractPoint((String)results[1]);
+			
+			//Postgis works in X,Y so invert coordinates to get lat,lng
+			mapInfoModel.setCentroid(centroid[1], centroid[0]);
+			mapInfoModel.setExtent(extentMin[1], extentMin[0], extentMax[1], extentMax[0]);
+		}
+		else{
+			//Provide empty data
+			mapInfoModel.setCentroid("", "");
+			mapInfoModel.setExtent("", "", "", "");
+		}
+		return mapInfoModel;
 	}
 	
 	public String getTableUsed() {

@@ -16,9 +16,14 @@ public class PostgisUtils {
 	private static final String BBOX_INTERSECT_OPERATOR = " && ";
 	
 	private static final String GEOMETRYFROMTEXT_CMD = "GEOMETRYFROMTEXT('POINT(%s %s)',%s)";
+	private static final String EXTENT_SQL = "ST_extent(%s)";
+	private static final String CCENTROID_SQL = "ST_centroid(%s)";
+	private static final String CCENTROID_TEXT_SQL = "ST_AsText(ST_centroid(%s))";
+	
 	private static final String CENTROID_SQL = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s";
 	private static final String CENTROID_SQL_WHERE = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s WHERE %s";
 
+	
 	private static final String INSIDE_POLYGON_SQL = "ST_Contains(ST_GeomFromText('POLYGON((%s))',%s),%s)";
 	private static final String MAKE_ENVELOPE_SQL = "ST_MakeEnvelope(%s,%s)";
 	
@@ -52,6 +57,25 @@ public class PostgisUtils {
 	}
 	
 	/**
+	 * Extract a list of points from a string returned by PostGIS.
+	 * The ordering of the points will be preserved.
+	 * @param pointsStr
+	 * @return
+	 */
+	public static List<String[]> extractPoints(String pointsStr){
+		List<String[]> pointList = null;
+		if(!StringUtils.isBlank(pointsStr)){
+			pointsStr = pointsStr.substring(pointsStr.indexOf("(")+1, pointsStr.lastIndexOf(")"));
+			String[] pointsArray = pointsStr.split(",");
+			pointList = new ArrayList<String[]>(pointsArray.length*2);
+			for(String currPoint : pointsArray){
+				pointList.add(currPoint.split(" "));
+			}
+		}
+		return pointList;
+	}
+	
+	/**
 	 * Returns the query to get the centroid of the geomColumn.
 	 * @param geomColumn
 	 * @param table
@@ -63,6 +87,28 @@ public class PostgisUtils {
 			return String.format(CENTROID_SQL, geomColumn,table);
 		}
 		return String.format(CENTROID_SQL_WHERE, geomColumn, table, whereClause);
+	}
+	
+	/**
+	 * The SQL fragment to select the centroid of the provided column.
+	 * @param geomColumn
+	 * @param asText return the bbox as text and not binary
+	 * @return
+	 */
+	public static String getCentroidSQL(String geomColumn, boolean asText){
+		if(asText){
+			return String.format(CCENTROID_TEXT_SQL, geomColumn); 
+		}
+		return String.format(CCENTROID_SQL, geomColumn); 
+	}
+	
+	/**
+	 * The SQL fragment to select the extent of multiple geometry.
+	 * @param geomColumn
+	 * @return
+	 */
+	public static String getExtentSQL(String geomColumn){
+		return String.format(EXTENT_SQL, geomColumn); 
 	}
 	
 	/**

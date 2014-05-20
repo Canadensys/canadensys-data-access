@@ -3,6 +3,7 @@ package net.canadensys.dataportal.occurrence.map;
 import java.util.List;
 import java.util.Map;
 
+import net.canadensys.dataportal.occurrence.model.MapInfoModel;
 import net.canadensys.query.SearchQueryPart;
 
 /**
@@ -31,10 +32,19 @@ public interface MapServerAccess {
 	/**
 	 * The center of the map based in the searchCriteria.
 	 * The center is based on the centroid
+	 * @deprecated use getMapInfo
 	 * @param sqlString
 	 * @return long,lat or an empty array if not found, never null.
 	 */
+	@Deprecated
 	public String[] getMapCenter(String searchCriteria);
+	
+	/**
+	 * Get information on the map based on the provided query.
+	 * @param searchCriteria
+	 * @return MapInfoModel containing the information of the map.
+	 */
+	public MapInfoModel getMapInfo(String searchCriteria);
 	
 	/**
 	 * If the map server provides a data layer(grid) on the map, this function will be used
