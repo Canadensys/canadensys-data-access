@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class WindshaftMapServerAccess implements MapServerAccess {
 	//TODO maybe move to configuration
 	private static final String GEOSPATIAL_COLUMN = "the_geom";
+	private static final String SHIFTED_GEOSPATIAL_COLUMN = "the_shifted_geom";
 	private static final String HAS_COORDINATES_CLAUSE = "hascoordinates=true";
 	private static final String COUNT_ALL_STATEMENT = SQLHelper.count("*", "count");
 	
@@ -120,7 +121,7 @@ public class WindshaftMapServerAccess implements MapServerAccess {
 		}
 		
 		//select the extent and the centroid of that extent
-		String extentSql = PostgisUtils.getExtentSQL(GEOSPATIAL_COLUMN);
+		String extentSql = PostgisUtils.getExtentSQL(SHIFTED_GEOSPATIAL_COLUMN);
 		String sqlColumns = extentSql + " as ext";
 		sqlColumns = sqlColumns +","+PostgisUtils.getCentroidSQL(extentSql,true) + " as cent";
 		
@@ -140,13 +141,14 @@ public class WindshaftMapServerAccess implements MapServerAccess {
 			if(extent != null && extent.size() == 2){
 				String[] extentMin = extent.get(0);
 				String[] extentMax = extent.get(1);
-				mapInfoModel.setExtent(extentMin[1], extentMin[0], extentMax[1], extentMax[0]);
+				mapInfoModel.setExtent(extentMin[1], PostgisUtils.unshiftLongitude(extentMin[0]), 
+						extentMax[1], PostgisUtils.unshiftLongitude(extentMax[0]));
 			}
 			
 			String[] centroid = PostgisUtils.extractPoint((String)results[1]);
 			if(centroid !=null && centroid.length == 2){
 				//Postgis works in X,Y so invert coordinates to get lat,lng
-				mapInfoModel.setCentroid(centroid[1], centroid[0]);
+				mapInfoModel.setCentroid(centroid[1], PostgisUtils.unshiftLongitude(centroid[0]));
 			}
 		}
 		return mapInfoModel;

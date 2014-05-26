@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.canadensys.databaseutils.PostgisUtils;
-import net.canadensys.dataportal.occurrence.map.MapUtils;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchableField;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
@@ -51,23 +49,16 @@ public class InsideEnvelopeFieldInterpreter extends InsidePolygonFieldInterprete
 		
 		List<String> valueList = searchQueryPart.getValueList();
 		Object parsedValue = null;
-		double lngEast, lngWest;
-		
+
 		//North East point
 		parsedValue = searchQueryPart.getParsedValue(valueList.get(0));
 		envelope.add((Pair<String,String>)parsedValue);
-		lngEast = NumberUtils.toDouble(((Pair<String,String>)parsedValue).getRight(),0);
-		
+
 		//South West point
 		parsedValue = searchQueryPart.getParsedValue(valueList.get(1));
 		envelope.add((Pair<String,String>)parsedValue);
-		lngWest = NumberUtils.toDouble(((Pair<String,String>)parsedValue).getRight(),0);
 
 		String geomColumn = searchableField.getRelatedField();
-		if(MapUtils.isBBoxCrossingIDL(lngEast, lngWest)){
-			return PostgisUtils.getInsideEnvelopeSQLClause(geomColumn, envelope, true);
-		}
-		return PostgisUtils.getInsideEnvelopeSQLClause(geomColumn, envelope, false);
+		return PostgisUtils.getInsideEnvelopeSQLClause(geomColumn, envelope, true);
 	}
-
 }

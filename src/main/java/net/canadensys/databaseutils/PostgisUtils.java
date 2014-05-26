@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
@@ -23,10 +24,11 @@ public class PostgisUtils {
 	private static final String CENTROID_SQL = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s";
 	private static final String CENTROID_SQL_WHERE = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s WHERE %s";
 	
-	private static final String INSIDE_POLYGON_SQL = "ST_Contains(ST_GeomFromText('POLYGON((%s))',%s),%s)";
+	private static final String MAKE_POLYGON_SQL = "ST_GeomFromText('POLYGON((%s))',%s)";
 	private static final String MAKE_ENVELOPE_SQL = "ST_MakeEnvelope(%s,%s)";
 	
 	private static final String SHIFT_LNG_SQL = "ST_Shift_Longitude(%s)";
+	private static final String ST_CONTAINS_SQL = "ST_Contains(%s,%s)";
 	
 	//ST_DWithin(ST_SetSRID(ST_MakePoint(<lng>, <lat>),<srid>), <geom>, <dist_meters>)";
 	private static final String WITHIN_DISTANCE_SQL = "ST_DWithin(Geography(ST_SetSRID(ST_MakePoint(%s,%s),%s)),Geography(%s),%d)";
@@ -116,33 +118,40 @@ public class PostgisUtils {
 	 * Generates a Postgis SQL clause to select within a polygon.
 	 * @param geomColumn
 	 * @param polygon List of Pair<lat,lng>
+	 * @param isShiftedGeometry is the target geometry column a shifted geometry column? In other words, should
+	 * we use ST_Shift_Longitude for the comparison.
 	 * @return
 	 */
-	public static String getInsidePolygonSQLClause(String geomColumn, List<Pair<String,String>> polygon){
+	public static String getInsidePolygonSQLClause(String geomColumn, List<Pair<String,String>> polygon, boolean isShiftedGeometry){
 		List<String> polygonPoints = new ArrayList<String>(polygon.size());
 		for(Pair<String,String> curr : polygon){
 			//add right (longitude) before left(latitude) since PostGIS wants X,Y
 			polygonPoints.add(curr.getRight() + " " + curr.getLeft());
 		}
-		return String.format(INSIDE_POLYGON_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID,geomColumn);
+		if(isShiftedGeometry){
+			return String.format(ST_CONTAINS_SQL, String.format(SHIFT_LNG_SQL,String.format(MAKE_POLYGON_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID)),geomColumn);
+		}
+		
+		return String.format(ST_CONTAINS_SQL, String.format(MAKE_POLYGON_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID), geomColumn);
 	}
 	
 	/**
 	 * Generates a Postgis SQL clause to select within an envelope.
 	 * @param geomColumn
 	 * @param polygon List of Pair<lat,lng>
-	 * @param idlSafe is this envelope crossing the International Date Line?
+	 * @param isShiftedGeometry is the target geometry column a shifted geometry column? In other words, should
+	 * we use ST_Shift_Longitude for the comparison.
 	 * @return
 	 */
-	public static String getInsideEnvelopeSQLClause(String geomColumn, List<Pair<String,String>> envelope, boolean idlSafe){
+	public static String getInsideEnvelopeSQLClause(String geomColumn, List<Pair<String,String>> envelope, boolean isShiftedGeometry){
 		List<String> envelopePoints = new ArrayList<String>(4);
 		for(Pair<String,String> curr : envelope){
 			//add right (longitude) before left(latitude) since PostGIS wants X,Y
 			envelopePoints.add(curr.getRight());
 			envelopePoints.add(curr.getLeft());
 		}
-		if(idlSafe){
-			return String.format(SHIFT_LNG_SQL,geomColumn) + BBOX_INTERSECT_OPERATOR + String.format(SHIFT_LNG_SQL,String.format(MAKE_ENVELOPE_SQL, StringUtils.join(envelopePoints,","),WSG84_SRID));
+		if(isShiftedGeometry){
+			return geomColumn + BBOX_INTERSECT_OPERATOR + String.format(SHIFT_LNG_SQL,String.format(MAKE_ENVELOPE_SQL, StringUtils.join(envelopePoints,","),WSG84_SRID));
 		}
 		return geomColumn + BBOX_INTERSECT_OPERATOR + String.format(MAKE_ENVELOPE_SQL, StringUtils.join(envelopePoints,","),WSG84_SRID);
 	}
@@ -158,5 +167,18 @@ public class PostgisUtils {
 	 */
 	public static String getFromWithinRadius(String geomColumn, String lat, String lng, int radiusInMeter){
 		return String.format(WITHIN_DISTANCE_SQL,lng,lat,WSG84_SRID,geomColumn,radiusInMeter);
+	}
+	
+	/**
+	 * Used to bring a shifted longitude back to -180,180 interval.
+	 * @param lng
+	 * @return
+	 */
+	public static String unshiftLongitude(String lng){
+		double dLng = NumberUtils.toDouble(lng, 0);
+		if(dLng > 180){
+			return new Double(dLng-360).toString();
+		}
+		return lng;
 	}
 }

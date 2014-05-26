@@ -88,6 +88,6 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 			polygon.add((Pair<String,String>)parsedValue);
 		}
 		String geomColumn = searchableField.getRelatedField();
-		return PostgisUtils.getInsidePolygonSQLClause(geomColumn, polygon);
+		return PostgisUtils.getInsidePolygonSQLClause(geomColumn, polygon, true);
 	}
 }

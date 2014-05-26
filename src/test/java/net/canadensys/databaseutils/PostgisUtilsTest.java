@@ -69,7 +69,10 @@ public class PostgisUtilsTest {
 		polygon.add(Pair.of("29.5","77.6"));
 		polygon.add(Pair.of("29.53","75.15"));
 		assertEquals("ST_Contains(ST_GeomFromText('POLYGON((75.15 29.53,77 29,77.6 29.5,75.15 29.53))',4326),the_geom)",
-				PostgisUtils.getInsidePolygonSQLClause("the_geom", polygon));
+				PostgisUtils.getInsidePolygonSQLClause("the_geom", polygon, false));
+		
+		assertEquals("ST_Contains(ST_Shift_Longitude(ST_GeomFromText('POLYGON((75.15 29.53,77 29,77.6 29.5,75.15 29.53))',4326)),the_shifted_geom)",
+				PostgisUtils.getInsidePolygonSQLClause("the_shifted_geom", polygon, true));
 	}
 	
 	@Test
@@ -79,15 +82,19 @@ public class PostgisUtilsTest {
 		envelope.add(Pair.of("77", "29"));
 		assertEquals("the_geom && ST_MakeEnvelope(29.53,75.15,29,77,4326)",
 				PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope, false));
-		assertEquals("ST_Shift_Longitude(the_geom) && ST_Shift_Longitude(ST_MakeEnvelope(29.53,75.15,29,77,4326))",
-				PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope, true));
-		
-		System.out.println(PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope, true));
+		assertEquals("the_shifted_geom && ST_Shift_Longitude(ST_MakeEnvelope(29.53,75.15,29,77,4326))",
+				PostgisUtils.getInsideEnvelopeSQLClause("the_shifted_geom", envelope, true));
 	}
 	
 	@Test
 	public void testGetFromWithinRadius(){
 		assertEquals("ST_DWithin(Geography(ST_SetSRID(ST_MakePoint(29.53,75.15),4326)),Geography(the_geom),250)",
 				PostgisUtils.getFromWithinRadius("the_geom", "75.15", "29.53", 250));
+	}
+	
+	@Test
+	public void testUnshiftLongitude(){
+		assertEquals("-170.0",PostgisUtils.unshiftLongitude("190"));
+		assertEquals("15",PostgisUtils.unshiftLongitude("15"));
 	}
 }
