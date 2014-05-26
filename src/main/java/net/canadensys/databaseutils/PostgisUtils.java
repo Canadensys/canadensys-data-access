@@ -22,10 +22,11 @@ public class PostgisUtils {
 	
 	private static final String CENTROID_SQL = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s";
 	private static final String CENTROID_SQL_WHERE = "SELECT ST_AsText(st_centroid(st_collect(%s))) point FROM %s WHERE %s";
-
 	
 	private static final String INSIDE_POLYGON_SQL = "ST_Contains(ST_GeomFromText('POLYGON((%s))',%s),%s)";
 	private static final String MAKE_ENVELOPE_SQL = "ST_MakeEnvelope(%s,%s)";
+	
+	private static final String SHIFT_LNG_SQL = "ST_Shift_Longitude(%s)";
 	
 	//ST_DWithin(ST_SetSRID(ST_MakePoint(<lng>, <lat>),<srid>), <geom>, <dist_meters>)";
 	private static final String WITHIN_DISTANCE_SQL = "ST_DWithin(Geography(ST_SetSRID(ST_MakePoint(%s,%s),%s)),Geography(%s),%d)";
@@ -130,16 +131,20 @@ public class PostgisUtils {
 	 * Generates a Postgis SQL clause to select within an envelope.
 	 * @param geomColumn
 	 * @param polygon List of Pair<lat,lng>
+	 * @param idlSafe is this envelope crossing the International Date Line?
 	 * @return
 	 */
-	public static String getInsideEnvelopeSQLClause(String geomColumn, List<Pair<String,String>> polygon){
-		List<String> polygonPoints = new ArrayList<String>(4);
-		for(Pair<String,String> curr : polygon){
+	public static String getInsideEnvelopeSQLClause(String geomColumn, List<Pair<String,String>> envelope, boolean idlSafe){
+		List<String> envelopePoints = new ArrayList<String>(4);
+		for(Pair<String,String> curr : envelope){
 			//add right (longitude) before left(latitude) since PostGIS wants X,Y
-			polygonPoints.add(curr.getRight());
-			polygonPoints.add(curr.getLeft());
+			envelopePoints.add(curr.getRight());
+			envelopePoints.add(curr.getLeft());
 		}
-		return geomColumn + BBOX_INTERSECT_OPERATOR + String.format(MAKE_ENVELOPE_SQL, StringUtils.join(polygonPoints,","),WSG84_SRID);
+		if(idlSafe){
+			return String.format(SHIFT_LNG_SQL,geomColumn) + BBOX_INTERSECT_OPERATOR + String.format(SHIFT_LNG_SQL,String.format(MAKE_ENVELOPE_SQL, StringUtils.join(envelopePoints,","),WSG84_SRID));
+		}
+		return geomColumn + BBOX_INTERSECT_OPERATOR + String.format(MAKE_ENVELOPE_SQL, StringUtils.join(envelopePoints,","),WSG84_SRID);
 	}
 	
 	/**

@@ -78,7 +78,11 @@ public class PostgisUtilsTest {
 		envelope.add(Pair.of("75.15", "29.53"));
 		envelope.add(Pair.of("77", "29"));
 		assertEquals("the_geom && ST_MakeEnvelope(29.53,75.15,29,77,4326)",
-				PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope));
+				PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope, false));
+		assertEquals("ST_Shift_Longitude(the_geom) && ST_Shift_Longitude(ST_MakeEnvelope(29.53,75.15,29,77,4326))",
+				PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope, true));
+		
+		System.out.println(PostgisUtils.getInsideEnvelopeSQLClause("the_geom", envelope, true));
 	}
 	
 	@Test
