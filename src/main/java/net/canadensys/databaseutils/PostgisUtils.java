@@ -18,6 +18,7 @@ public class PostgisUtils {
 	
 	private static final String GEOMETRYFROMTEXT_CMD = "GEOMETRYFROMTEXT('POINT(%s %s)',%s)";
 	private static final String EXTENT_SQL = "ST_extent(%s)";
+	private static final String GEOGRAPHY_SQL = "Geography(%s)";
 	private static final String CCENTROID_SQL = "ST_centroid(%s)";
 	private static final String CCENTROID_TEXT_SQL = "ST_AsText(ST_centroid(%s))";
 	
@@ -26,6 +27,7 @@ public class PostgisUtils {
 	
 	private static final String MAKE_POLYGON_SQL = "ST_GeomFromText('POLYGON((%s))',%s)";
 	private static final String MAKE_ENVELOPE_SQL = "ST_MakeEnvelope(%s,%s)";
+	private static final String MAKE_GEOG_ENVELOPE_SQL = String.format(GEOGRAPHY_SQL,"ST_MakeEnvelope(%s,%s)");
 	
 	private static final String SHIFT_LNG_SQL = "ST_Shift_Longitude(%s)";
 	private static final String ST_CONTAINS_SQL = "ST_Contains(%s,%s)";

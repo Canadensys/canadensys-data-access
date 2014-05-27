@@ -24,12 +24,12 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 	private static final Logger LOGGER = Logger.getLogger(InsidePolygonFieldInterpreter.class);
 	
 	/**
-	 * Needs exactly one related field and type can not be specified.
+	 * Needs at least one related field and type should not be specified.
 	 */
 	@Override
 	public boolean canHandleSearchableField(SearchableField searchableField) {
 		return (searchableField.getRelatedFields() != null && 
-				searchableField.getRelatedFields().size() == 1 &&
+				searchableField.getRelatedFields().size() >= 1 &&
 				searchableField.getType() == null);
 	}
 	
@@ -44,8 +44,10 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 		//validate that the parsedValue are in the right type(class)
 		List<String> valueList = searchQueryPart.getValueList();
 		Object parsedValue = null;
+		//get the parsed value of the first SearchableField only (e.g. the_geom)
+		String searchableFieldKey = searchQueryPart.getSearchableField().getRelatedFields().get(0);
 		for(String currValue : valueList){
-			parsedValue = searchQueryPart.getParsedValue(currValue);
+			parsedValue = searchQueryPart.getParsedValue(currValue, searchableFieldKey);
 			if(parsedValue instanceof Pair){
 				Pair<?,?> a = (Pair<?,?>)parsedValue;
 				if(!String.class.equals(a.getLeft().getClass()) ||
