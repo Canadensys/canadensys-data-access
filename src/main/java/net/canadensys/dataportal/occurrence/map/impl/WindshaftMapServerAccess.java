@@ -1,5 +1,6 @@
 package net.canadensys.dataportal.occurrence.map.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,15 @@ import net.canadensys.dataportal.occurrence.map.MapServerAccess;
 import net.canadensys.dataportal.occurrence.model.MapInfoModel;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchQueryPartUtils;
+import net.canadensys.query.SearchableFieldTypeEnum;
+import net.canadensys.query.interpreter.InsidePolygonFieldInterpreter;
 
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.type.BooleanType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +51,33 @@ public class WindshaftMapServerAccess implements MapServerAccess {
 	}
 	
 	@Override
-	public String getMapQuery(Map<String,List<SearchQueryPart>> searchCriteria){
+	public String getMapQuery(Map<String,List<SearchQueryPart>> searchCriteria){		
 		if(searchCriteria.isEmpty()){
 			return DEFAULT_QUERY;
 		}
 		return searchCriteriaToSQL("*", searchCriteria);
+	}
+	
+	@Override
+	public boolean isCrossingIDL(SearchQueryPart searchQueryPart){
+		//we only support INSIDE_POLYGON_GEO since we have easier solutions for the other types
+		if(searchQueryPart.getSearchableField().getSearchableFieldTypeEnum() == SearchableFieldTypeEnum.INSIDE_POLYGON_GEO){
+			List<Pair<String,String>> polygon = new ArrayList<Pair<String,String>>();
+			List<String> valueList = searchQueryPart.getValueList();
+			String the_geom = searchQueryPart.getSearchableField().getRelatedFields().get(InsidePolygonFieldInterpreter.GEOM_FIELD_IDX);
+			Object parsedValue = null;
+			for(String currValue : valueList){
+				parsedValue = searchQueryPart.getParsedValue(currValue,the_geom);
+				polygon.add((Pair<String,String>)parsedValue);
+			}
+			String sql = SQLHelper.select(PostgisUtils.getPolygonCrossingIDLSQL(polygon),"crossingIDL");
+			SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(sql);
+			sqlQuery.addScalar("crossingIDL", BooleanType.INSTANCE);
+			
+			Boolean crossingIDL = (Boolean)sqlQuery.uniqueResult();
+			return BooleanUtils.toBoolean(crossingIDL);
+		}
+		return false;
 	}
 	
 	@Override

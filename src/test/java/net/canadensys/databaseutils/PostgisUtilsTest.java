@@ -87,6 +87,18 @@ public class PostgisUtilsTest {
 	}
 	
 	@Test
+	public void testGetPolygonCrossingIDLSQL(){
+		List<Pair<String,String>> polygon = new ArrayList<Pair<String,String>>();
+		polygon.add(Pair.of("29.53","75.15"));
+		polygon.add(Pair.of("29","77"));
+		polygon.add(Pair.of("29.5","77.6"));
+		polygon.add(Pair.of("29.53","75.15"));
+		assertEquals("ST_Intersects(Geography(ST_GeomFromText('POLYGON((75.15 29.53,77 29,77.6 29.5,75.15 29.53))',4326)),"
+		+ "Geography(ST_SetSRID(ST_MakeLine(ST_MakePoint(180,89.999999),ST_MakePoint(180,-89.999999)),4326)))",
+			PostgisUtils.getPolygonCrossingIDLSQL(polygon));
+	}
+	
+	@Test
 	public void testGetFromWithinRadius(){
 		assertEquals("ST_DWithin(Geography(ST_SetSRID(ST_MakePoint(29.53,75.15),4326)),Geography(the_geom),250)",
 				PostgisUtils.getFromWithinRadius("the_geom", "75.15", "29.53", 250));

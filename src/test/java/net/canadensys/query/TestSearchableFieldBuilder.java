@@ -274,12 +274,13 @@ public class TestSearchableFieldBuilder {
 			public List<String> getRelatedFields() {
 				List<String> relatedFields = new ArrayList<String>();
 				relatedFields.add("the_geom");
+				relatedFields.add("the_shifted_geom");
 				return relatedFields;
 			}
 
 			@Override
 			public String getRelatedField() {
-				return "the_geom";
+				return null;
 			}
 			
 		};

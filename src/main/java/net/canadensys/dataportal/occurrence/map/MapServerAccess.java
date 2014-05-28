@@ -55,4 +55,12 @@ public interface MapServerAccess {
 	 */
 	public String getMapElementDetails(int id, List<String> columnList);
 	
+	/**
+	 * Check if a searchQueryPart contains a geospatial query part that would represent a shape 
+	 * crossing the IDL.
+	 * @param searchQueryPart
+	 * @return
+	 */
+	public boolean isCrossingIDL(SearchQueryPart searchQueryPart);
+	
 }
