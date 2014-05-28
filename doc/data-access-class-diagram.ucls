@@ -160,9 +160,9 @@
       <operations public="true" package="true" protected="true" private="true" static="false"/>    
     </display>  
   </class>  
-  <class id="16" language="java" name="net.canadensys.query.interpreter.GeoCoordinatesFieldInterpreter" 
+  <class id="16" language="java" name="net.canadensys.query.interpreter.InsidePolygonFieldInterpreter" 
     project="canadensys-data-access" 
-    file="/canadensys-data-access/src/main/java/net/canadensys/query/interpreter/GeoCoordinatesFieldInterpreter.java" 
+    file="/canadensys-data-access/src/main/java/net/canadensys/query/interpreter/InsidePolygonFieldInterpreter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="247" y="1349"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="false" 
