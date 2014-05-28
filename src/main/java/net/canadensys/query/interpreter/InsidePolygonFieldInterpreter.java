@@ -8,13 +8,16 @@ import net.canadensys.query.QueryOperatorEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchableField;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 /**
- * Interprets a SearchQueryPart representing a geospatial query where we target a polygon. 
+ * Interprets a SearchQueryPart representing a geospatial query where we target a polygon.
+ * If the polygon is crossing the IDL, make sure to add the hint IS_CROSSING_IDL_HINT so the 
+ * interpreter can use the shifted_geom column.
  * @author canadensys
  *
  */
@@ -22,6 +25,10 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 	
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(InsidePolygonFieldInterpreter.class);
+	
+	public static final String IS_CROSSING_IDL_HINT = "isCrossingIDL";
+	public static final int GEOM_FIELD_IDX = 0;
+	public static final int SHIFTED_GEOM_FIELD_IDX = 1;
 	
 	/**
 	 * Needs at least one related field and type should not be specified.
@@ -45,7 +52,7 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 		List<String> valueList = searchQueryPart.getValueList();
 		Object parsedValue = null;
 		//get the parsed value of the first SearchableField only (e.g. the_geom)
-		String searchableFieldKey = searchQueryPart.getSearchableField().getRelatedFields().get(0);
+		String searchableFieldKey = searchQueryPart.getSearchableField().getRelatedFields().get(GEOM_FIELD_IDX);
 		for(String currValue : valueList){
 			parsedValue = searchQueryPart.getParsedValue(currValue, searchableFieldKey);
 			if(parsedValue instanceof Pair){
@@ -82,14 +89,20 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 		
 		List<Pair<String,String>> polygon = new ArrayList<Pair<String,String>>();
 		SearchableField searchableField = searchQueryPart.getSearchableField();
-		
+		String geomColumn = searchableField.getRelatedFields().get(GEOM_FIELD_IDX);
 		List<String> valueList = searchQueryPart.getValueList();
+		
 		Object parsedValue = null;
 		for(String currValue : valueList){
-			parsedValue = searchQueryPart.getParsedValue(currValue);
+			parsedValue = searchQueryPart.getParsedValue(currValue,geomColumn);
 			polygon.add((Pair<String,String>)parsedValue);
 		}
-		String geomColumn = searchableField.getRelatedField();
-		return PostgisUtils.getInsidePolygonSQLClause(geomColumn, polygon, true);
+		
+		//If the polygon is crossing the IDL, we use the shiftedGeomColumn.
+		if(BooleanUtils.toBoolean((Boolean)searchQueryPart.getHint(IS_CROSSING_IDL_HINT))){
+			String shiftedGeomColumn = searchableField.getRelatedFields().get(SHIFTED_GEOM_FIELD_IDX);
+			return PostgisUtils.getInsidePolygonSQLClause(shiftedGeomColumn, polygon, true);
+		}
+		return PostgisUtils.getInsidePolygonSQLClause(geomColumn, polygon, false);
 	}
 }
