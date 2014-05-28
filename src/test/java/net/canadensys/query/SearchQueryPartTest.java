@@ -64,5 +64,11 @@ public class SearchQueryPartTest {
 			fail();
 		}
 	}
-
+	
+	@Test
+	public void testSearchQueryPartHint(){
+		SearchQueryPart sqp = new SearchQueryPart();
+		sqp.addHint("hint", true);
+		assertTrue(Boolean.parseBoolean(sqp.getHint("hint").toString()));
+	}
 }

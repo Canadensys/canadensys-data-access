@@ -123,6 +123,17 @@ public class SQLHelper {
 	}
 	
 	/**
+	 * Returns a string representing a SELECT.
+	 * Normally used to call a function.
+	 * @param str
+	 * @param alias
+	 * @return 
+	 */
+	public static String select(String str, String alias){
+		return SELECT+str+" "+alias;
+	}
+	
+	/**
 	 * Very simple escape function for SQL string.
 	 * All single quotes will be doubled
 	 * @param command

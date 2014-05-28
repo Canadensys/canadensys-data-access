@@ -25,6 +25,7 @@ public class SearchQueryPart {
 	
 	private TreeMap<Integer,String> valuesTree = null;
 	private Map<String,Map<String,Object>> parsedValuesMap = null;
+	private Map<String,Object> hints = null;
 	
 	/**
 	 * Default constructor
@@ -91,6 +92,31 @@ public class SearchQueryPart {
 	 */
 	public void addValue(String value){
 		addValue(value,null);
+	}
+	
+	/**
+	 * Add hint that could help the interpreter to be more efficient.
+	 * See the matching Interpreter for available hint keys.
+	 * @param value
+	 */
+	public void addHint(String hintKey, Object value){
+		if(hints == null){
+			hints = new HashMap<String, Object>();
+		}
+		hints.put(hintKey, value);
+	}
+	
+	/**
+	 * Get hint previously set on this SearchQueryPart.
+	 * A hint is set to help the interpreter to be more efficient.
+	 * @param hintKey
+	 * @return hint as object or null is no hint is associated with the provided key
+	 */
+	public Object getHint(String hintKey){
+		if(hints == null){
+			return null;
+		}
+		return hints.get(hintKey);
 	}
 	
 	/**
