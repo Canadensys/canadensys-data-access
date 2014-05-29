@@ -1,7 +1,9 @@
 Version History
 ===============
-Version 2.7.0 2014-??-??
+Version 2.7.0 2014-05-29
 * Added hasTypeStatus
+* Geospatial query support
+* Add 'hints' to SearchQueryPart
 
 Version 2.6.0 2014-04-14
 * Minor improvements in TaxonDAO introducing new method signatures.

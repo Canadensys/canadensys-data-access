@@ -23,6 +23,9 @@ public class InsideEnvelopeFieldInterpreter extends InsidePolygonFieldInterprete
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(InsideEnvelopeFieldInterpreter.class);
 	
+	public static final int GEOM_FIELD_IDX = 0;
+	public static final int SHIFTED_GEOM_FIELD_IDX = 1;
+	
 	/**
 	 * Check if we have exactly 2 elements in value list (envelope is defined by 2 points)
 	 * @param searchQueryPart
@@ -48,7 +51,7 @@ public class InsideEnvelopeFieldInterpreter extends InsidePolygonFieldInterprete
 		
 		List<Pair<String,String>> envelope = new ArrayList<Pair<String,String>>();
 		SearchableField searchableField = searchQueryPart.getSearchableField();
-		String geomColumn = searchableField.getRelatedFields().get(0);
+		String geomColumn = searchableField.getRelatedFields().get(GEOM_FIELD_IDX);
 		
 		List<String> valueList = searchQueryPart.getValueList();
 		Object parsedValue = null;
@@ -65,9 +68,8 @@ public class InsideEnvelopeFieldInterpreter extends InsidePolygonFieldInterprete
 		lngWest = NumberUtils.toDouble(((Pair<String,String>)parsedValue).getRight(),0);
 
 		//If the bbox is crossing the IDL, we use the shiftedGeomColumn.
-
 		if(MapUtils.isBBoxCrossingIDL(lngEast, lngWest)){
-			String shiftedGeomColumn = searchableField.getRelatedFields().get(1);
+			String shiftedGeomColumn = searchableField.getRelatedFields().get(SHIFTED_GEOM_FIELD_IDX);
 			return PostgisUtils.getInsideEnvelopeSQLClause(shiftedGeomColumn, envelope, true);
 		}
 		return PostgisUtils.getInsideEnvelopeSQLClause(geomColumn, envelope, false);
