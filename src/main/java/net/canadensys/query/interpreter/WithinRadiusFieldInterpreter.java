@@ -62,7 +62,6 @@ public class WithinRadiusFieldInterpreter implements QueryPartInterpreter{
 	@Override
 	public Criterion toCriterion(SearchQueryPart searchQueryPart) {
 		String sqlCmd = toSQL(searchQueryPart);
-		System.out.println("sqlCmd:"+sqlCmd);
 		if(sqlCmd == null){
 			return null;
 		}

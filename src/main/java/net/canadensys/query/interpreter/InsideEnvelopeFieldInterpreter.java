@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.canadensys.databaseutils.PostgisUtils;
 import net.canadensys.dataportal.occurrence.map.MapUtils;
+import net.canadensys.query.QueryOperatorEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchableField;
 
@@ -27,17 +28,23 @@ public class InsideEnvelopeFieldInterpreter extends InsidePolygonFieldInterprete
 	public static final int SHIFTED_GEOM_FIELD_IDX = 1;
 	
 	/**
-	 * Check if we have exactly 2 elements in value list (envelope is defined by 2 points)
+	 * Details: Check if we have exactly 2 elements in value list (envelope is defined by 2 points)
 	 * @param searchQueryPart
 	 * @return
 	 */
 	@Override
 	public boolean canHandleSearchQueryPart(SearchQueryPart searchQueryPart) {
-		if(!super.canHandleSearchQueryPart(searchQueryPart)){
+		
+		if(!canHandleSearchableField(searchQueryPart.getSearchableField()) || 
+			!QueryOperatorEnum.IN.equals(searchQueryPart.getOp()) || 
+			searchQueryPart.getValueList().size() != 2){
+			LOGGER.debug("Can NOT handle SearchQueryPart.");
 			return false;
 		}
-		List<String> valueList = searchQueryPart.getValueList();
-		return (valueList.size() == 2);
+		
+		//get the parsed value of the first SearchableField only (e.g. the_geom)
+		String searchableFieldKey = searchQueryPart.getSearchableField().getRelatedFields().get(GEOM_FIELD_IDX);
+		return validateParsedValue(searchQueryPart,searchableFieldKey);
 	}
 	
 	@SuppressWarnings("unchecked")

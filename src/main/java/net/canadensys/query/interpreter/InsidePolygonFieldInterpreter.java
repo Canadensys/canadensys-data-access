@@ -31,7 +31,7 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 	public static final int SHIFTED_GEOM_FIELD_IDX = 1;
 	
 	/**
-	 * Needs at least one related field and type should not be specified.
+	 * Details: Needs at least one related field and type should not be specified.
 	 */
 	@Override
 	public boolean canHandleSearchableField(SearchableField searchableField) {
@@ -40,19 +40,35 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 				searchableField.getType() == null);
 	}
 	
+	/**
+	 * Details: SearchQueryPart must contains at least 4 elements in its value list,
+	 * only IN operator is accepted.
+	 */
 	@Override
 	public boolean canHandleSearchQueryPart(SearchQueryPart searchQueryPart) {
 		
 		if(!canHandleSearchableField(searchQueryPart.getSearchableField()) || 
-			!QueryOperatorEnum.IN.equals(searchQueryPart.getOp())){
+			!QueryOperatorEnum.IN.equals(searchQueryPart.getOp()) || 
+			searchQueryPart.getValueList().size() < 4){
+			LOGGER.debug("Can NOT handle SearchQueryPart.");
 			return false;
 		}
 		
-		//validate that the parsedValue are in the right type(class)
-		List<String> valueList = searchQueryPart.getValueList();
-		Object parsedValue = null;
 		//get the parsed value of the first SearchableField only (e.g. the_geom)
 		String searchableFieldKey = searchQueryPart.getSearchableField().getRelatedFields().get(GEOM_FIELD_IDX);
+		return validateParsedValue(searchQueryPart,searchableFieldKey);
+	}
+	
+	/**
+	 * Validate that the parsedValues are in the right type(class).
+	 * @param searchQueryPart
+	 * @param searchableFieldKey
+	 * @return
+	 */
+	protected boolean validateParsedValue(SearchQueryPart searchQueryPart, String searchableFieldKey){
+		List<String> valueList = searchQueryPart.getValueList();
+		
+		Object parsedValue = null;
 		for(String currValue : valueList){
 			parsedValue = searchQueryPart.getParsedValue(currValue, searchableFieldKey);
 			if(parsedValue instanceof Pair){
