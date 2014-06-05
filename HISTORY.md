@@ -1,5 +1,8 @@
 Version History
 ===============
+Version 2.7.1 2014-06-05
+* Improve validation for geospatial query handling
+
 Version 2.7.0 2014-05-29
 * Added hasTypeStatus
 * Geospatial query support
