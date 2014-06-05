@@ -28,12 +28,18 @@ public interface QueryPartInterpreter {
 	 */
 	public boolean canHandleSearchQueryPart(SearchQueryPart searchQueryPart);
 	
-	
-	
 	/**
+	 * Express SearchQueryPart as Hibernate Criterion
 	 * @param searchQueryPart a valid SearchQueryPart see SearchQueryPartValidator
-	 * @return
+	 * @return Criterion or null if impossible to achieve.
 	 */
 	public Criterion toCriterion(SearchQueryPart searchQueryPart);
+	
+	/**
+	 * Express SearchQueryPart as SQL. Be aware that this function may allow SQL injection, please
+	 * see concrete implementation and use carefully (e.g. read-only user)
+	 * @param searchQueryPart  a valid SearchQueryPart see SearchQueryPartValidator
+	 * @return sql statement or null if impossible to achieve.
+	 */
 	public String toSQL(SearchQueryPart searchQueryPart);
 }

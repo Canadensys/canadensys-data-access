@@ -7,6 +7,7 @@ import net.canadensys.query.QueryOperatorEnum;
 import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchableField;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Criterion;
@@ -52,11 +53,29 @@ public class WithinRadiusFieldInterpreter implements QueryPartInterpreter{
 		//check that we have a coordinate as Pair and a radius as Integer.
 		Object parsedValue = null;
 		parsedValue = searchQueryPart.getParsedValue(valueList.get(POINT_IDX));
-		boolean isValid = (parsedValue instanceof Pair);
-		
+
+		if(!(parsedValue instanceof Pair)){
+			return false;
+		}
+		Pair<?,?> pv = (Pair<?,?>)parsedValue;
+		Object leftValue = pv.getLeft();
+		Object rightValue = pv.getRight();
+			
+		//isNumber is not perfect but will catch most of the possible issue
+		if(!String.class.equals(leftValue.getClass()) || 
+				!NumberUtils.isNumber((String)leftValue)){
+			return false;
+		}
+		if(!String.class.equals(rightValue.getClass()) || 
+				!NumberUtils.isNumber((String)rightValue)){
+			return false;
+		}
+
 		parsedValue = searchQueryPart.getParsedValue(valueList.get(RADIUS_IDX));
-		isValid = isValid && Integer.class.equals(parsedValue.getClass());
-		return isValid;
+		if(!Integer.class.equals(parsedValue.getClass())){
+			return false;
+		}
+		return true;
 	}
 	
 	@Override

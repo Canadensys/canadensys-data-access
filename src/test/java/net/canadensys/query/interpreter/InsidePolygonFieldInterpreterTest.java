@@ -64,4 +64,24 @@ public class InsidePolygonFieldInterpreterTest {
 		InsidePolygonFieldInterpreter geoCoorInterpreter = new InsidePolygonFieldInterpreter();
 		assertFalse(geoCoorInterpreter.canHandleSearchQueryPart(sqp));
 	}
+	
+	/**
+	 * Test that non-number values are flag as "can't be handled"
+	 */
+	@Test
+	public void testWrongValues(){
+		SearchQueryPart sqp = new SearchQueryPart();
+		sqp.setSearchableField(TestSearchableFieldBuilder.buildInsidePolygonSearchableField());
+		sqp.setOp(QueryOperatorEnum.IN);
+		sqp.addValue("a,b");
+		sqp.addValue("-26.985412,130.053265");
+		sqp.addValue("-25.363882,131.044922");
+		
+		sqp.addParsedValue("a,b", "the_geom", Pair.of("a","b"));
+		sqp.addParsedValue("-26.985412,130.053265", "the_geom", Pair.of("-26.985412","130.053265"));
+		sqp.addParsedValue("-25.363882,131.044922", "the_geom", Pair.of("-25.363882","131.044922"));
+		
+		InsidePolygonFieldInterpreter geoCoorInterpreter = new InsidePolygonFieldInterpreter();
+		assertFalse(geoCoorInterpreter.canHandleSearchQueryPart(sqp));
+	}
 }

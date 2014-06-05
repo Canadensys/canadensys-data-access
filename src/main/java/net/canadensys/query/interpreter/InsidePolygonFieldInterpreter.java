@@ -9,6 +9,7 @@ import net.canadensys.query.SearchQueryPart;
 import net.canadensys.query.SearchableField;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Criterion;
@@ -56,11 +57,18 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 		
 		//get the parsed value of the first SearchableField only (e.g. the_geom)
 		String searchableFieldKey = searchQueryPart.getSearchableField().getRelatedFields().get(GEOM_FIELD_IDX);
+		
+		//ensure the polygon is closed
+		List<String> valueList = searchQueryPart.getValueList();
+		if(!valueList.get(0).equals(valueList.get(valueList.size()-1))){
+			return false;
+		}
+		
 		return validateParsedValue(searchQueryPart,searchableFieldKey);
 	}
 	
 	/**
-	 * Validate that the parsedValues are in the right type(class).
+	 * Validate that the parsedValues are numbers, stored in Pair of String.
 	 * @param searchQueryPart
 	 * @param searchableFieldKey
 	 * @return
@@ -68,13 +76,22 @@ public class InsidePolygonFieldInterpreter implements QueryPartInterpreter{
 	protected boolean validateParsedValue(SearchQueryPart searchQueryPart, String searchableFieldKey){
 		List<String> valueList = searchQueryPart.getValueList();
 		
-		Object parsedValue = null;
+		Object parsedValue = null, leftValue = null, rightValue= null;
 		for(String currValue : valueList){
 			parsedValue = searchQueryPart.getParsedValue(currValue, searchableFieldKey);
 			if(parsedValue instanceof Pair){
-				Pair<?,?> a = (Pair<?,?>)parsedValue;
-				if(!String.class.equals(a.getLeft().getClass()) ||
-						!String.class.equals(a.getRight().getClass())){
+				Pair<?,?> pv = (Pair<?,?>)parsedValue;
+				leftValue = pv.getLeft();
+				rightValue = pv.getRight();
+				
+				//isNumber is not perfect but will catch most of the possible issue
+				if(!String.class.equals(leftValue.getClass()) || 
+						!NumberUtils.isNumber((String)leftValue)){
+					return false;
+				}
+				
+				if(!String.class.equals(rightValue.getClass()) || 
+						!NumberUtils.isNumber((String)rightValue)){
 					return false;
 				}
 			}
