@@ -192,7 +192,7 @@ public class TaxonModel implements Comparable<TaxonModel>{
 	 */
 
 	@OneToMany(mappedBy="taxon")
-	@OrderBy("status ASC name ASC")
+	@OrderBy("status ASC, name ASC")
 	public List<VernacularNameModel> getVernacularnames() {
 		return vernacularnames;
 	}
