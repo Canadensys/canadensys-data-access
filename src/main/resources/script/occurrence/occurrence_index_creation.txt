@@ -1,0 +1,54 @@
+{
+ "settings":{
+    "index":{
+      "analysis":{
+        "filter" : {
+          "autocomplete_filter" : {
+            "max_gram" : 100,
+            "min_gram" : 2,
+            "type" : "edge_ngram"
+          }
+        },
+        "analyzer":{
+          "keyword_autocomplete" : {
+            "filter" : [
+              "lowercase","asciifolding","autocomplete_filter"
+            ],
+            "tokenizer" : "keyword"
+          },
+          "standard_autocomplete" : {
+            "filter" : [
+              "lowercase","asciifolding","autocomplete_filter"
+            ],
+            "tokenizer" : "standard"
+          }
+        }
+      }
+    }
+  },
+  "mappings" : {
+    "occurrence" : {
+      "properties" : {
+        "sourcefileid":{
+          "type" : "string"
+        },
+        "dwcaid":{
+          "type" : "string"
+        },
+        "scientificname":{
+          "type" : "string"
+        },
+        "country":{
+          "type" : "string",
+          "fields": {
+            "autocomplete":   { 
+              "type": "string", 
+              "index_analyzer" : "keyword_autocomplete",
+              "search_analyzer" : "standard"
+            }
+          }
+        }
+      }
+    }
+  }
+}
