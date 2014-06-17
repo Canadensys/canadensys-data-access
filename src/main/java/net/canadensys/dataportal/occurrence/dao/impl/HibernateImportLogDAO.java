@@ -47,8 +47,18 @@ public class HibernateImportLogDAO implements ImportLogDAO{
 	 * It assumes records were inserted normally and that the sequence was used.
 	 * @return ImportLogModel or null if nothing is found
 	 */
+	@Override
 	public ImportLogModel loadLast(){
 		Criteria c = sessionFactory.getCurrentSession().createCriteria(ImportLogModel.class);
+		c.addOrder(Order.desc(MANAGED_ID));
+		c.setMaxResults(1);
+		return (ImportLogModel)c.uniqueResult();
+	}
+	
+	@Override
+	public ImportLogModel loadLastFrom(String sourceFileId){
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(ImportLogModel.class);
+		c.add(Restrictions.eq("sourcefileid", sourceFileId));
 		c.addOrder(Order.desc(MANAGED_ID));
 		c.setMaxResults(1);
 		return (ImportLogModel)c.uniqueResult();

@@ -44,5 +44,16 @@ public class ImportLogDAOTest extends AbstractTransactionalJUnit4SpringContextTe
 		assertEquals("test_sourcefileid",loadedModel.getSourcefileid());
 		assertEquals("me",loadedModel.getUpdated_by());
 		assertEquals(now,loadedModel.getEvent_end_date_time());
+		
+		//test importLogDAO.loadLastFrom
+		testModel = new ImportLogModel();
+		now = new Date();
+		testModel.setSourcefileid("test_sourcefileid");
+		testModel.setUpdated_by("me");
+		testModel.setEvent_end_date_time(now);
+		importLogDAO.save(testModel);
+		
+		loadedModel = importLogDAO.loadLastFrom("test_sourcefileid");
+		assertEquals(now,loadedModel.getEvent_end_date_time());
 	}
 }
