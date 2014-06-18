@@ -10,6 +10,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -49,7 +50,7 @@ public class ElasticSearchOccurrenceAutoCompleteDAO implements OccurrenceAutoCom
 		SearchRequestBuilder srb = client.prepareSearch(INDEX_NAME)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(QueryBuilders.matchQuery("country.autocomplete", currValue))
-		        //TODO add aggregation, requires ES > 1.0
+		        .addAggregation(AggregationBuilders.terms("country"))
 	            .setSize(MAX_SIZE)
 	            .setTypes(OCCURRENCE_TYPE);
 
