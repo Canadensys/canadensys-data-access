@@ -52,4 +52,8 @@
 		<property name="client" ref="esClient"/>
 	</bean>
 	
+	<bean id="esAutoCompleteOccurrenceDAO" class="net.canadensys.dataportal.occurrence.dao.impl.ElasticSearchOccurrenceAutoCompleteDAO">
+		<property name="client" ref="esClient"/>
+	</bean>
+	
 </beans>

@@ -9,25 +9,18 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import net.canadensys.model.SuggestedValue;
+
 @Entity
 @Table(name = "unique_values")
-public class UniqueValuesModel {
+public class UniqueValuesModel extends SuggestedValue{
 	
-	@Id
 	private int id;
 	
-	@Column(name = "key")
 	private String key;
-	
-	@Column(name = "occurrence_count")
-	private int occurrence_count;
-	
-	@Column(name = "value")
-	private String value;
-
-	@Column(name = "unaccented_value")
 	private String unaccented_value;
 	
+	@Id
 	public int getId() {
 		return id;
 	}
@@ -35,6 +28,7 @@ public class UniqueValuesModel {
 		this.id = id;
 	}
 	
+	@Column(name = "key")
 	public String getKey() {
 		return key;
 	}
@@ -42,20 +36,34 @@ public class UniqueValuesModel {
 		this.key = key;
 	}
 	
-	public int getOccurrence_count() {
-		return occurrence_count;
-	}
-	public void setOccurrence_count(int occurrence_count) {
-		this.occurrence_count = occurrence_count;
+	/**
+	 * setCount alias to comply with JavaBean convention
+	 * @param count
+	 */
+	public void setOccurrence_count(int count) {
+		setCount(count);
 	}
 	
-	public String getValue() {
-		return value;
+	/**
+	 * getCount alias to comply with JavaBean convention
+	 * @return
+	 */
+	@Column(name = "occurrence_count")
+	public int getOccurrence_count(){
+		return (int)getCount();
 	}
+	
+	@Override
 	public void setValue(String value) {
 		this.value = value;
 	}
+	@Column(name = "value")
+	@Override
+	public String getValue() {
+		return value;
+	}
 	
+	@Column(name = "unaccented_value")
 	public String getUnaccented_value() {
 		return unaccented_value;
 	}

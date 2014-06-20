@@ -2,18 +2,14 @@ package net.canadensys.dataportal.occurrence.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import net.canadensys.dataportal.occurrence.dao.OccurrenceAutoCompleteDAO;
-import net.canadensys.dataportal.occurrence.model.UniqueValuesModel;
+import net.canadensys.model.SuggestedValue;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,25 +59,16 @@ public class OccurrenceAutoCompleteDAOTest extends AbstractTransactionalJUnit4Sp
 		expectedCountryList.add("Canada");
 		expectedCountryList.add("canada");
 		expectedCountryList.add("Côte d'Ivoire");
-		String json = autoCompleteOccurrenceDAO.getSuggestionsFor("country", "c", true);
+		List<SuggestedValue> suggestions = autoCompleteOccurrenceDAO.getSuggestionsFor("country", "c", true);
 		
-		try{
-			JSONObject jsonObj = new JSONObject(json);
-			JSONArray jsonRows = (JSONArray)jsonObj.get("rows");
-			
-			for(int i=0;i<jsonRows.length();i++){
-				assertTrue(expectedCountryList.contains(
-						((JSONObject)jsonRows.get(i)).get("value")));
-			}
-		}
-		catch (Exception e) {
-			fail();
+		for(SuggestedValue currValue : suggestions){
+			assertTrue(expectedCountryList.contains(currValue.getValue()));
 		}
 	}
 	
 	@Test
 	public void testGetAllPossibleValues(){
-		List<UniqueValuesModel> possibleValues = autoCompleteOccurrenceDAO.getAllPossibleValues("country");
+		List<SuggestedValue> possibleValues = autoCompleteOccurrenceDAO.getAllPossibleValues("country");
 		assertEquals(4,possibleValues.size());
 	}
 }

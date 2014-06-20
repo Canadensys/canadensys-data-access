@@ -2,7 +2,7 @@ package net.canadensys.dataportal.occurrence.dao;
 
 import java.util.List;
 
-import net.canadensys.dataportal.occurrence.model.UniqueValuesModel;
+import net.canadensys.model.SuggestedValue;
 
 /**
  * Interface to add a AutoComplete feature to some occurrence data.
@@ -12,19 +12,19 @@ import net.canadensys.dataportal.occurrence.model.UniqueValuesModel;
 public interface OccurrenceAutoCompleteDAO {
 	
 	/**
-	 * Returns suggestions as JSON string for a field and a current value.
+	 * Returns suggestions as SuggestedValue list for a field and a current value.
 	 * @param field
 	 * @param currValue
 	 * @param useSanitizedValue compare with sanitized value instead of real value
-	 * @return result as JSON string
+	 * @return result SuggestedValue list
 	 */
-	public String getSuggestionsFor(String field, String currValue, boolean useSanitizedValue);
+	public List<SuggestedValue> getSuggestionsFor(String field, String currValue, boolean useSanitizedValue);
 	
 	/**
-	 * Returns all possible values as UniqueValuesModel list.
+	 * Returns all possible values as SuggestedValue list.
 	 * @param field
-	 * @return
+	 * @return SuggestedValue list
 	 */
-	public List<UniqueValuesModel> getAllPossibleValues(String field);
+	public List<SuggestedValue> getAllPossibleValues(String field);
 
 }

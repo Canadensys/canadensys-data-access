@@ -40,6 +40,8 @@
         },
         "country":{
           "type" : "string",
+          "index_analyzer" : "keyword",
+          "search_analyzer" : "keyword",
           "fields": {
             "autocomplete":   { 
               "type": "string", 

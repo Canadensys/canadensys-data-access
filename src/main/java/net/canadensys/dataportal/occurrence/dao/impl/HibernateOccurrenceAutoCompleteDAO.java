@@ -1,10 +1,10 @@
 package net.canadensys.dataportal.occurrence.dao.impl;
 
-import java.io.IOException;
 import java.util.List;
 
 import net.canadensys.dataportal.occurrence.dao.OccurrenceAutoCompleteDAO;
 import net.canadensys.dataportal.occurrence.model.UniqueValuesModel;
+import net.canadensys.model.SuggestedValue;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -13,10 +13,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Implementation for accessing UniqueValuesModel through Hibernate technology.
@@ -32,15 +28,8 @@ public class HibernateOccurrenceAutoCompleteDAO implements OccurrenceAutoComplet
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	//this object is expensive to create so only create one and reuse it. This object
-	//is thread safe after configuration.
-	private ObjectMapper jacksonMapper = new ObjectMapper();
-	
-	/**
-	 * TODO : get rid of the Wrapper
-	 */
 	@Override
-	public String getSuggestionsFor(String field, String currValue, boolean useSanitizedValue) {
+	public List<SuggestedValue> getSuggestionsFor(String field, String currValue, boolean useSanitizedValue) {
 		Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(UniqueValuesModel.class)
 			    .add(Restrictions.eq("key", field))
 			    .addOrder(Order.desc("occurrence_count"))
@@ -56,27 +45,14 @@ public class HibernateOccurrenceAutoCompleteDAO implements OccurrenceAutoComplet
 		}
 			    
 		@SuppressWarnings("unchecked")    
-		List<UniqueValuesModel> suggestions = suggestionCriteria.list();
+		List<SuggestedValue> suggestions = suggestionCriteria.list();
 		
-		Wrapper w = new Wrapper();
-		w.setTotal_rows(Integer.toString(suggestions.size()));
-		w.setRows(suggestions);
-
-		try {
-			return jacksonMapper.writeValueAsString(w);
-		} catch (JsonGenerationException e) {
-			LOGGER.fatal("getSuggestionsFor error", e);
-		} catch (JsonMappingException e) {
-			LOGGER.fatal("getSuggestionsFor error", e);
-		} catch (IOException e) {
-			LOGGER.fatal("getSuggestionsFor error", e);
-		}
-		return "";
+		return suggestions;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<UniqueValuesModel> getAllPossibleValues(String field) {
+	public List<SuggestedValue> getAllPossibleValues(String field) {
 		Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(UniqueValuesModel.class)
 			    .add(Restrictions.eq("key", field))
 			    .addOrder(Order.desc("occurrence_count")); 
@@ -88,23 +64,5 @@ public class HibernateOccurrenceAutoCompleteDAO implements OccurrenceAutoComplet
 	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}
-	
-	private class Wrapper{
-		private String total_rows;
-		private List<UniqueValuesModel> rows;
-		
-		public List<UniqueValuesModel> getRows() {
-			return rows;
-		}
-		public void setRows(List<UniqueValuesModel> rows) {
-			this.rows = rows;
-		}
-		public String getTotal_rows() {
-			return total_rows;
-		}
-		public void setTotal_rows(String total_rows) {
-			this.total_rows = total_rows;
-		}
 	}
 }
