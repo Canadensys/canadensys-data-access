@@ -1,13 +1,15 @@
 Version History
 ===============
 
-Version 2.8.0 2014-??-??
-* Added associatedsequences and basisofrecord, removed associatedmediamime. Database Schema changes: 2.7.0_to_2.8.0.sql
+Version 2.8.0 2014-07-14
+* Database Schema changes: [2.7.0_to_2.8.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.7.0_to_2.8.0.sql)
+* Added associatedsequences and basisofrecord, removed associatedmediamime. 
 
 Version 2.7.1 2014-06-05
 * Improve validation for geospatial query handling
 
 Version 2.7.0 2014-05-29
+* Database Schema changes: [2.6.0_to_2.7.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.6.0_to_2.7.0.sql)
 * Added hasTypeStatus
 * Geospatial query support
 * Add 'hints' to SearchQueryPart
@@ -22,11 +24,11 @@ Version 2.5.0 2014-04-03
 Version 2.4.0 2014-03-27
 * OccurrenceDAO: added sorting and paging support for searchWithLimit
 * Added ImportLogModel handling
-* Database Schema changes: [2.3.0_to_2.4.0.sql](https://github.com/Canadensys/canadensys-data-access/blob/dev/script/migrations/occurrence/2.3.0_to_2.4.0.sql)
+* Database Schema changes: [2.3.0_to_2.4.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/previous/2.3.0_to_2.4.0.sql)
 * Now using Spring 4.0.2 and Hibernate 4.3.2
 
 Version 2.3.0 2014-01-31
-* Database Schema changes: [2.2.2_to_2.3.0.sql](https://github.com/Canadensys/canadensys-data-access/blob/dev/script/migrations/occurrence/2.2.2_to_2.3.0.sql)
+* Database Schema changes: [2.2.2_to_2.3.0.sql](https://github.com/Canadensys/canadensys-data-access/blob/dev/script/migrations/occurrence/previous/2.2.2_to_2.3.0.sql)
 * Refactor ResourceContactModel
 * OccurrenceDAO: getOccurrenceSummaryJson is now deprecated, replaced by loadOccurrenceSummary
 * Now using Spring 3.2.6 and Hibernate 4.2.8
