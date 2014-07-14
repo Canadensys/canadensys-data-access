@@ -1,5 +1,9 @@
 Version History
 ===============
+
+Version 2.8.0 2014-??-??
+* Added associatedsequences and basisofrecord, removed associatedmediamime. Database Schema changes: 2.7.0_to_2.8.0.sql
+
 Version 2.7.1 2014-06-05
 * Improve validation for geospatial query handling
 

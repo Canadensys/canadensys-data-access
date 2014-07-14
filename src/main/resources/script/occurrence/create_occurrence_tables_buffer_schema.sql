@@ -2,10 +2,12 @@ CREATE SCHEMA buffer;
 CREATE TABLE buffer.occurrence (
 auto_id INTEGER NOT NULL,
 associatedmedia TEXT,
-associatedmediamime TEXT,
+associatedsequences TEXT,
+basisofrecord VARCHAR(25),
 catalogNumber TEXT,
 _references TEXT,
 collectionCode TEXT,
+
 continent VARCHAR(50),
 country VARCHAR(90),
 county VARCHAR(90),

@@ -24,11 +24,12 @@ public class OccurrenceModel {
 	@OneToOne(fetch=FetchType.LAZY, optional=false)
 	private OccurrenceRawModel rawModel;
 	
-	private String associatedmedia;
+	private String basisofrecord;
 	private String catalognumber;
-	private String _references;
 	private String collectioncode;
-	private String continent;
+	
+	private String associatedmedia;
+	private String _references;
 	
 	private String country;
 	private String county;
@@ -45,6 +46,7 @@ public class OccurrenceModel {
 	private String infraspecificepithet;
 	private String species;
 	
+	private String continent;
 	private String locality;
 	private String recordedby;
 	private String recordnumber;
@@ -67,6 +69,8 @@ public class OccurrenceModel {
 	private Integer eyear;
 	private Integer decade;
 	
+	private String associatedsequences;
+	
 	private Double minimumelevationinmeters;
 	private Double maximumelevationinmeters;
 	private Integer averagealtituderounded;
@@ -77,7 +81,6 @@ public class OccurrenceModel {
 	private Boolean hascoordinates;
 	private Boolean hasmedia;
 	private Boolean hastypestatus;
-	private String associatedmediamime;
 	
 	private String verbatimelevation;
 	private String habitat;
@@ -102,6 +105,12 @@ public class OccurrenceModel {
 		this.rawModel = rawModel;
 	}
 	
+	public String getBasisofrecord() {
+		return basisofrecord;
+	}
+	public void setBasisofrecord(String basisofrecord) {
+		this.basisofrecord = basisofrecord;
+	}
 	public String getCatalognumber() {
 		return catalognumber;
 	}
@@ -290,6 +299,12 @@ public class OccurrenceModel {
 	public void setEyear(Integer eyear) {
 		this.eyear = eyear;
 	}
+	public String getAssociatedsequences() {
+		return associatedsequences;
+	}
+	public void setAssociatedsequences(String associatedsequences) {
+		this.associatedsequences = associatedsequences;
+	}
 	public String getPhylum() {
 		return phylum;
 	}
@@ -326,13 +341,6 @@ public class OccurrenceModel {
 	}
 	public void setAssociatedmedia(String associatedmedia) {
 		this.associatedmedia = associatedmedia;
-	}
-	
-	public String getAssociatedmediamime() {
-		return associatedmediamime;
-	}
-	public void setAssociatedmediamime(String associatedmediamime) {
-		this.associatedmediamime = associatedmediamime;
 	}
 	
 	public String getScientificnameauthorship() {
