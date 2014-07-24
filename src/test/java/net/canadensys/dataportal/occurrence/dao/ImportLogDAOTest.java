@@ -1,6 +1,7 @@
 package net.canadensys.dataportal.occurrence.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -16,9 +17,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
  * Test Coverage : 
- * -Save ImportLogDAO
+ * -Save ImportLogModel
  * -Get generated id
- * -Load ImportLogDAO from id
+ * -Load ImportLogModel from id
  * @author canadensys
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,7 +37,7 @@ public class ImportLogDAOTest extends AbstractTransactionalJUnit4SpringContextTe
 		testModel.setSourcefileid("test_sourcefileid");
 		testModel.setUpdated_by("me");
 		testModel.setEvent_end_date_time(now);
-		importLogDAO.save(testModel);
+		assertTrue(importLogDAO.save(testModel));
 		
 		int id = testModel.getId();
 		

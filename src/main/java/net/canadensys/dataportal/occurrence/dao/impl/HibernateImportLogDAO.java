@@ -2,6 +2,7 @@ package net.canadensys.dataportal.occurrence.dao.impl;
 
 import net.canadensys.dataportal.occurrence.dao.ImportLogDAO;
 import net.canadensys.dataportal.occurrence.model.ImportLogModel;
+import net.canadensys.dataportal.occurrence.model.ModelFieldConstants;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -58,7 +59,7 @@ public class HibernateImportLogDAO implements ImportLogDAO{
 	@Override
 	public ImportLogModel loadLastFrom(String sourceFileId){
 		Criteria c = sessionFactory.getCurrentSession().createCriteria(ImportLogModel.class);
-		c.add(Restrictions.eq("sourcefileid", sourceFileId));
+		c.add(Restrictions.eq(ModelFieldConstants.SOURCE_FILE_ID, sourceFileId));
 		c.addOrder(Order.desc(MANAGED_ID));
 		c.setMaxResults(1);
 		return (ImportLogModel)c.uniqueResult();

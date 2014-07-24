@@ -44,6 +44,10 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
+	<bean id="resourceDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateResourceDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
 	<bean id="resourceContactDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateResourceContactDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
@@ -51,5 +55,4 @@
 	<bean id="nameDAO" class="net.canadensys.dataportal.vascan.dao.impl.ElasticSearchNameDAO">
 		<property name="client" ref="esClient"/>
 	</bean>
-	
 </beans>

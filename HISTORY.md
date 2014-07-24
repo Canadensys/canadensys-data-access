@@ -1,5 +1,8 @@
 Version History
 ===============
+Version 2.9.0 2014-??-??
+* Database Schema changes: [2.8.0_to_2.9.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.8.0_to_2.9.0.sql)
+* Added ResourceModel and matching DAO
 
 Version 2.8.0 2014-07-14
 * Database Schema changes: [2.7.0_to_2.8.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.7.0_to_2.8.0.sql)
@@ -9,7 +12,7 @@ Version 2.7.1 2014-06-05
 * Improve validation for geospatial query handling
 
 Version 2.7.0 2014-05-29
-* Database Schema changes: [2.6.0_to_2.7.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.6.0_to_2.7.0.sql)
+* Database Schema changes: [2.6.0_to_2.7.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/previous/2.6.0_to_2.7.0.sql)
 * Added hasTypeStatus
 * Geospatial query support
 * Add 'hints' to SearchQueryPart
