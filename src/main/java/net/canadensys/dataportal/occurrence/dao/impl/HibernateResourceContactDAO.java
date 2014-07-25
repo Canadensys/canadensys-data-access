@@ -3,6 +3,7 @@ package net.canadensys.dataportal.occurrence.dao.impl;
 import java.util.List;
 
 import net.canadensys.dataportal.occurrence.dao.ResourceContactDAO;
+import net.canadensys.dataportal.occurrence.model.OccurrenceFieldConstants;
 import net.canadensys.dataportal.occurrence.model.ResourceContactModel;
 
 import org.apache.log4j.Logger;
@@ -47,7 +48,7 @@ public class HibernateResourceContactDAO implements ResourceContactDAO {
 	@Override
 	public List<ResourceContactModel> load(String sourcefileid){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(ResourceContactModel.class);
-		searchCriteria.add(Restrictions.eq("sourcefileid", sourcefileid));
+		searchCriteria.add(Restrictions.eq(OccurrenceFieldConstants.SOURCE_FILE_ID, sourcefileid));
 		return searchCriteria.list();
 	}
 	

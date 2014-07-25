@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import net.canadensys.databaseutils.PostgresUtils;
 import net.canadensys.databaseutils.ScrollableResultsIteratorWrapper;
 import net.canadensys.dataportal.occurrence.dao.OccurrenceDAO;
+import net.canadensys.dataportal.occurrence.model.OccurrenceFieldConstants;
 import net.canadensys.dataportal.occurrence.model.OccurrenceModel;
 import net.canadensys.query.LimitedResult;
 import net.canadensys.query.OrderEnum;
@@ -59,9 +60,6 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	private static final String OCCURRENCE_TABLE = OccurrenceModel.class.getAnnotation(Table.class).name();
 	private static final String MANAGED_ID = "auto_id";
 	
-	//natural id
-	private static final String SOURCE_FILE_ID = "sourcefileid";
-	private static final String DWCA_ID = "dwcaid";
 	private static final String RAW_MODEL = "rawModel";
 	
 	//get log4j handler
@@ -84,8 +82,8 @@ public class HibernateOccurrenceDAO implements OccurrenceDAO {
 	@Override
 	public OccurrenceModel load(String sourceFileId, String dwcaId, boolean deepLoad){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceModel.class);
-		searchCriteria.add(Restrictions.eq(SOURCE_FILE_ID, sourceFileId));
-		searchCriteria.add(Restrictions.eq(DWCA_ID, dwcaId));
+		searchCriteria.add(Restrictions.eq(OccurrenceFieldConstants.SOURCE_FILE_ID, sourceFileId));
+		searchCriteria.add(Restrictions.eq(OccurrenceFieldConstants.DWCA_ID, dwcaId));
 		
 		if(deepLoad){
 			searchCriteria.setFetchMode(RAW_MODEL, FetchMode.JOIN);

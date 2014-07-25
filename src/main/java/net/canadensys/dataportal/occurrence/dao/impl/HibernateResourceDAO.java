@@ -3,7 +3,7 @@ package net.canadensys.dataportal.occurrence.dao.impl;
 import java.util.List;
 
 import net.canadensys.dataportal.occurrence.dao.ResourceDAO;
-import net.canadensys.dataportal.occurrence.model.ModelFieldConstants;
+import net.canadensys.dataportal.occurrence.model.OccurrenceFieldConstants;
 import net.canadensys.dataportal.occurrence.model.ResourceModel;
 
 import org.apache.log4j.Logger;
@@ -44,7 +44,7 @@ public class HibernateResourceDAO implements ResourceDAO {
 	@Override
 	public ResourceModel load(String sourcefileid) {
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(ResourceModel.class);
-		searchCriteria.add(Restrictions.eq(ModelFieldConstants.SOURCE_FILE_ID, sourcefileid));
+		searchCriteria.add(Restrictions.eq(OccurrenceFieldConstants.SOURCE_FILE_ID, sourcefileid));
 		return (ResourceModel)searchCriteria.uniqueResult();
 	}
 	

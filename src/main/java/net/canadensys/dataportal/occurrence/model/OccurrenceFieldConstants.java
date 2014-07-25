@@ -5,8 +5,9 @@ package net.canadensys.dataportal.occurrence.model;
  * @author cgendreau
  *
  */
-public class ModelFieldConstants {
+public class OccurrenceFieldConstants {
 	
+	public static final String DWCA_ID = "dwcaid";
 	public static final String SOURCE_FILE_ID = "sourcefileid";
 
 }
