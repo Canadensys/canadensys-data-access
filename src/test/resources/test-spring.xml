@@ -25,10 +25,15 @@
 	</bean>
 	
 	<jdbc:initialize-database data-source="dataSource">
+		<jdbc:script location="classpath:h2/h2setup.sql" />
     	<jdbc:script location="classpath:script/occurrence/create_occurrence_tables.sql" />
   	</jdbc:initialize-database>
 
   	<bean id="occurrenceDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateOccurrenceDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="occurrenceExtensionDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateOccurrenceExtensionDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	

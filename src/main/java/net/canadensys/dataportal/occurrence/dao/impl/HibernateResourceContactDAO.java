@@ -31,7 +31,6 @@ public class HibernateResourceContactDAO implements ResourceContactDAO {
 		}
 		catch (HibernateException e) {
 			LOGGER.fatal("Couldn't save ResourceContactModel", e);
-			e.printStackTrace();
 			return false;
 		}
 		return true;

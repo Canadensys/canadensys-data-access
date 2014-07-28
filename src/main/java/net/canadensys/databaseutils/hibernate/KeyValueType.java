@@ -30,6 +30,9 @@ public class KeyValueType implements UserType {
 
 	@SuppressWarnings("unchecked")
 	public Object deepCopy(Object o) throws HibernateException {
+		if( o == null){
+			return null;
+		}
 		// Not a true deep copy but since the map contains immutable Strings, it's fine.
 		return new HashMap<String, String>((Map<String, String>) o);
 	}
