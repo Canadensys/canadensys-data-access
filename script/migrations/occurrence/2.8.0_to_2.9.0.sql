@@ -10,3 +10,13 @@ CREATE TABLE resource_management
   CONSTRAINT resource_management_pkey PRIMARY KEY (id),
   CONSTRAINT resource_management_source_file_id_key UNIQUE (sourcefileid)
 );
+
+--For future DwC extensions support
+CREATE EXTENSION hstore;
+CREATE TABLE occurrence_extension
+(
+	id integer, 
+	ext_type character varying(25), 
+	ext_version character varying(10), 
+	ext_data hstore
+);

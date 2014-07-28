@@ -17,36 +17,46 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+/**
+ * This test is using a 'stub' hstore since hstore is PostgreSQL specific.
+ * The trick to use it with h2 is available in src/test/resources/h2/h2setup.sql
+ * Test Coverage : 
+ * -Insert extension data using jdbcTemplate
+ * -Save OccurrenceExtensionModel
+ * -Load OccurrenceExtensionModel from id
+ * @author canadensys
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/test-spring.xml" })
-@TransactionConfiguration(transactionManager="hibernateTransactionManager")
-public class OccurrenceExtensionDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
-	
+@TransactionConfiguration(transactionManager = "hibernateTransactionManager")
+public class OccurrenceExtensionDAOTest extends AbstractTransactionalJUnit4SpringContextTests {
+
 	@Autowired
 	private OccurrenceExtensionDAO occurrenceExtDAO;
-	
-    @Before
-    public void setup(){	
-		//make sure the table is empty
+
+	@Before
+	public void setup() {
+		// make sure the table is empty
 		jdbcTemplate.update("DELETE FROM occurrence_extension");
-    	jdbcTemplate.update("INSERT INTO occurrence_extension (id,ext_type,ext_data) VALUES (1,'image', toKeyValue('image_type=>png','author=>darwin','licence=>cc0'))");
-    }
-	
+		jdbcTemplate
+				.update("INSERT INTO occurrence_extension (id,ext_type,ext_data) VALUES (1,'image', toKeyValue('image_type=>png','author=>darwin','licence=>cc0'))");
+	}
+
 	@Test
-	public void testSaveAndLoad(){
-		
+	public void testSaveAndLoad() {
+
 		OccurrenceExtensionModel occExtModel = new OccurrenceExtensionModel();
 		occExtModel.setId(2);
 		occExtModel.setExt_type("image");
-		Map<String,String> data = new HashMap<String, String>();
+		Map<String, String> data = new HashMap<String, String>();
 		data.put("licence", "cc0");
 		occExtModel.setExt_data(data);
-		
+
 		assertTrue(occurrenceExtDAO.save(occExtModel));
-		
-		//reload the model
+
+		// reload the model
 		OccurrenceExtensionModel extModel = occurrenceExtDAO.load(1);
-		assertEquals("cc0",extModel.getExt_data().get("licence"));
+		assertEquals("cc0", extModel.getExt_data().get("licence"));
 	}
 
 }
