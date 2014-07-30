@@ -51,6 +51,4 @@ public class HibernateOccurrenceExtensionDAO implements OccurrenceExtensionDAO{
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
-
 }

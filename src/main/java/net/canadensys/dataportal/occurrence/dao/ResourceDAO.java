@@ -8,14 +8,14 @@ public interface ResourceDAO {
 	
 	/**
 	 * Load all ResourceModel
-	 * @return ImportLogModel or null if nothing is found
+	 * @return ResourceModel list or null
 	 */
 	public List<ResourceModel> loadResources();
 	
 	/**
-	 * Load a ImportLogModel from an id
-	 * @param id
-	 * @return ImportLogModel or null if nothing is found
+	 * Load a ResourceModel from a sourcefileid
+	 * @param sourcefileid
+	 * @return ResourceModel or null if nothing is found
 	 */
 	public ResourceModel load(String sourcefileid);
 	
