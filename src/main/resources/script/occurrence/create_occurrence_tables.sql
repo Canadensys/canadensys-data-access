@@ -50,6 +50,7 @@ averagealtituderounded integer,
 hascoordinates boolean,
 hasmedia boolean,
 hastypestatus boolean,
+hasassociatedsequences boolean,
 sourcefileid VARCHAR(50),
 dwcaid VARCHAR(75),
 CONSTRAINT occurrence_pkey PRIMARY KEY (auto_id )

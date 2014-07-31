@@ -81,6 +81,7 @@ public class OccurrenceModel {
 	private Boolean hascoordinates;
 	private Boolean hasmedia;
 	private Boolean hastypestatus;
+	private Boolean hasassociatedsequences;
 	
 	private String verbatimelevation;
 	private String habitat;
@@ -364,8 +365,14 @@ public class OccurrenceModel {
 	public Boolean getHastypestatus() {
 		return hastypestatus;
 	}
-	public void setHastypestaus(Boolean hastypestatus) {
+	public void setHastypestatus(Boolean hastypestatus) {
 		this.hastypestatus = hastypestatus;
+	}
+	public Boolean getHasassociatedsequences() {
+		return hasassociatedsequences;
+	}
+	public void setHasassociatedsequences(Boolean hasassociatedsequences) {
+		this.hasassociatedsequences = hasassociatedsequences;
 	}
 	public String getInstitutioncode() {
 		return institutioncode;
