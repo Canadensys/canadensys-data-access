@@ -19,7 +19,7 @@ Dependencies
 * [Canadensys Core 1.8](https://github.com/Canadensys/canadensys-core)
 
 Optional
-* [Elastic Search 0.90.2](http://www.elasticsearch.org/)
+* [Elastic Search 0.90.12](http://www.elasticsearch.org/)
 
 Testing only
 * [H2 Database 1.3.175](http://www.h2database.com)

@@ -1,7 +1,9 @@
 Version History
 ===============
-Version 2.10.0 2014-??-??
+Version 2.10.0 2014-08-05
 * Added hasassociatedsequences to OccurrenceModel
+* Database Schema changes: [2.9.0_to_2.10.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.9.0_to_2.10.0.sql)
+* Update to ElasticSearch 0.90.12
 
 Version 2.9.0 2014-07-30
 * Possible breaking change: resource_management is now handled by the data-access layer which could conflit with previous harvester versions.
