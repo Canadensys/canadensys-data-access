@@ -16,7 +16,7 @@ public class ElasticSearchTestInstance {
     private Node node;
     
 	public void startElasticSearch(){
-        node = nodeBuilder().local(true).node();
+        node = nodeBuilder().clusterName("es-test").local(true).node();
         node.start();
         node.client().admin().cluster().prepareHealth().setWaitForGreenStatus().execute().actionGet();
     }
