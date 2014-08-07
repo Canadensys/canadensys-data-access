@@ -1,5 +1,5 @@
-CREATE SCHEMA buffer;
-CREATE TABLE buffer.occurrence (
+CREATE SCHEMA IF NOT EXISTS buffer;
+CREATE TABLE IF NOT EXISTS buffer.occurrence (
 auto_id INTEGER NOT NULL,
 associatedmedia TEXT,
 associatedsequences TEXT,
@@ -57,8 +57,8 @@ dwcaid VARCHAR(75),
 CONSTRAINT occurrence_pkey PRIMARY KEY (auto_id )
 );
 
-CREATE SEQUENCE buffer.occurrence_raw_auto_id_seq;
-CREATE TABLE buffer.occurrence_raw (
+CREATE SEQUENCE IF NOT EXISTS buffer.occurrence_raw_auto_id_seq;
+CREATE TABLE IF NOT EXISTS buffer.occurrence_raw (
 auto_id INTEGER NOT NULL,
 dwcaid VARCHAR(75),
 sourcefileid character varying(50) NOT NULL,
@@ -225,8 +225,8 @@ CONSTRAINT occurrence_raw_pkey PRIMARY KEY (auto_id ),
 CONSTRAINT occurrence_raw_dwcaid_sourcefileid_key UNIQUE (dwcaid , sourcefileid)
 );
 
-CREATE SEQUENCE buffer.unique_values_id_seq;
-CREATE TABLE buffer.unique_values
+CREATE SEQUENCE IF NOT EXISTS buffer.unique_values_id_seq;
+CREATE TABLE IF NOT EXISTS buffer.unique_values
 (
   id integer DEFAULT nextval('buffer.unique_values_id_seq') NOT NULL,
   key character varying(255) NOT NULL,
@@ -236,8 +236,8 @@ CREATE TABLE buffer.unique_values
   CONSTRAINT unique_values_pkey PRIMARY KEY (id )
 );
 
-CREATE SEQUENCE buffer.download_log_id_seq;
-CREATE TABLE buffer.download_log
+CREATE SEQUENCE IF NOT EXISTS buffer.download_log_id_seq;
+CREATE TABLE IF NOT EXISTS buffer.download_log
 (
   id integer DEFAULT nextval('buffer.download_log_id_seq') NOT NULL,
   event_date timestamp,
@@ -247,8 +247,8 @@ CREATE TABLE buffer.download_log
   CONSTRAINT download_log_pkey PRIMARY KEY (id )
 );
 
-CREATE SEQUENCE buffer.resource_contact_id_seq;
-CREATE TABLE buffer.resource_contact
+CREATE SEQUENCE IF NOT EXISTS buffer.resource_contact_id_seq;
+CREATE TABLE IF NOT EXISTS buffer.resource_contact
 (
 	id integer DEFAULT nextval('buffer.resource_contact_id_seq') NOT NULL,
 	sourcefileid character varying(50),

@@ -1,4 +1,4 @@
-CREATE TABLE occurrence (
+CREATE TABLE IF NOT EXISTS occurrence (
 auto_id INTEGER NOT NULL,
 associatedmedia TEXT,
 associatedsequences TEXT,
@@ -56,7 +56,7 @@ dwcaid VARCHAR(75),
 CONSTRAINT occurrence_pkey PRIMARY KEY (auto_id )
 );
 
-CREATE TABLE occurrence_raw (
+CREATE TABLE IF NOT EXISTS occurrence_raw (
 auto_id INTEGER NOT NULL,
 dwcaid VARCHAR(75),
 sourcefileid character varying(50) NOT NULL,
@@ -224,8 +224,8 @@ CONSTRAINT occurrence_raw_dwcaid_sourcefileid_key UNIQUE (dwcaid , sourcefileid)
 );
 
 
-CREATE SEQUENCE unique_values_id_seq;
-CREATE TABLE unique_values
+CREATE SEQUENCE IF NOT EXISTS unique_values_id_seq;
+CREATE TABLE IF NOT EXISTS unique_values
 (
   id integer DEFAULT nextval('unique_values_id_seq') NOT NULL,
   key character varying(255) NOT NULL,
@@ -235,8 +235,8 @@ CREATE TABLE unique_values
   CONSTRAINT unique_values_pkey PRIMARY KEY (id )
 );
 
-CREATE SEQUENCE download_log_id_seq;
-CREATE TABLE download_log
+CREATE SEQUENCE IF NOT EXISTS download_log_id_seq;
+CREATE TABLE IF NOT EXISTS download_log
 (
   id integer DEFAULT nextval('download_log_id_seq') NOT NULL,
   event_date timestamp,
@@ -246,8 +246,8 @@ CREATE TABLE download_log
   CONSTRAINT download_log_pkey PRIMARY KEY (id )
 );
 
-CREATE SEQUENCE import_log_id_seq;
-CREATE TABLE import_log
+CREATE SEQUENCE IF NOT EXISTS import_log_id_seq;
+CREATE TABLE IF NOT EXISTS import_log
 (
   id integer DEFAULT nextval('import_log_id_seq') NOT NULL,
   sourcefileid character varying(50),
@@ -258,8 +258,8 @@ CREATE TABLE import_log
   CONSTRAINT import_log_pkey PRIMARY KEY (id )
 );
 
-CREATE SEQUENCE resource_contact_id_seq;
-CREATE TABLE resource_contact
+CREATE SEQUENCE IF NOT EXISTS resource_contact_id_seq;
+CREATE TABLE IF NOT EXISTS resource_contact
 (
 	id integer DEFAULT nextval('resource_contact_id_seq') NOT NULL,
 	sourcefileid character varying(50),
@@ -277,8 +277,8 @@ CREATE TABLE resource_contact
 	CONSTRAINT resource_contact_pkey PRIMARY KEY (id)
 );
 
-CREATE SEQUENCE resource_management_id_seq;
-CREATE TABLE resource_management
+CREATE SEQUENCE IF NOT EXISTS resource_management_id_seq;
+CREATE TABLE IF NOT EXISTS resource_management
 (
   id integer DEFAULT nextval('resource_management_id_seq') NOT NULL,
   sourcefileid character varying(50),
@@ -289,7 +289,7 @@ CREATE TABLE resource_management
   CONSTRAINT resource_management_source_file_id_key UNIQUE (sourcefileid)
 );
 
-CREATE TABLE occurrence_extension
+CREATE TABLE IF NOT EXISTS occurrence_extension
 (
 	id integer, 
 	ext_type character varying(25), 
