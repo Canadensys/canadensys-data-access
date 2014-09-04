@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.gbif.dwc.terms.ConceptTerm;
+import org.gbif.dwc.terms.Term;
 import org.gbif.dwc.text.Archive;
 import org.gbif.dwc.text.ArchiveField;
 import org.gbif.dwc.text.ArchiveFile;
@@ -34,11 +34,11 @@ public class FixedHeadersDwcaWriter {
 	private File dir;
 	private long recordNum;
 	private String coreId;
-	private Map<ConceptTerm, String> coreRow;
-	private final ConceptTerm coreRowType;
-	private Map<ConceptTerm, TabWriter> writers = new HashMap<ConceptTerm, TabWriter>();
-	private Map<ConceptTerm, String> dataFileNames = new HashMap<ConceptTerm, String>();
-	private Map<ConceptTerm, List<ConceptTerm>> terms = new HashMap<ConceptTerm, List<ConceptTerm>>();
+	private Map<Term, String> coreRow;
+	private final Term coreRowType;
+	private Map<Term, TabWriter> writers = new HashMap<Term, TabWriter>();
+	private Map<Term, String> dataFileNames = new HashMap<Term, String>();
+	private Map<Term, List<Term>> terms = new HashMap<Term, List<Term>>();
 	private Eml eml;
 
 	/**
@@ -47,22 +47,22 @@ public class FixedHeadersDwcaWriter {
 	 * @param dir
 	 *            the directory to create the archive in.
 	 */
-	public FixedHeadersDwcaWriter(ConceptTerm coreRowType, List<ConceptTerm> coreTermList, File dir) throws IOException {
+	public FixedHeadersDwcaWriter(Term coreRowType, List<Term> coreTermList, File dir) throws IOException {
 		this.dir = dir;
 		this.coreRowType = coreRowType;
 		addRowType(coreRowType,coreTermList);
 	}
 
-	public static String dataFileName(ConceptTerm rowType) {
-		return rowType.simpleNormalisedName().toLowerCase() + ".txt";
+	public static String dataFileName(Term rowType) {
+		return rowType.simpleName().toLowerCase() + ".txt";
 	}
 
-	private void addRowType(ConceptTerm rowType,List<ConceptTerm> conceptTermList) throws IOException {
+	private void addRowType(Term rowType,List<Term> conceptTermList) throws IOException {
 		if(conceptTermList != null){
 			terms.put(rowType, conceptTermList);
 		}
 		else{
-			terms.put(rowType, new ArrayList<ConceptTerm>());
+			terms.put(rowType, new ArrayList<Term>());
 		}
 
 		String dfn = dataFileName(rowType);
@@ -84,7 +84,7 @@ public class FixedHeadersDwcaWriter {
 		recordNum++;
 		coreId = id;
 		if(coreRow == null){
-			coreRow = new HashMap<ConceptTerm, String>();
+			coreRow = new HashMap<Term, String>();
 		}
 		else{
 			coreRow.clear();
@@ -101,21 +101,21 @@ public class FixedHeadersDwcaWriter {
 		return recordNum;
 	}
 
-	private void writeRow(Map<ConceptTerm, String> rowMap, ConceptTerm rowType)
+	private void writeRow(Map<Term, String> rowMap, Term rowType)
 			throws IOException {
 		TabWriter writer = writers.get(rowType);
-		List<ConceptTerm> coreTerms = terms.get(rowType);
+		List<Term> coreTerms = terms.get(rowType);
 		String[] row = new String[coreTerms.size() + 1];
 		row[0] = coreId;
-		for (ConceptTerm term : rowMap.keySet()) {
+		for (Term term : rowMap.keySet()) {
 			int column = 1 + coreTerms.indexOf(term);
 			row[column] = rowMap.get(term);
 		}
 		writer.write(row);
 	}
 
-	public void addCoreColumn(ConceptTerm term, String value) {
-		List<ConceptTerm> coreTerms = terms.get(coreRowType);
+	public void addCoreColumn(Term term, String value) {
+		List<Term> coreTerms = terms.get(coreRowType);
 		if (!coreTerms.contains(term)) {
 			coreTerms.add(term);
 		}
@@ -125,19 +125,19 @@ public class FixedHeadersDwcaWriter {
 	/**
 	 * @return new map of all current data file names by their rowTypes.
 	 */
-	public Map<ConceptTerm, String> getDataFiles() {
+	public Map<Term, String> getDataFiles() {
 		return Maps.newHashMap(dataFileNames);
 	}
 
-	public void addExtensionRecord(ConceptTerm rowType,
-			Map<ConceptTerm, String> row) throws IOException {
+	public void addExtensionRecord(Term rowType,
+			Map<Term, String> row) throws IOException {
 		// make sure we know the extension rowtype
 		if (!terms.containsKey(rowType)) {
 			addRowType(rowType,null);
 		}
 		// make sure we know all terms
-		List<ConceptTerm> knownTerms = terms.get(rowType);
-		for (ConceptTerm term : row.keySet()) {
+		List<Term> knownTerms = terms.get(rowType);
+		for (Term term : row.keySet()) {
 			if (!knownTerms.contains(term)) {
 				knownTerms.add(term);
 			}
@@ -186,7 +186,7 @@ public class FixedHeadersDwcaWriter {
 			arch.setMetadataLocation("eml.xml");
 		}
 		arch.setCore(buildArchiveFile(arch, coreRowType));
-		for (ConceptTerm rowType : this.terms.keySet()) {
+		for (Term rowType : this.terms.keySet()) {
 			if (!coreRowType.equals(rowType)) {
 				arch.addExtension(buildArchiveFile(arch, rowType));
 			}
@@ -199,20 +199,20 @@ public class FixedHeadersDwcaWriter {
 		}
 	}
 	
-	private void writeHeaders(ConceptTerm rowType) throws IOException{
+	private void writeHeaders(Term rowType) throws IOException{
 		TabWriter writer = writers.get(rowType);
-		List<ConceptTerm> coreTerms = terms.get(rowType);
+		List<Term> coreTerms = terms.get(rowType);
 		String[] row = new String[coreTerms.size()+1];
 		int i=1;
 		row[0] = "id";
-		for (ConceptTerm term : coreTerms) {
+		for (Term term : coreTerms) {
 			row[i] = term.simpleName();
 			i++;
 		}
 		writer.write(row);
 	}
 
-	private ArchiveFile buildArchiveFile(Archive archive, ConceptTerm rowType) {
+	private ArchiveFile buildArchiveFile(Archive archive, Term rowType) {
 		ArchiveFile af = ArchiveFile.buildTabFile();
 		af.setArchive(archive);
 		af.addLocation(dataFileNames.get(rowType));
@@ -227,7 +227,7 @@ public class FixedHeadersDwcaWriter {
 		af.setId(id);
 
 		int idx = 0;
-		for (ConceptTerm c : this.terms.get(rowType)) {
+		for (Term c : this.terms.get(rowType)) {
 			idx++;
 			ArchiveField field = new ArchiveField();
 			field.setIndex(idx);

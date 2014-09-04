@@ -14,7 +14,7 @@ public interface OccurrenceExtensionDAO {
 	 * @param id
 	 * @return OccurrenceExtensionModel or null if nothing is found
 	 */
-	public OccurrenceExtensionModel load(Integer id);
+	public OccurrenceExtensionModel load(Long id);
 	
 	/**
 	 * Save a OccurrenceExtensionModel

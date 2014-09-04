@@ -16,8 +16,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.gbif.dwc.terms.ConceptTerm;
 import org.gbif.dwc.terms.DwcTerm;
+import org.gbif.dwc.terms.Term;
 import org.gbif.dwc.terms.TermFactory;
 import org.gbif.dwc.terms.UnknownTerm;
 
@@ -46,13 +46,12 @@ public class OccurrenceDwcWriter {
 		
 		try {
 			TreeSet<String> sortedHeader;
-			TermFactory termFactory = new TermFactory();
 			//Find the Terms for the header
-			List<ConceptTerm> headerTermList = new ArrayList<ConceptTerm>();
-			Map<String,ConceptTerm> conceptTermList = new HashMap<String, ConceptTerm>();
-			ConceptTerm conceptTerm;
+			List<Term> headerTermList = new ArrayList<Term>();
+			Map<String,Term> conceptTermList = new HashMap<String, Term>();
+			Term conceptTerm;
 			for(String currHeader : headers){
-				conceptTerm = termFactory.findTerm(currHeader);
+				conceptTerm = TermFactory.instance().findTerm(currHeader);
 				if(conceptTerm instanceof UnknownTerm){
 					LOGGER.fatal("UnknownTerm in DarwinCore header. This header comes from the config file :" + currHeader);
 				}

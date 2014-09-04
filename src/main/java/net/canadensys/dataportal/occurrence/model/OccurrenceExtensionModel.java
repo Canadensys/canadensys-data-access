@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 
 /**
@@ -18,7 +19,12 @@ import org.hibernate.annotations.Type;
 public class OccurrenceExtensionModel {
 	
 	@Id
-	private int id;
+	private long auto_id;
+	
+	@NaturalId
+	private String dwcaid;
+	@NaturalId
+	private String sourcefileid;
 	
 	private String ext_type;
 	private String ext_version;
@@ -26,11 +32,25 @@ public class OccurrenceExtensionModel {
 	@Type(type="net.canadensys.databaseutils.hibernate.KeyValueType")
 	private Map<String,String> ext_data;
 		
-	public int getId() {
-		return id;
+	public long getAuto_id() {
+		return auto_id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setAuto_id(long auto_id) {
+		this.auto_id = auto_id;
+	}
+	
+	public String getDwcaid() {
+		return dwcaid;
+	}
+	public void setDwcaid(String dwcaid) {
+		this.dwcaid = dwcaid;
+	}
+	
+	public String getSourcefileid() {
+		return sourcefileid;
+	}
+	public void setSourcefileid(String sourcefileid) {
+		this.sourcefileid = sourcefileid;
 	}
 	
 	public String getExt_type() {

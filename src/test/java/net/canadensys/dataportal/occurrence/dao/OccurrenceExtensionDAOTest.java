@@ -39,24 +39,26 @@ public class OccurrenceExtensionDAOTest extends AbstractTransactionalJUnit4Sprin
 		// make sure the table is empty
 		jdbcTemplate.update("DELETE FROM occurrence_extension");
 		jdbcTemplate
-				.update("INSERT INTO occurrence_extension (id,ext_type,ext_data) VALUES (1,'image', toKeyValue('image_type=>png','author=>darwin','licence=>cc0'))");
+				.update("INSERT INTO occurrence_extension (auto_id,dwcaid,sourcefileid,ext_type,ext_data) VALUES (1,'1','source','image', toKeyValue('image_type=>png','author=>darwin','licence=>cc0'))");
 	}
 
 	@Test
 	public void testSaveAndLoad() {
 
 		OccurrenceExtensionModel occExtModel = new OccurrenceExtensionModel();
-		occExtModel.setId(2);
+		occExtModel.setAuto_id(2l);
+		occExtModel.setDwcaid("2");
+		occExtModel.setSourcefileid("source");
 		occExtModel.setExt_type("image");
 		Map<String, String> data = new HashMap<String, String>();
-		data.put("licence", "cc0");
+		data.put("licence", "cc-by");
 		occExtModel.setExt_data(data);
 
 		assertTrue(occurrenceExtDAO.save(occExtModel));
 
 		// reload the model
-		OccurrenceExtensionModel extModel = occurrenceExtDAO.load(1);
-		assertEquals("cc0", extModel.getExt_data().get("licence"));
+		OccurrenceExtensionModel extModel = occurrenceExtDAO.load(2l);
+		assertEquals("cc-by", extModel.getExt_data().get("licence"));
 	}
 
 }
