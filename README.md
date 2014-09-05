@@ -3,6 +3,10 @@ liger-data-access
 
 Data access layer containing DAO and models, forked from [canadensys-data-access](http://github.com/canadensys/canadensys-data-aceess).
 
+Code Status
+-----------
+[![Build Status](https://travis-ci.org/WingLongitude/liger-data-access.png)](https://travis-ci.org/WingLongitude/liger-data-access)
+
 Dependencies
 ------------
 * [Apache Maven 3](http://maven.apache.org/)
