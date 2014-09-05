@@ -39,7 +39,7 @@ public class HibernateOccurrenceExtensionDAO implements OccurrenceExtensionDAO{
 	}
 
 	@Override
-	public OccurrenceExtensionModel load(Integer id) {
+	public OccurrenceExtensionModel load(Long id) {
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceExtensionModel.class);
 		searchCriteria.add(Restrictions.eq(MANAGED_ID, id));
 		return (OccurrenceExtensionModel)searchCriteria.uniqueResult();
