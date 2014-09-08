@@ -265,3 +265,14 @@ CREATE TABLE IF NOT EXISTS buffer.resource_contact
 	email character varying(200),
 	CONSTRAINT resource_contact_pkey PRIMARY KEY (id)
 );
+
+CREATE SEQUENCE IF NOT EXISTS buffer.occurrence_extension_id_seq;
+CREATE TABLE IF NOT EXISTS buffer.occurrence_extension
+(
+	auto_id bigint NOT NULL,
+	dwcaid character varying(75),
+	sourcefileid character varying(50),
+	ext_type character varying(25), 
+	ext_version character varying(10), 
+	ext_data hstore
+);
