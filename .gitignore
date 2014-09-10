@@ -4,9 +4,11 @@
 *.classpath
 *.project
 *.DS_Store
+*.settings
 
 bin/**/*
 target/**/*
 build/**/*
 .gradle/**/*
 data/*
+/target

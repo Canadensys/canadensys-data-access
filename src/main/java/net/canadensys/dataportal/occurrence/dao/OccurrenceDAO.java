@@ -31,6 +31,14 @@ public interface OccurrenceDAO {
 	public OccurrenceModel load(int auto_id);
 	
 	/**
+	 * Load a specific Occurrence into an OccurrenceModel with it's raw information
+	 * @param auto_id occurrence's pk
+	 * @param deepLoad add raw data model
+	 * @return
+	 */
+	public OccurrenceModel load(int auto_id, boolean deepLoad);
+	
+	/**
 	 * Load a specific Occurrence into an OccurrenceModel
 	 * @param sourceFileId
 	 * @param dwcaId
