@@ -209,6 +209,17 @@ public class OccurrenceDAOTest extends AbstractTransactionalJUnit4SpringContextT
 	}
 	
 	/**
+	 * Assert that the load(auto_id) is working properly
+	 */
+	@Test
+	public void testLoadOccurrence(){
+		OccurrenceModel occModel = occurrenceDAO.load(1);
+		assertEquals("Mexico",occModel.getCountry());
+		assertEquals("Mexico",occModel.getLocality());
+		assertEquals("uom-occurrence", occModel.getSourcefileid());
+	}
+		
+	/**
 	 * Test iterator feature of the Occurrence DAO
 	 */
 	@Test

@@ -91,6 +91,15 @@ public class OccurrenceModelAndRawTest  extends AbstractTransactionalJUnit4Sprin
 		}
     }
     
+    /**
+     * Assert that the load(auto_id, deepLoad) is working properly
+     */
+    @Test
+    public void testLoad(){
+		OccurrenceModel occModel = occurrenceDAO.load(1, true);
+		assertEquals("Mexico",occModel.getRawModel().getCountry());
+    }
+    
     @Test
     public void testRawModelSearchIterator(){	
     	SearchQueryPart sqpCountryMexico = new SearchQueryPart();
