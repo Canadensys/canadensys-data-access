@@ -31,7 +31,7 @@ public class ResourceDAOTest extends AbstractTransactionalJUnit4SpringContextTes
 		ResourceModel testModel = new ResourceModel();
 		
 		testModel.setSourcefileid("test_sourcefileid");
-		testModel.setKey("12345");
+		testModel.setResource_uuid("12345");
 		assertTrue(resourceDAO.save(testModel));
 		
 		int id = testModel.getId();
