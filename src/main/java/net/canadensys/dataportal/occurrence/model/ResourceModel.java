@@ -20,7 +20,7 @@ public class ResourceModel {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resource_management_id_seq")
 	private Integer id;
 	private String name;
-	private String key;
+	private String resource_uuid;
 	private String archive_url;
 	private String sourcefileid;
 	
@@ -31,18 +31,20 @@ public class ResourceModel {
 		this.id = id;
 	}
 	
+	public String getResource_uuid() {
+		return resource_uuid;
+	}
+	public void setResource_uuid(String resource_uuid) {
+		this.resource_uuid = resource_uuid;
+	}
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getKey() {
-		return key;
-	}
-	public void setKey(String key) {
-		this.key = key;
-	}
+
 	public String getArchive_url() {
 		return archive_url;
 	}
