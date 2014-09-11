@@ -294,9 +294,11 @@ CREATE TABLE IF NOT EXISTS occurrence_extension
 	auto_id bigint NOT NULL,
 	dwcaid character varying(75),
 	sourcefileid character varying(50),
+	resource_uuid character varying(50),
 	ext_type character varying(25), 
 	ext_version character varying(10), 
-	ext_data hstore
+	ext_data hstore,
+	CONSTRAINT occurrence_extension_pkey PRIMARY KEY (auto_id)
 );
 
 CREATE OR REPLACE VIEW complete_occurrence_view AS 

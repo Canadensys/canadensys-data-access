@@ -1,7 +1,10 @@
 package net.canadensys.dataportal.occurrence.dao.impl;
 
+import java.util.List;
+
 import net.canadensys.dataportal.occurrence.dao.OccurrenceExtensionDAO;
 import net.canadensys.dataportal.occurrence.model.OccurrenceExtensionModel;
+import net.canadensys.dataportal.occurrence.model.OccurrenceFieldConstants;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -22,6 +25,7 @@ public class HibernateOccurrenceExtensionDAO implements OccurrenceExtensionDAO{
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(HibernateOccurrenceExtensionDAO.class);
 	private static final String MANAGED_ID = "id";
+	private static final String EXTENSION_TYPE = "ext_type";
 		
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -43,6 +47,17 @@ public class HibernateOccurrenceExtensionDAO implements OccurrenceExtensionDAO{
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceExtensionModel.class);
 		searchCriteria.add(Restrictions.eq(MANAGED_ID, id));
 		return (OccurrenceExtensionModel)searchCriteria.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<OccurrenceExtensionModel> load(String extensionType, String resourceUUID, String dwcaId) {
+		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(OccurrenceExtensionModel.class);
+		
+		searchCriteria.add(Restrictions.eq(EXTENSION_TYPE, extensionType));
+		searchCriteria.add(Restrictions.eq(OccurrenceFieldConstants.RESOURCE_UUID, resourceUUID));
+		searchCriteria.add(Restrictions.eq(OccurrenceFieldConstants.DWCA_ID, dwcaId));
+		return searchCriteria.list();
 	}
 	
 	public SessionFactory getSessionFactory() {
