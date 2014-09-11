@@ -298,7 +298,7 @@ CREATE TABLE IF NOT EXISTS occurrence_extension
 	ext_type character varying(25), 
 	ext_version character varying(10), 
 	ext_data hstore,
-	CONSTRAINT resource_management_pkey PRIMARY KEY (auto_id)
+	CONSTRAINT occurrence_extension_pkey PRIMARY KEY (auto_id)
 );
 
 CREATE OR REPLACE VIEW complete_occurrence_view AS 
