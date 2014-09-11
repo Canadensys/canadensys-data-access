@@ -1,11 +1,11 @@
-liger-data-access
+canadensys-data-access
 ======================
 
-Data access layer containing DAO and models, forked from [canadensys-data-access](http://github.com/canadensys/canadensys-data-aceess).
+Canandensys data access layer containing DAO and models.
 
 Code Status
 -----------
-[![Build Status](https://travis-ci.org/WingLongitude/liger-data-access.png)](https://travis-ci.org/WingLongitude/liger-data-access)
+[![Build Status](https://travis-ci.org/Canadensys/canadensys-data-access.png)](https://travis-ci.org/Canadensys/canadensys-data-access)
 
 Dependencies
 ------------
