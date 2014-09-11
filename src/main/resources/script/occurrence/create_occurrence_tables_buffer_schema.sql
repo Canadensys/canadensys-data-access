@@ -272,6 +272,7 @@ CREATE TABLE IF NOT EXISTS buffer.occurrence_extension
 	auto_id bigint NOT NULL,
 	dwcaid character varying(75),
 	sourcefileid character varying(50),
+	resource_uuid character varying(50),
 	ext_type character varying(25), 
 	ext_version character varying(10), 
 	ext_data hstore
