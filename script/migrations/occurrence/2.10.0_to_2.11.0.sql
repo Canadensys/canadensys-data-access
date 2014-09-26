@@ -7,3 +7,9 @@ ALTER TABLE occurrence_extension ADD COLUMN resource_uuid character varying(50);
 ALTER TABLE occurrence_extension DROP COLUMN IF EXISTS id;
 
 ALTER TABLE resource_management RENAME key TO resource_uuid;
+
+ALTER TABLE occurrence ADD COLUMN bibliographiccitation TEXT;
+ALTER TABLE occurrence ADD COLUMN occurrenceid TEXT;
+
+ALTER TABLE buffer.occurrence ADD COLUMN bibliographiccitation TEXT;
+ALTER TABLE buffer.occurrence ADD COLUMN occurrenceid TEXT;
