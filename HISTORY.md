@@ -1,5 +1,11 @@
 Version History
 ===============
+Version 2.11.0 2014-10-01
+* Updated support for occurrence extensions
+* Database Schema changes: [2.10.0_to_2.11.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.10.0_to_2.11.0.sql)
+* Added  bibliographiccitation and occurrenceid to OccurrenceModel
+* Introduce resource_uuid to ResourceModel
+
 Version 2.10.0 2014-08-05
 * Added hasassociatedsequences to OccurrenceModel
 * Database Schema changes: [2.9.0_to_2.10.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.9.0_to_2.10.0.sql)
