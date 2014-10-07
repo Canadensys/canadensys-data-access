@@ -7,7 +7,8 @@ import net.canadensys.dataportal.occurrence.model.OccurrenceExtensionModel;
 /**
  * Interface for accessing occurrence extension data.
  * The main reason to NOT embed OccurrenceExtensionModel into OccurrenceModel is that we, in most of the case,
- * don't want to load all extension data provided, we want to specify an extension type.
+ * don't want to load all extension data provided, we want to specify an extension type. This could still be merged
+ * in the future.
  * @author canadensys
  *
  */

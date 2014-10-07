@@ -14,7 +14,8 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
 /**
- * Hibernate UserType to handle key/value coloumn type (e.g. Postgres hstore).
+ * Hibernate UserType to handle key/value column type (e.g. Postgres hstore).
+ * Should be used on variable of type Map<String,String>
  * The driver must return a Java Map object when rs.getObject(column) is called on a key/value column.
  * PostgreSQL JDBC driver 9.2 and higher are returning hstore as a Map.
  * 
@@ -69,13 +70,20 @@ public class KeyValueType implements UserType {
 
 	@Override
 	public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
-		String col = names[0];
-		return rs.getObject(col);
+		if(rs.getString(names[0]) == null){
+            return null;
+        }
+		return rs.getObject(names[0]);
 	}
 
 	@Override
 	public void nullSafeSet(PreparedStatement ps, Object obj, int index, SessionImplementor session) throws HibernateException, SQLException {
-		ps.setObject(index, obj, Types.OTHER);
+		if (obj == null) {
+            ps.setNull(index, Types.OTHER);
+            return;
+        }
+		// can't use ps.setObject(index, obj, Types.OTHER) for now
+		// see https://github.com/pgjdbc/pgjdbc/issues/199
+		ps.setObject(index, obj);
 	}
-
 }

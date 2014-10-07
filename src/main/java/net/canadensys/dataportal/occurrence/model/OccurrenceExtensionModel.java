@@ -6,8 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import net.canadensys.databaseutils.hibernate.KeyValueType;
+
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 /**
  * Model containing data related to a DarwinCore occurrence extension. Data are stored in a key/value map allowing to abstract specific extension columns.
@@ -16,6 +20,7 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "occurrence_extension")
+@TypeDefs( {@TypeDef( name= "KeyValueType", typeClass = KeyValueType.class)})
 public class OccurrenceExtensionModel {
 	
 	@Id
@@ -31,7 +36,7 @@ public class OccurrenceExtensionModel {
 	private String ext_type;
 	private String ext_version;
 	
-	@Type(type="net.canadensys.databaseutils.hibernate.KeyValueType")
+	@Type(type="KeyValueType")
 	private Map<String,String> ext_data;
 		
 	public long getAuto_id() {
