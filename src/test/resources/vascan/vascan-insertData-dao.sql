@@ -79,14 +79,14 @@ INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor
 'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (26,'Equisetidae','Equisetidae Warming','<em>Equisetidae</em>','<em>Equisetidae</em> Warming',
-'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
+'accepted','herb,shrub,tree,vine','subclass','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 
 INSERT INTO lookup (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (1,'_Mock1','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (2,'_Mock2','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
-'accepted','herb,shrub,tree,vine','class','native','introduced','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
+'accepted','herb,shrub,tree,vine','subclass','native','introduced','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (3,'_Mock3','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','class','native','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
@@ -105,4 +105,16 @@ INSERT INTO vernacularname (id,name,statusid,taxonid,language,referenceid) VALUE
 (26256,'if du Canada',1,9401,'fr',1),
 (26258,'buis',2,9401,'fr',1),
 (2627,'cosmos',2,3018,'fr',1);
+
+INSERT INTO distribution(
+id,taxonid,regionid,
+distributionstatusid,excludedcodeid,referenceid,cdate,mdate)
+VALUES
+('9450','73','3','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18'),
+('9451','73','4','6','1','1','2011-02-21 12:20:13','2011-08-16 10:37:01'),
+('9452','73','7','6','1','1','2011-02-21 12:20:13','2011-08-16 10:37:01'),
+('9453','73','8','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18'),
+('9454','73','10','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18'),
+('9455','73','13','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18'),
+('9456','73','16','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18');
 

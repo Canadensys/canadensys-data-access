@@ -26,6 +26,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.hibernate.type.BigIntegerType;
 import org.hibernate.type.CalendarType;
 import org.hibernate.type.IntegerType;
@@ -45,7 +46,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(HibernateTaxonDAO.class);
-	private static final String MANAGED_ID = "taxonId";
+	private static final String TAXON_MANAGED_ID = "id";
+	private static final String TAXON_LOOKUP_MANAGED_ID = "taxonId";
 	
 	//TODO should not be in that class
 	//includes Greenland and St-Pierre Miquelon
@@ -110,7 +112,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	@Override
 	public TaxonLookupModel loadTaxonLookup(Integer taxonId) {
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
-		searchCriteria.add(Restrictions.eq(MANAGED_ID, taxonId));
+		searchCriteria.add(Restrictions.eq(TAXON_LOOKUP_MANAGED_ID, taxonId));
 		return (TaxonLookupModel)searchCriteria.uniqueResult();
 	}
 
@@ -148,6 +150,56 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return (List<TaxonModel>)searchCriteria.list();
 	}
 	
+	@Override
+	public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
+			String[] rank, boolean includeHybrids, String sort){
+		
+		// don't go any further if no region & status
+		// Make sure this request is looking for something
+		if((status == null || rqp == null || rqp.getRegion() == null) && (taxonid == null || taxonid.intValue() == 0) && habitus !=null && habitus.equals("all")){
+			return null;
+		}
+		
+		List<Criterion> lookupCriterionList = new ArrayList<Criterion>();
+		
+		// filter by status in region
+		if(status != null && rqp != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
+			lookupCriterionList.add(getStatusRegionCriterion(rqp, status));
+		}
+		
+		// filter by habitus
+		if(habitus != null && habitus!="" && !habitus.equals("all")){
+			lookupCriterionList.add(getHabitCriterion(habitus));
+		}
+		
+		// filter by rank
+		if(rank != null){
+			lookupCriterionList.add(getRankCriterion(rank));
+		}
+		
+		// filter by hybrids
+		if(!includeHybrids){
+			lookupCriterionList.add(getExcludeHybridCriterion());
+		}
+		
+		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class)
+				.createAlias("lookup", "lkp", JoinType.INNER_JOIN, Restrictions.and(lookupCriterionList.toArray(new Criterion[0])) );
+		
+		if(taxonid !=null && taxonid > 0){
+			searchCriteria.add(getTaxonCriterion(taxonid,TAXON_MANAGED_ID));
+		}
+		
+		// order
+		addOrderBy(searchCriteria, sort,"lkp.calname");
+		
+		// limit
+		if(limitResultsTo > 0 ){
+			addLimitClause(searchCriteria, limitResultsTo);
+		}
+		
+		return new ScrollableResultsIteratorWrapper<TaxonModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY), sessionFactory.getCurrentSession());
+	}
+	
 	/**
 	 * @see TaxonDAO
 	 */
@@ -162,7 +214,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 		
 		if(taxonid > 0){
-			searchCriteria.add(getTaxonCriterion(taxonid));
+			searchCriteria.add(getTaxonCriterion(taxonid,TAXON_LOOKUP_MANAGED_ID));
 		}
 		
 		// filter by status in region
@@ -186,7 +238,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 		
 		// order
-		addOrderBy(searchCriteria, sort);
+		addOrderBy(searchCriteria, sort, "calname");
 		
 		// limit
 		if(limitResultsTo > 0 ){
@@ -209,11 +261,11 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			return null;
 		}
 		//we only want to count
-		searchCriteria.setProjection(Projections.count(MANAGED_ID));
+		searchCriteria.setProjection(Projections.count(TAXON_LOOKUP_MANAGED_ID));
 		
 		// filter for a specific taxon
 		if(taxonid > 0){
-			searchCriteria.add(getTaxonCriterion(taxonid));
+			searchCriteria.add(getTaxonCriterion(taxonid,TAXON_LOOKUP_MANAGED_ID));
 		}
 		
 		// filter by status in region
@@ -299,10 +351,10 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @param sort
 	 * @return
 	 */
-	private void addOrderBy(Criteria searchCriteria, String sort){
+	private void addOrderBy(Criteria searchCriteria, String sort, String propertyName){
 		if(sort != null){
 			if(sort.equals("alphabetically")){
-				searchCriteria.addOrder(Order.asc("calname"));
+				searchCriteria.addOrder(Order.asc(propertyName));
 			}
 			else if(sort.equals("taxonomically")){
 				//nothing to do, it's the assumed default order. This is risky and should be fixed.
@@ -351,16 +403,16 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	}
 	
 	/**
-	 * Returns a Criterion for a taxon and all its accepted children
+	 * Returns a Criterion for a taxon and all its accepted children.
 	 * @param taxonId
 	 * @return
 	 */
-	private Criterion getTaxonCriterion(int taxonId){
+	private Criterion getTaxonCriterion(int taxonId, String idPropertyName){
 		List<Integer> idList = new ArrayList<Integer>();
 		getTaxonIdTree(taxonId, idList);
 		//add the taxon itself
 		idList.add(taxonId);
-		return Restrictions.in("taxonId", idList);
+		return Restrictions.in(idPropertyName, idList);
 	}
 	
 	/**

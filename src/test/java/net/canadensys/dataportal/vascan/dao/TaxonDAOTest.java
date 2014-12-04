@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 
 import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart;
 import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart.RegionSelector;
+import net.canadensys.dataportal.vascan.model.DistributionModel;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
@@ -47,9 +48,10 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
     public void testSetup(){
     	//Used for test : testDeleteTaxon()
     	jdbcTemplate.batchUpdate(new String[]{
-    			"INSERT INTO taxon (id,uninomial,binomial,author,statusid,rankid,referenceid) VALUES" +
-    			"(9470,'Verbena','×perriana','Moldenke',1,14,105),"+
-    			"(9460,'Hybrid ','Parent 1','Schkuhr ex Willdenow',1,14,105),(9466,'Hybrid ','Parent 2','Marshall',1,14,105)",
+    			"INSERT INTO taxon (id,uninomial,binomial,author,statusid,rankid,referenceid) VALUES"
+    			+ "(9470,'Verbena','×perriana','Moldenke',1,14,105),"
+    			+ "(9460,'Hybrid','Parent 1','Schkuhr ex Willdenow',1,14,105),"
+    			+ "(9466,'Hybrid','Parent 2','Marshall',1,14,105)",
     			"INSERT INTO taxonomy (parentid,childid) VALUES (73,9470)",
     			"INSERT INTO taxonomy (parentid,childid) VALUES (9466,1)",
     			"INSERT INTO taxonhybridparent (id,childid,parentid) VALUES (729,9470,9460),(730,9470,9466)",
@@ -104,7 +106,26 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		assertEquals("Class",taxon.getRank().getRank());
 		
 		//validate taxonomy
-		TaxonModel childTaxon = taxon.getChildren().get(0);
+		TaxonModel childTaxon = null;
+		Iterator<TaxonModel> taxonIt = taxon.getChildren().iterator();
+		while(taxonIt.hasNext()){
+			childTaxon = taxonIt.next();
+			//try to find back Equisetidae (id == 26)
+			if(childTaxon.getId().intValue() == 26){
+				break;
+			}
+		}
+		
+		//validate distribution
+		int qty = 0;
+		Iterator<DistributionModel> distIt = taxon.getDistribution().iterator();
+		while(distIt.hasNext()){
+			System.out.println(distIt.next());
+			
+			qty++;
+		}
+		assertTrue(qty > 2);
+		
 		assertEquals("Equisetidae",childTaxon.getUninomial());
 		assertEquals("accepted",childTaxon.getStatus().getStatus());
 		assertEquals("Subclass",childTaxon.getRank().getRank());
@@ -118,6 +139,25 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		List<TaxonModel> taxonModelList = taxonDAO.loadTaxonList(Arrays.asList(new Integer[]{73,26}));
 		assertTrue(taxonModelList.get(0).getId().equals(73) || taxonModelList.get(0).getId().equals(26));
 		assertTrue(taxonModelList.get(1).getId().equals(73) || taxonModelList.get(1).getId().equals(26));
+	}
+	
+	@Test
+	public void testSearchIterator(){
+		Iterator<TaxonModel> taxonIt = taxonDAO.searchIterator(-1, null, null, null, null, new String[]{"class"}, false, null);
+		
+		assertTrue(taxonIt.hasNext());
+		assertTrue(taxonIt.hasNext());
+		TaxonModel t = taxonIt.next();
+		
+		Iterator<DistributionModel> distIt = t.getDistribution().iterator();
+		int qty=0;
+		while(distIt.hasNext()){
+			distIt.next();
+			qty++;
+		}
+		assertTrue(qty > 2);
+		
+		assertEquals("Class", t.getRank().getRank());
 	}
 	
 	@Test

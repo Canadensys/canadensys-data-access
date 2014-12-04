@@ -49,6 +49,9 @@ public interface TaxonDAO {
 	 */
 	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
 	
+	
+	public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
+	
 	/**
 	 * Count the taxon matching the criteria 
 	 * @param habitus
@@ -89,12 +92,15 @@ public interface TaxonDAO {
 	 */
 	public List<TaxonModel> loadTaxonByName(String taxonCalculatedName);
 	
+	
 	/**
+	 * Deprected : use searchIterator()
 	 * Load denormalized taxon data for a collection of ids.
 	 * @param taxonIdList
 	 * @return list of Object with the following content: "id","mdate","status","parentid","url","reference","calnameauthor","author","rank","parentfsn","higherclassification","class",
 			"order","family","genus","subgenus","specificepithet","infraspecificepithet"
 	 */
+	@Deprecated
 	public List<Object[]> loadCompleteTaxonData(List<Integer> taxonIdList);
 
 }

@@ -5,6 +5,7 @@ package net.canadensys.dataportal.vascan.model;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -47,9 +48,9 @@ public class TaxonModel implements Comparable<TaxonModel>{
 	private	Date					mdate;
     private List<HabitModel>		habit;
     private TaxonLookupModel		lookup;
-	private List<DistributionModel>		distribution;
-	private List<VernacularNameModel>	vernacularnames;
-	private List<TaxonModel>			children;
+	private Set<DistributionModel>		distribution;
+	private Set<VernacularNameModel>	vernacularnames;
+	private Set<TaxonModel>				children;
 	private List<TaxonModel>			parents;
 	private List<TaxonModel>			hybridparents;
 	
@@ -193,10 +194,10 @@ public class TaxonModel implements Comparable<TaxonModel>{
 
 	@OneToMany(mappedBy="taxon")
 	@OrderBy("status ASC, name ASC")
-	public List<VernacularNameModel> getVernacularnames() {
+	public Set<VernacularNameModel> getVernacularnames() {
 		return vernacularnames;
 	}
-	public void setVernacularnames(List<VernacularNameModel> vernacularnames) {
+	public void setVernacularnames(Set<VernacularNameModel> vernacularnames) {
 		this.vernacularnames = vernacularnames;
 	}
 	
@@ -314,23 +315,15 @@ public class TaxonModel implements Comparable<TaxonModel>{
 	/**
 	 * @return the distribution
 	 */
-	@ManyToMany
-	@JoinTable(name = "distribution",
-		joinColumns = {
-			@JoinColumn(name="taxonid")
-	    },inverseJoinColumns = {
-			@JoinColumn(name="id")
-    	}
-	)
-	@Basic(fetch = FetchType.LAZY)
-	public List<DistributionModel> getDistribution() {
+	@OneToMany(mappedBy="taxon", fetch=FetchType.LAZY)
+	public Set<DistributionModel> getDistribution() {
 		return distribution;
 	}
 
 	/**
 	 * @param distribution the distribution to set
 	 */
-	public void setDistribution(List<DistributionModel> distribution) {
+	public void setDistribution(Set<DistributionModel> distribution) {
 		this.distribution = distribution;
 	}
 	
@@ -349,14 +342,14 @@ public class TaxonModel implements Comparable<TaxonModel>{
 	    }
 	)
 	@Basic(fetch = FetchType.LAZY)
-	public List<TaxonModel> getChildren() {
+	public Set<TaxonModel> getChildren() {
 		return children;
 	}
 	
 	/**
 	 * @param children the children to set
 	 */
-	public void setChildren(List<TaxonModel> children) {
+	public void setChildren(Set<TaxonModel> children) {
 		this.children = children;
 	}
 	
@@ -431,10 +424,10 @@ public class TaxonModel implements Comparable<TaxonModel>{
 			return false;
 		*/
 		TaxonModel other = (TaxonModel) obj;
-		if (this.getId() != other.getId())
-			return false;
+//		if (this.getId() != other.getId())
+//			return false;
 		
-		return true;
+		return getId().equals(other.getId());
 	}
 	
 	
