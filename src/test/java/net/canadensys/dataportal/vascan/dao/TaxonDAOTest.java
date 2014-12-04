@@ -146,7 +146,6 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		Iterator<TaxonModel> taxonIt = taxonDAO.searchIterator(-1, null, null, null, null, new String[]{"class"}, false, null);
 		
 		assertTrue(taxonIt.hasNext());
-		assertTrue(taxonIt.hasNext());
 		TaxonModel t = taxonIt.next();
 		
 		Iterator<DistributionModel> distIt = t.getDistribution().iterator();
