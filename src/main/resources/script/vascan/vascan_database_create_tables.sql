@@ -125,7 +125,8 @@ CREATE TABLE `taxonomy` (
   PRIMARY KEY (`id`),
   KEY `acceptedid` (`childid`,`parentid`),
   KEY `childid` (`childid`),
-  KEY `parentid` (`parentid`)
+  KEY `parentid` (`parentid`),
+  CONSTRAINT chk_circular_reference CHECK (childid <> parentid)
 );
 
 CREATE TABLE `taxonhybridparent` (

@@ -32,7 +32,7 @@
 		<hibernate.version>4.3.7.Final</hibernate.version>
 		<jackson.version>2.2.3</jackson.version>
 		<canadensys.core.version>1.8</canadensys.core.version>
-		<dwca-reader.version>1.18</dwca-reader.version>
+		<dwca-reader.version>1.20-SNAPSHOT</dwca-reader.version>
 	</properties>
 
 	<prerequisites>
