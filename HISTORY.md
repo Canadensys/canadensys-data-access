@@ -1,5 +1,11 @@
 Version History
 ===============
+
+Version 2.12.0 2014-12-17
+* Added searchIterator(...) to TaxonDAO, loadCompleteTaxonData is now deprecated.
+* Some changes in TaxonModel (use Set instead of List, remove the @ManyToMany from getDistribution())
+* Fixed an issue with ScrollableResultsIteratorWrapper 
+
 Version 2.11.0 2014-10-01
 * Updated support for occurrence extensions
 * Database Schema changes: [2.10.0_to_2.11.0.sql](https://raw.githubusercontent.com/Canadensys/canadensys-data-access/dev/script/migrations/occurrence/2.10.0_to_2.11.0.sql)
