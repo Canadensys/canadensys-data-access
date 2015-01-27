@@ -1,5 +1,7 @@
 Version History
 ===============
+Version 2.13.1 2015-01-27
+* Fixed dwca-reader dependency
 
 Version 2.12.0 2014-12-17
 * Added searchIterator(...) to TaxonDAO, loadCompleteTaxonData is now deprecated.
