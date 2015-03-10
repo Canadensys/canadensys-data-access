@@ -3,7 +3,6 @@ package net.canadensys.databaseutils;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-
 /**
  * Collection of utilities functions to generate textual SQL query part.
  * This class is inspired by Hibernates's Restrictions class.
@@ -21,6 +20,8 @@ public class SQLHelper {
 	static final String INSERT = "INSERT INTO ";
 	static final String VALUES = " VALUES ";
 	static final String NULL = "NULL";
+	static final String LIKE = " LIKE ";
+	static final String NOT_LIKE = " NOT LIKE ";
 	static final char STRING_QUOTE = '\'';
 	
 	//Basic SQL formating
@@ -55,7 +56,7 @@ public class SQLHelper {
 		if(Number.class.isAssignableFrom(value.getClass())){
 			return column + "=" + value;
 		}
-		return column + "='" + escapeSQLString(value.toString()) + "'";
+		return column + "=" + quote(value.toString());
 	}
 	
 	/**
@@ -68,7 +69,21 @@ public class SQLHelper {
 		if(Number.class.isAssignableFrom(value.getClass())){
 			return column + "<>" + value;
 		}
-		return column + "<>'" + escapeSQLString(value.toString()) + "'";
+		return column + "<>" + quote(value.toString());
+	}
+	
+	/**
+	 * LIKE query
+	 * @param column
+	 * @param value
+	 * @return
+	 */
+	public static String like(String column, String value){
+		return column + LIKE + quote(value);
+	}
+	
+	public static String notLike(String column, String value){
+		return column + NOT_LIKE + quote(value);
 	}
 	
 	/**
@@ -103,13 +118,43 @@ public class SQLHelper {
 		return "("+StringUtils.join(orSeparatedList, " OR ")+")";
 	}
 	
+	/**
+	 * If left or right is empty the same provided String is returned unchanged.
+	 * @param left
+	 * @param right
+	 * @return
+	 */
 	public static String and(String left, String right){
+		if(StringUtils.isBlank(left)){
+			return right;
+		}
+		if(StringUtils.isBlank(right)){
+			return left;
+		}
 		return left + " AND " + right;
 	}
+
 	public static String and(List<String> andSeparatedList){
 		return StringUtils.join(andSeparatedList, " AND ");
 	}
 	
+	/**
+	 * Returns a: column IN('element1','element2') SQL segment.
+	 * @param column
+	 * @param orSeparatedList
+	 * @return
+	 */
+	public static String in(String column, List<String> orSeparatedList){
+		return column + " IN ("+quoteList(orSeparatedList)+")";
+	}
+	
+	public static String in(String column, String subSelect){
+		return column + " IN (" + subSelect + ")";
+	}
+	
+	public static String notIn(String column, List<String> orSeparatedList){
+		return column + " NOT IN ("+quoteList(orSeparatedList)+")";
+	}
 	
 	/**
 	 * Returns a string representing a column count with an alias.
@@ -133,7 +178,33 @@ public class SQLHelper {
 		return SELECT+str+" "+alias;
 	}
 	
+	public static String limit(int limit){
+		return LIMIT+limit;
+	}
+	
 	/**
+	 * Quote the provided String
+	 * e.g. 'value'
+	 * @param value
+	 * @return
+	 */
+	public static String quote(String value){
+		return "'" + escapeSQLString(value) + "'";
+	}
+	
+	public static String quoteList(List<String> values){
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i < values.size(); i++){
+			if(i > 0){
+				sb.append(",");
+			}
+			sb.append(quote(values.get(i)));
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * This function is NOT a SQL injection protection.
 	 * Very simple escape function for SQL string.
 	 * All single quotes will be doubled
 	 * @param command
