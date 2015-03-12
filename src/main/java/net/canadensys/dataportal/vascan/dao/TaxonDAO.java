@@ -2,6 +2,7 @@ package net.canadensys.dataportal.vascan.dao;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
@@ -51,6 +52,21 @@ public interface TaxonDAO {
 	
 	
 	public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
+	
+	/**
+	 * Returns an iterator containing the denormalized data as a result of a search.
+	 * 
+	 * @param limitResultsTo
+	 * @param habitus
+	 * @param taxonid
+	 * @param rqp
+	 * @param status
+	 * @param rank
+	 * @param includeHybrids
+	 * @param sort
+	 * @return
+	 */
+	public Iterator<Map<String,Object>> searchIteratorDenormalized(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
 	
 	/**
 	 * Count the taxon matching the criteria 

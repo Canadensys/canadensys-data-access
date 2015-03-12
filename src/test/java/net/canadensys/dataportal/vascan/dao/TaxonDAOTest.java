@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -160,6 +161,22 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	}
 	
 	@Test
+	public void testSearchIteratorMap(){
+		Iterator<Map<String,Object>> taxonIt = taxonDAO.searchIteratorDenormalized(-1, null, null, null, null, new String[]{"class"}, false, null);
+		
+		assertTrue(taxonIt.hasNext());
+		Map<String,Object> row = null;
+		int qty=0;
+		while(taxonIt.hasNext()){
+			row = taxonIt.next();
+			qty++;
+		}
+		assertEquals(1, qty);
+		assertEquals(new Integer(73), (Integer)row.get("id"));
+		assertEquals("class", (String)row.get("rank"));
+	}
+	
+	@Test
 	public void loadTaxonLookupModelCriteria(){
 		int count = taxonDAO.countTaxonLookup(null, -1, null, null, new String[]{"class"}, false);
 		assertTrue(count > 0);
@@ -169,7 +186,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	public void loadTaxonLookupModelTaxonIdCriteria(){
 		int count = taxonDAO.countTaxonLookup(null, 73, null, null, null, false);
 		assertTrue(count > 0);
-	}
+	}	
 	
 	@Test
 	public void loadTaxonLookupModelStatusRegionCriteria(){

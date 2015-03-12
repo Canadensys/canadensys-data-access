@@ -1,6 +1,8 @@
 package net.canadensys.dataportal.vascan.dao.impl;
 
+import static org.jooq.impl.DSL.condition;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.table;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -13,10 +15,10 @@ import net.canadensys.databaseutils.SQLHelper;
 import net.canadensys.databaseutils.ScrollableResultsIteratorWrapper;
 import net.canadensys.dataportal.vascan.dao.TaxonDAO;
 import net.canadensys.dataportal.vascan.dao.query.RegionQueryPart;
-import net.canadensys.dataportal.vascan.model.TaxonDumpModel;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 import net.canadensys.dataportal.vascan.model.TaxonModel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -33,11 +35,17 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.BigIntegerType;
 import org.hibernate.type.CalendarType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.jooq.Condition;
+import org.jooq.Record;
+import org.jooq.SQLDialect;
+import org.jooq.Select;
+import org.jooq.Table;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -50,6 +58,10 @@ import org.springframework.stereotype.Repository;
 public class HibernateTaxonDAO implements TaxonDAO{
 	
 	private enum RegionCriterionOperatorEnum{OR,AND};
+	
+	// Aliases given to denormalized query fields
+	public static final String CONCAT_PARENT_ID = "concatParentId";
+	public static final String CONCAT_PARENT_CALNAME_AUTHOR = "concatParentCalNameAuthor";
 
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(HibernateTaxonDAO.class);
@@ -62,6 +74,18 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	public static final String CANADA_PROVINCES[] = {"AB","BC","NL_N","NL_L","MB","NB","NT","NS","NU","ON","PE","QC","SK","YT"};
 	public static final int STATUS_ACCEPTED = 1;
 	public static final int STATUS_SYNONYM = 2;
+	
+	//jOOQ
+	private static final SQLDialect DQL_DIALECT = SQLDialect.MYSQL;
+	private static final Table<Record> LOOKUP_TABLE = table("lookup");
+	private static final Table<Record> TAXON_TABLE = table("taxon");
+	private static final Table<Record> TAXONOMY_TABLE = table("taxonomy");
+	
+	//predefined SQL
+	//database independant order by clause using nested sets with NULL last
+	//(in mysql it's cleaner to use ISNULL(lookup._left))
+	private static final String TAXONOMIC_ORDERBY = "ORDER BY COALESCE(lookup._left," + Integer.MAX_VALUE + "), lookup._left ASC";
+	
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -189,7 +213,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			lookupCriterionList.add(getExcludeHybridCriterion());
 		}
 		
-		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonDumpModel.class)
+		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class)
 				.createAlias("lookup", "lkp", JoinType.INNER_JOIN, Restrictions.and(lookupCriterionList.toArray(new Criterion[0])) );
 		
 		if(taxonid !=null && taxonid > 0){
@@ -207,86 +231,95 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return new ScrollableResultsIteratorWrapper<TaxonModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY), sessionFactory.getCurrentSession());
 	}
 	
-	public String searchIteratorSQLTest(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
+	@Override
+	public Iterator<Map<String,Object>> searchIteratorDenormalized(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
 			String[] rank, boolean includeHybrids, String sort){
-		// don't go any further if no region & status
-			// Make sure this request is looking for something
-			if((status == null || rqp == null || rqp.getRegion() == null) && (taxonid == null || taxonid.intValue() == 0) && habitus !=null && habitus.equals("all")){
-				return null;
-			}
-			
-			String whereClause = "";
-			List<Map<String,Object>> userProvidedValues = new ArrayList<Map<String, Object>>();
-			
-			// filter by status in region
-			if(status != null && rqp != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
-				whereClause = getStatusRegionSQL(rqp, status, userProvidedValues);
-			}
-			
-			// filter by habitus
-			if(habitus != null && habitus!="" && !habitus.equals("all")){
-				whereClause = SQLHelper.and(whereClause, getHabitSQL(habitus));
-			}
-			
-			// filter by rank
-			if(rank != null){
-				whereClause = SQLHelper.and(whereClause, getRankSQL(rank));
-			}
-			
-			// filter by hybrids
-			if(!includeHybrids){
-				whereClause = SQLHelper.and(whereClause, getExcludeHybridSQL());
-			}
-						
-			if(taxonid !=null && taxonid > 0){
-				whereClause = SQLHelper.and(whereClause, getTaxonSQL(taxonid,TAXON_MANAGED_ID));
-			}
-			
-			// order
-			//addOrderBy(searchCriteria, sort,"lkp.calname");
-			
-			// limit
-			if(limitResultsTo > 0 ){
-				SQLHelper.limit(limitResultsTo);
-			}
-			
-			//set all params
-			
-			
-			//return new ScrollableResultsIteratorWrapper<TaxonModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY), sessionFactory.getCurrentSession());
 		
-			return whereClause;
-//		
-//		"SELECT taxon.id, taxon.mdate, lookup.status, GROUP_CONCAT(taxonomy.parentid) concatParentId,"+
-//		+            "reference.url, reference.reference, lookup.calnameauthor,taxon.author,lookup.rank,"+
-//		+            "GROUP_CONCAT(pLookup.calnameauthor) AS concatParentCalNameAuthor, lookup.higherclassification,"+
-//		+            "lookup.class, lookup._order,lookup.family,lookup.genus,"+
-//		+            "lookup.subgenus,lookup.specificepithet,lookup.infraspecificepithet "+
-//		+            "FROM taxon "+
-//		+            "INNER JOIN lookup ON taxon.id = lookup.taxonid "+
-//		+            "INNER JOIN reference ON taxon.referenceid = reference.id "+
-//		+            "LEFT JOIN taxonomy ON taxonomy.childid = taxon.id "+
-//		+            "LEFT JOIN lookup pLookup ON pLookup.taxonid = taxonomy.parentid "+
-//		+            "GROUP BY taxon.id "+
-//		+            "ORDER BY ISNULL(lookup._left), lookup._left ASC ") // ORDER BY using the nested sets with NULLs last
-//		+                .addScalar("id",Hibernate.INTEGER)
-//		+                .addScalar("mdate",Hibernate.CALENDAR)
-//		+                .addScalar("status",Hibernate.STRING)
-//		+                .addScalar("concatParentId",Hibernate.STRING)
-//		+                .addScalar("url",Hibernate.STRING)
-//		+                .addScalar("reference",Hibernate.STRING)
-//		+                .addScalar("calnameauthor",Hibernate.STRING)
-//		+                .addScalar("author",Hibernate.STRING)
-//		+                .addScalar("rank",Hibernate.STRING)
-//		+                .addScalar("concatParentCalNameAuthor",Hibernate.STRING)
-//		+                .addScalar("higherclassification",Hibernate.STRING)
-//		+                .addScalar("class",Hibernate.STRING)
-//		+                .addScalar("_order",Hibernate.STRING)
-//		+                .addScalar("family",Hibernate.STRING)
-//		+                .addScalar("genus",Hibernate.STRING)
-//		+                .addScalar("subgenus",Hibernate.STRING)
-//		+                .addScalar("specificepithet",Hibernate.STRING)
-//		+                .addScalar("infraspecificepithet",Hibernate.STRING);
+		// don't go any further if no region & status
+		// Make sure this request is looking for something
+		if((status == null || rqp == null || rqp.getRegion() == null) && (taxonid == null || taxonid.intValue() == 0) && habitus !=null && habitus.equals("all")){
+			return null;
+		}
+		
+		Condition searchCondition = null;
+		String orderBySQL = null;
+		
+		// filter by status in region
+		if(status != null && rqp != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
+			searchCondition = safeAnd(searchCondition, getStatusRegionCondition(rqp, status));
+		}
+		
+		// filter by habitus
+		if(habitus != null && habitus!="" && !habitus.equals("all")){
+			searchCondition = safeAnd(searchCondition, getHabitCondition(habitus));
+		}
+		
+		// filter by rank
+		if(rank != null){
+			searchCondition = safeAnd(searchCondition, getRankCondition("lookup.rank", rank));
+		}
+		
+		// filter by hybrids
+		if(!includeHybrids){
+			searchCondition = safeAnd(searchCondition, getExcludeHybridCondition("lookup.calname"));
+		}
+		
+		// filter by taxonid
+		if(taxonid !=null && taxonid > 0){
+			searchCondition = safeAnd(searchCondition, condition(getTaxonConditionSQL(taxonid,TAXON_MANAGED_ID)));
+		}
+		
+		orderBySQL = getOrderBy(sort,"lookup.calname");
+		
+		Query searchQuery = buildSearchDenormalizedQuery(sessionFactory.getCurrentSession(), searchCondition, orderBySQL);
+		searchQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP); 
+		
+		// limit
+		if(limitResultsTo > 0 ){
+			searchQuery.setMaxResults(limitResultsTo);
+		}
+		
+		return new ScrollableResultsIteratorWrapper<Map<String,Object>>(searchQuery.scroll(ScrollMode.FORWARD_ONLY), sessionFactory.getCurrentSession());
+	}
+	
+	/**
+	 * Build a search Query object using SQL to get decent performance.
+	 * @param hibernateSession
+	 * @param whereClause
+	 * @return
+	 */
+	private static Query buildSearchDenormalizedQuery(Session hibernateSession, Condition whereClause, String orderBySQL ){
+		return hibernateSession.createSQLQuery("SELECT taxon.id, taxon.mdate, lookup.status, GROUP_CONCAT(taxonomy.parentid) concatParentId,"+
+			"reference.url, reference.reference, lookup.calnameauthor,taxon.author,lookup.rank,"+
+			"GROUP_CONCAT(pLookup.calnameauthor) AS concatParentCalNameAuthor, lookup.higherclassification,"+
+			"lookup.class, lookup._order,lookup.family,lookup.genus,"+
+			"lookup.subgenus,lookup.specificepithet,lookup.infraspecificepithet "+
+			"FROM taxon "+
+			"INNER JOIN lookup ON taxon.id = lookup.taxonid "+
+			"INNER JOIN reference ON taxon.referenceid = reference.id "+
+			"LEFT JOIN taxonomy ON taxonomy.childid = taxon.id "+
+			"LEFT JOIN lookup pLookup ON pLookup.taxonid = taxonomy.parentid "+
+			"WHERE " + whereClause.toString() + 
+			" GROUP BY taxon.id " +
+			StringUtils.defaultString(orderBySQL))
+			    .addScalar("id", IntegerType.INSTANCE)
+				.addScalar("mdate", CalendarType.INSTANCE)
+				.addScalar("status", StringType.INSTANCE)
+				.addScalar(CONCAT_PARENT_ID, StringType.INSTANCE)
+				.addScalar("url", StringType.INSTANCE)
+				.addScalar("reference", StringType.INSTANCE)
+				.addScalar("calnameauthor", StringType.INSTANCE)
+				.addScalar("author", StringType.INSTANCE)
+				.addScalar("rank", StringType.INSTANCE)
+				.addScalar(CONCAT_PARENT_CALNAME_AUTHOR, StringType.INSTANCE)
+				.addScalar("higherclassification", StringType.INSTANCE)
+				.addScalar("class", StringType.INSTANCE)
+				.addScalar("_order", StringType.INSTANCE)
+				.addScalar("family", StringType.INSTANCE)
+				.addScalar("genus", StringType.INSTANCE)
+				.addScalar("subgenus", StringType.INSTANCE)
+				.addScalar("specificepithet", StringType.INSTANCE)
+				.addScalar("infraspecificepithet", StringType.INSTANCE);
 	}
 	
 	/**
@@ -441,7 +474,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @return
 	 */
 	private void addOrderBy(Criteria searchCriteria, String sort, String propertyName){
-		if(sort != null){
+		if(StringUtils.isNotBlank(sort)){
 			if(sort.equals("alphabetically")){
 				searchCriteria.addOrder(Order.asc(propertyName));
 			}
@@ -449,9 +482,30 @@ public class HibernateTaxonDAO implements TaxonDAO{
 				//nothing to do, it's the assumed default order. This is risky and should be fixed.
 			}
 			else{
-				
+				LOGGER.warn("unknown sort value:" + sort);
 			}
 		}
+	}
+	
+	/**
+	 * Get ORDER BY clause in SQL representing the provided 'sort'.
+	 * 
+	 * @param sort
+	 * @return sql ORDER BY clause or null
+	 */
+	private String getOrderBy(String sort, String propertyName){
+		if(StringUtils.isNotBlank(sort)){
+			if(sort.equals("alphabetically")){
+				return DSL.orderBy(field(propertyName).asc()).toString();
+			}
+			else if(sort.equals("taxonomically")){
+				return TAXONOMIC_ORDERBY;
+			}
+			else{
+				LOGGER.warn("unknown sort value:" + sort);
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -463,9 +517,9 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return Restrictions.not(Restrictions.like("calname", "×", MatchMode.ANYWHERE));
 	}
 	
-	private String getExcludeHybridSQL(){
+	private Condition getExcludeHybridCondition(String scientificNameColumn){
 		//warning, × is not the x character, × = &times;
-		return SQLHelper.notLike("calname", "%×%");
+		return field(scientificNameColumn).notLike("%×%");
 	}
 	
 	
@@ -509,17 +563,30 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		idList.add(taxonId);
 		return Restrictions.in(idPropertyName, idList);
 	}
-	
-	private String getTaxonSQL(int taxonId, String idPropertyName){
-		//add the taxon itself
-		String sql = "SELECT " + taxonId + " UNION SELECT childid FROM taxonomy,taxon WHERE parentid = :taxonid AND taxonomy.childid = " +
-				taxonId + " AND taxon.statusid = " + STATUS_ACCEPTED;
+		
+	/**
+	 * Returns SQL string build from a jOOQ sub query that returns a taxon and all of its accepted children.
+	 * @param taxonId
+	 * @param idPropertyName
+	 * @return
+	 */
+	private String getTaxonConditionSQL(int taxonId, String idPropertyName){
+		Table<?> leftRightOfTaxon = table(
+				DSL.select(field("_left"),field("_right")).from(LOOKUP_TABLE)
+				.where(field("taxonid").eq(taxonId))).as("tlf");
+		
+		Select<?> subSelect = DSL.using(DQL_DIALECT)
+			.select(field("taxonid")).from(LOOKUP_TABLE, leftRightOfTaxon)
+			.where(field("lookup._left").gt(field("tlf._left"))
+			.and(field("lookup._right").lt(field("tlf._right"))));
+
+		String sql = "SELECT " + taxonId + " UNION " + subSelect.getSQL();
 		return SQLHelper.in(idPropertyName, sql);
 	}
 	
 	/**
 	 * Returns a Criterion for one ore more rank(s)
-	 * @param rank a validated rank array
+		 * @param rank a validated rank array
 	 * @return
 	 */	
 	private Criterion getRankCriterion(String[] rank){
@@ -529,29 +596,19 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 		return disjunction;
 	}
-	
-	private String getRankSQL(String[] rank){
-		List<String> disjunction = new ArrayList<String>();
-		for(String r : rank){
-			disjunction.add(SQLHelper.eq("rank", r.toLowerCase()));
-		}
-		return SQLHelper.or(disjunction);
-	}
-	
-	private Condition getRankCondition(String[] rank){
-		Condition c = null; //field("BOOK.TITLE").equal("8")
-		for(String r : rank){
-			if(c == null){
-				c = field("rank").equal(r.toLowerCase());
-			}
-			else{
-				c = c.or(field("rank").equal(r.toLowerCase()));
-			}
-		}
-		return c;
-	}
 
-
+	/**
+	 * @param alias given to rank column in the query
+	 * @param rank
+	 * @return
+	 */
+	private Condition getRankCondition(String rankColumnAlias, String[] rank){
+		Condition condition = null;
+		for(String r : rank){
+			condition = safeOr(condition, field(rankColumnAlias).equal(r.toLowerCase()));
+		}
+		return condition;
+	}
 	
 	/**
 	 * Returns a Criterion for a habit against calhabit of the lookup table.
@@ -562,8 +619,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return Restrictions.like("calhabit", habit.toLowerCase(), MatchMode.ANYWHERE);
 	}
 	
-	private String getHabitSQL(String habit){
-		return SQLHelper.like("calhabit", "%" + habit.toLowerCase() +"%");
+	private Condition getHabitCondition(String habit){
+		return field("calhabit").like("%" + habit.toLowerCase() +"%");
 	}
 	
 	/**
@@ -615,31 +672,32 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 	}
 	
-	private String getStatusRegionSQL(RegionQueryPart rqp, String[] status, List<Map<String,Object>> userProvidedValues){
+	private Condition getStatusRegionCondition(RegionQueryPart rqp, String[] status){
 		//TaxonLookupModel uses upper case for regions
 		String[] region = net.canadensys.utils.StringUtils.allUpperCase(rqp.getRegion());
 		
-		String onlyInCriteria = null;
+		Condition onlyInCondition = null;
 		switch(rqp.getRegionSelector()){
-			case ALL_OF : return getAllRegionStatusSQL(status, region, RegionCriterionOperatorEnum.AND);
-			case ANY_OF : return getAnyRegionStatusSQL(status, region);
+			case ALL_OF : return getAllRegionStatusCondition(status, region, RegionCriterionOperatorEnum.AND);
+			case ANY_OF : return getAnyRegionStatusCondition(status, region);
 			case ONLY_IN:
-				onlyInCriteria = getAllRegionStatusSQL(status, region,RegionCriterionOperatorEnum.OR);
+				onlyInCondition = getAllRegionStatusCondition(status, region,RegionCriterionOperatorEnum.OR);
 				break;
 			case ALL_OF_ONLY_IN:
-				onlyInCriteria = getAllRegionStatusSQL(status, region,RegionCriterionOperatorEnum.AND);
+				onlyInCondition = getAllRegionStatusCondition(status, region,RegionCriterionOperatorEnum.AND);
 				break;
 		}
 		//sanity check
-		if(onlyInCriteria == null){
+		if(onlyInCondition == null){
 			LOGGER.fatal("Unhandled rqp.getRegionSelector() case");
+			return null;
 		}
 		
 		if(rqp.isSearchOnlyInCanada()){
-			return SQLHelper.and(onlyInCriteria, getExclusionSQL(status,region,CANADA_PROVINCES));
+			return onlyInCondition.and(getExclusionCondition(status,region,CANADA_PROVINCES));
 		}
 		else{
-			return SQLHelper.and(onlyInCriteria, getExclusionSQL(status,region,ALL_PROVINCES));
+			return onlyInCondition.and(getExclusionCondition(status,region,ALL_PROVINCES));
 		}
 	}
 	
@@ -675,34 +733,6 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return regionStatusCriterion;
 	}
 	
-	
-	private String getAllRegionStatusSQL(String[] status, String[] region, RegionCriterionOperatorEnum op){
-		String regionStatusCriterion = null;
-		List<String> disjunction;
-		String disjunctionStr;
-		
-		for(String prov : region){
-			// match against all the statuses checked in the checklist builder
-			disjunction = new ArrayList<String>();
-			for(String currStatus: status){
-				disjunction.add(SQLHelper.eq(prov, currStatus));
-			}
-			disjunctionStr = SQLHelper.or(disjunction);
-			if(regionStatusCriterion == null){
-				regionStatusCriterion = disjunctionStr;
-			}
-			else{
-				if(op == RegionCriterionOperatorEnum.AND){
-					regionStatusCriterion = SQLHelper.and(regionStatusCriterion, disjunctionStr);
-				}
-				else if(op == RegionCriterionOperatorEnum.OR){
-					regionStatusCriterion = SQLHelper.or(regionStatusCriterion, disjunctionStr);
-				}
-			}
-		}
-		return regionStatusCriterion;
-	}
-	
 	private Condition getAllRegionStatusCondition(String[] status, String[] region, RegionCriterionOperatorEnum op){
 		Condition allStatus = null;
 		Condition statusByProvince = null;
@@ -713,7 +743,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			for(String currStatus: status){
 				statusByProvince = safeOr(statusByProvince,field(prov).eq(currStatus));
 			}
-			//disjunctionStr = SQLHelper.or(disjunction);
+
 			if(allStatus == null){
 				allStatus = statusByProvince;
 			}
@@ -745,18 +775,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return disjunction;
 	}
 	
-	private String getAnyRegionStatusSQL(String[] status, String[] regions){		
-		List<String> disjunction = new ArrayList<String>();
-		for(String currRegion : regions){
-			for(String currStatus: status){
-				disjunction.add(SQLHelper.eq(currRegion, currStatus));
-			}
-		}
-		return SQLHelper.or(disjunction);
-	}
-	
 	private Condition getAnyRegionStatusCondition(String[] status, String[] regions){		
-		//List<String> disjunction = new ArrayList<String>();
 		Condition anyStatusProvince = null;
 		for(String currRegion : regions){
 			for(String currStatus: status){
@@ -791,25 +810,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 		return exclusionCriterion;
 	}
-	
-	private String getExclusionSQL(String[] status, String[] region, String[] allRegions){
-		List<String> exclusionCriterion = new ArrayList<String>();
-		for(String currRegion : allRegions){
-			boolean exclude = true;
-			for(String prov : region){
-				if(prov.equals(currRegion)){
-					exclude = false;
-					break;
-				}
-			}
-			
-			if(exclude){
-				exclusionCriterion.add(SQLHelper.notIn(currRegion, Arrays.asList(status)));
-			}
-		}
-		return SQLHelper.and(exclusionCriterion);
-	}
-	
+		
 	private Condition getExclusionCondition(String[] status, String[] region, String[] allRegions){
 		Condition exclusionCondition = null;
 		for(String currRegion : allRegions){
@@ -829,7 +830,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	}
 	
 	/**
-	 * Condition OR that handles null as current.
+	 * JOOQ OR Condition that handles null on current.
 	 * @param current
 	 * @param condition
 	 * @return
@@ -842,6 +843,12 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 	}
 	
+	/**
+	 * JOOQ AND Condition that handles null aon current.
+	 * @param current
+	 * @param condition
+	 * @return
+	 */
 	private Condition safeAnd(Condition current, Condition condition){
 		if(current == null){
 			return condition;
