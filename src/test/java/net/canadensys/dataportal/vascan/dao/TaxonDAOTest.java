@@ -121,8 +121,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		int qty = 0;
 		Iterator<DistributionModel> distIt = taxon.getDistribution().iterator();
 		while(distIt.hasNext()){
-			System.out.println(distIt.next());
-			
+			distIt.next();
 			qty++;
 		}
 		assertTrue(qty > 2);

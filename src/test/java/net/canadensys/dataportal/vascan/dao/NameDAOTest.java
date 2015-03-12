@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author canadensys
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/test-spring.xml" })
+@ContextConfiguration(locations = { "/vascan/vascan-test-context.xml" })
 public class NameDAOTest {
 	
 	@Autowired
@@ -209,8 +209,8 @@ public class NameDAOTest {
 		assertEquals(1,nameModeListLR.getTotal_rows());
 		assertEquals("Ascii Folding, search vernacular with accent",new Integer(7174), nameModeListLR.getRows().get(0).getTaxonId());
 		
-		//Test search using carex f
-		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex f");
+		//Test search using carex fe
+		List<NameConceptModelIF> nameModeList = nameDAO.searchTaxon("carex fe");
 		//make sure Carex feta is the first element
 		assertEquals("<em>Carex feta</em> L.H. Bailey",((NameConceptTaxonModel)nameModeList.get(0)).getNamehtmlauthor());
 		//make sure Carex alone (951) is not there
@@ -232,6 +232,10 @@ public class NameDAOTest {
 		//same test with searchTaxon
 		nameModeList = nameDAO.searchTaxon("carex");
 		assertTrue(nameModeList.get(0).getScore() > nameModeList.get(1).getScore());
+		
+		//Test fuzzy match
+		nameModeListLR = nameDAO.search("carox",true);
+		assertEquals(new Integer(951), nameModeListLR.getRows().get(0).getTaxonId());
 		
 		//Search for carex feta using the genus first letter
 		nameModeListLR = nameDAO.search("C. feta",true);
@@ -265,8 +269,27 @@ public class NameDAOTest {
 		nameModeListLR = nameDAO.search("maple",true);
 		assertEquals(1,nameModeListLR.getRows().size());
 		
-		//Test to make sure that taxon and vernacular are sorted correctly
-		nameModeListLR = nameDAO.search("carex",true);
+		//test a synonym with 2 parents
+		nameModeListLR = nameDAO.search("SynonymWithTwoParents",true);
+		assertEquals(new Integer(101010), nameModeListLR.getRows().get(0).getTaxonId());
+		assertFalse(((NameConceptTaxonModel)nameModeListLR.getRows().get(0)).hasSingleParent());
+		
+		//Test with paging, do this one last since we change the behavior of the nameDAO
+		//We should not use setPageSize outside testing
+		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
+		nameModeListLR = nameDAO.search("care",true,0);
+		assertEquals(1,nameModeListLR.getRows().size());
+		nameModeListLR = nameDAO.search("care",true,1);
+		assertEquals(1,nameModeListLR.getRows().size());
+	}
+	
+	/**
+	 * Test to make sure that taxon and vernacular are sorted correctly when returned by search function.
+	 * Correctly means sorted by score then name.
+	 */
+	@Test
+	public void testTaxonVernacularOrdering(){
+		LimitedResult<List<NameConceptModelIF>> nameModeListLR = nameDAO.search("carex",true);
 		int idx=0;
 		int carexSabulosaIdx=0;
 		int carexSaliIdx=0;
@@ -280,19 +303,6 @@ public class NameDAOTest {
 			idx++;
 		}
 		assertTrue("taxon and vernacular order",carexSabulosaIdx < carexSaliIdx);
-		
-		//test a synonym with 2 parents
-		nameModeListLR = nameDAO.search("SynonymWithTwoParents",true);
-		assertEquals(new Integer(101010), nameModeListLR.getRows().get(0).getTaxonId());
-		assertFalse(((NameConceptTaxonModel)nameModeListLR.getRows().get(0)).hasSingleParent());
-		
-		//Test with paging, do this one last since we change the behavior of the nameDAO
-		//We should not use setPageSize outside testing
-		((ElasticSearchNameDAO)nameDAO).setPageSize(1);
-		nameModeListLR = nameDAO.search("care",true,0);
-		assertEquals(1,nameModeListLR.getRows().size());
-		nameModeListLR = nameDAO.search("care",true,1);
-		assertEquals(1,nameModeListLR.getRows().size());
 	}
 	
 	@Test

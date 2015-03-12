@@ -25,7 +25,7 @@ public interface NameDAO {
 	 * Search NameModel from a String with paging.
 	 * @param text
 	 * @param useAutocompletion should we use AutoCompletion feature to return partially matched names. 
-	 * @param pageNumber (starting at 0)
+	 * @param pageNumber (starting at 0), if pageNumber is less or equals to 0, it will be ignored
 	 * @return
 	 */
 	public LimitedResult<List<NameConceptModelIF>> search(String text, boolean useAutocompletion, int pageNumber);

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Repository;
 /**
  * Optional feature implementation of the data access layer.
  * Add ElasticSearch to your classpath to enable it.
+ * TODO This class is not enough DRY
  * @author canadensys
  *
  */
@@ -63,21 +64,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 
 	@Override
 	public LimitedResult<List<NameConceptModelIF>> search(String text, boolean useAutocompletion){
-		SearchRequestBuilder srb;
-		if(useAutocompletion){
-			srb = buildSearchRequestBuilderFromText(text,pageSize);
-		}
-		else{
-			srb = buildSearchRequestBuilderFromTextNoNGram(text,pageSize);
-		}
-		
-		SearchResponse response = srb
-		        .execute()
-		        .actionGet();
-		LimitedResult<List<NameConceptModelIF>> qr = new LimitedResult<List<NameConceptModelIF>>();
-		qr.setRows(searchHitsToNameModelList(response.getHits()));
-		qr.setTotal_rows(response.getHits().getTotalHits());
-		return qr;
+		return search(text, useAutocompletion, -1);
 	}
 	
 	@Override
@@ -89,7 +76,9 @@ public class ElasticSearchNameDAO implements NameDAO{
 		else{
 			srb = buildSearchRequestBuilderFromTextNoNGram(text,pageSize);
 		}
-		srb.setFrom(pageNumber*pageSize);
+		if(pageNumber > 0){
+			srb.setFrom(pageNumber*pageSize);
+		}
 		
 		SearchResponse response = srb
 		        .execute()
@@ -112,6 +101,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 		    			QueryBuilders.boolQuery()
 		    				.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
 		    				.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+		    				.should(QueryBuilders.fuzzyQuery(TAXON_NAME_FIELD,text))
 		    			)
 	                .should(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)))
 	            .setSize(pageSize)
@@ -147,6 +137,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 	
 	/**
 	 * Build an ElasticSearch query using the name and name.ngrams fields.
+	 * This will search in 'taxon' and 'vernacular' types.
 	 * Sorted by score then name (maybe it should be provided by the caller?)
 	 * @param text
 	 * @param pageSize
@@ -163,8 +154,10 @@ public class ElasticSearchNameDAO implements NameDAO{
 		    				QueryBuilders.boolQuery()
 		    					.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
 		    					.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
+		    					.should(QueryBuilders.fuzzyQuery(TAXON_NAME_FIELD,text))
 		    				).boost(1)
 		    			)
+		    			//this will allow to give more weight for a perfect match on a taxon
 		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)).boost(1))
 		    			.should(QueryBuilders.constantScoreQuery(QueryBuilders.matchQuery(VERNACULAR_NAME_FIELD,text)).boost(1))
 		    			//Avoid giving a better score to vernacular ngrams if both query match
@@ -182,6 +175,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 	
 	/**
 	 * Build an ElasticSearch query using the name while ignoring the ngram (used for autocompletion).
+	 * This will search in 'taxon' and 'vernacular' types.
 	 * Perfect match on taxon or vernacular names will get higher scores.
 	 * Sorted by score then name.
 	 * @param text
