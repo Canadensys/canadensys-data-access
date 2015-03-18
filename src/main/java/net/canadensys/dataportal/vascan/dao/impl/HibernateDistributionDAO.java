@@ -1,6 +1,7 @@
 package net.canadensys.dataportal.vascan.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import net.canadensys.dataportal.vascan.dao.DistributionDAO;
 import net.canadensys.dataportal.vascan.model.DistributionModel;
@@ -10,6 +11,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ public class HibernateDistributionDAO implements DistributionDAO{
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<DistributionModel> loadTaxonDistribution(Integer taxonId) {
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(DistributionModel.class);
@@ -34,14 +37,16 @@ public class HibernateDistributionDAO implements DistributionDAO{
 		return (List<DistributionModel>)searchCriteria.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<DistributionStatusModel> loadAllDistributionStatus(){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(DistributionStatusModel.class);
 		return (List<DistributionStatusModel>)searchCriteria.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Object[]> loadCompleteDistributionData(List<Integer> taxonIdList){
+	public List<Map<String,Object>> loadDenormalizedDistributionData(List<Integer> taxonIdList){
 		Query query = sessionFactory.getCurrentSession().createSQLQuery("SELECT distribution.taxonid, region.iso3166_2, region.region, region.iso3166_1, distributionstatus.occurrencestatus, distributionstatus.establishmentmeans, reference.reference, reference.url, excludedcode.excludedcode" +
 			" FROM region,distributionstatus,reference,distribution,excludedcode" +
 			" WHERE distribution.taxonid IN (:id)" +
@@ -49,16 +54,17 @@ public class HibernateDistributionDAO implements DistributionDAO{
 			" AND region.id = distribution.regionid" +
 			" AND reference.id = distribution.referenceid" +
 			" AND excludedcode.id = distribution.excludedcodeid")
-			.addScalar("taxonid",IntegerType.INSTANCE)
-			.addScalar("iso3166_2",StringType.INSTANCE)
-			.addScalar("region",StringType.INSTANCE)
-			.addScalar("iso3166_1",StringType.INSTANCE)
-			.addScalar("occurrencestatus",StringType.INSTANCE)
-			.addScalar("establishmentMeans",StringType.INSTANCE)
-			.addScalar("reference",StringType.INSTANCE)
-			.addScalar("url",StringType.INSTANCE)
-			.addScalar("excludedcode",StringType.INSTANCE);
+			.addScalar(DD_TAXON_ID, IntegerType.INSTANCE)
+			.addScalar(DD_ISO3166_2, StringType.INSTANCE)
+			.addScalar(DD_REGION, StringType.INSTANCE)
+			.addScalar(DD_ISO3166_1, StringType.INSTANCE)
+			.addScalar(DD_OCCURRENCE_STATUS, StringType.INSTANCE)
+			.addScalar(DD_ESTABLISHMENT_MEANS, StringType.INSTANCE)
+			.addScalar(DD_REFERENCE, StringType.INSTANCE)
+			.addScalar(DD_URL, StringType.INSTANCE)
+			.addScalar(DD_EXCLUDED_CODE, StringType.INSTANCE);
 		query.setParameterList("id", taxonIdList);
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		return query.list();
 	}
 	

@@ -70,16 +70,34 @@ INSERT INTO taxon (id,uninomial,author,statusid,rankid,referenceid) VALUES
 INSERT INTO taxon (id,uninomial,binomial,author,statusid,rankid,referenceid) VALUES
 (15428,'Carex','abdita','Bicknell',2,14,105),
 (5129,'Carex','umbellata','Schkuhr ex Willdenow',1,14,105),
-(9401,'Taxus','canadensis','Marshall',1,14,105);
+(9401,'Taxus','canadensis','Marshall',1,14,105),
+(2663,'Apocynum','×floribundum','Greene',1,14,1);
+
+INSERT INTO taxon (id,uninomial,binomial,trinomial,author,statusid,rankid,referenceid) VALUES
+(2658,'Apocynum','androsaemifolium','androsaemifolium','Linnaeus',1,15,1),
+(2661,'Apocynum','cannabinum','hypericifolium','(Aiton) A. Gray',1,16,1);
 		
 INSERT INTO taxonomy (parentid,childid) VALUES (73,26);
 INSERT INTO taxonomy (parentid,childid) VALUES (5129,15428);
-INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
+INSERT INTO taxonomy (parentid,childid) VALUES (9401,15428);
+INSERT INTO lookup (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (73,'Equisetopsida','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
-INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
+INSERT INTO lookup (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (26,'Equisetidae','Equisetidae Warming','<em>Equisetidae</em>','<em>Equisetidae</em> Warming',
 'accepted','herb,shrub,tree,vine','subclass','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
+INSERT INTO lookup (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
+(5129,'Carex umbellata','Carex umbellata Schkuhr ex Willdenow','<em>Carex umbellata</em>','<em>Carex umbellata</em> Schkuhr ex Willdenow',
+'accepted','herb,shrub,tree,vine','subclass','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native'),
+(9401,'Taxus canadensis','Taxus canadensis Marshall','<em>Taxus canadensis</em>','<em>Taxus canadensis</em> Marshall',
+'accepted','herb,shrub,tree,vine','subclass','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native'),
+(15428,'Carex abdita','Carex abdita Bicknell','<em>Carex abdita</em>','<em>Carex abdita</em> Bicknell',
+'synonym','herb,shrub,tree,vine','subclass','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native'),
+('2661','Apocynum cannabinum var. hypericifolium','Apocynum cannabinum var. hypericifolium (Aiton) A. Gray','<em>Apocynum cannabinum</em> var. <em>hypericifolium</em>','<em>Apocynum cannabinum</em> var. <em>hypericifolium</em> (Aiton) A. Gray',
+'accepted','herb','variety','native','native','absent','absent','native','native','native','native','native','absent','native','absent','native','absent','native','absent'),
+('2658','Apocynum androsaemifolium subsp. androsaemifolium','Apocynum androsaemifolium Linnaeus subsp. androsaemifolium','<em>Apocynum androsaemifolium</em> subsp. <em>androsaemifolium</em>','<em>Apocynum androsaemifolium</em> Linnaeus subsp. <em>androsaemifolium</em>',
+'accepted','herb','subspecies','native','native','absent','absent','native','native','native','native','native','absent','native','native','native','absent','native','native');
+
 
 INSERT INTO lookup (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
 (1,'_Mock1','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
@@ -117,4 +135,7 @@ VALUES
 ('9454','73','10','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18'),
 ('9455','73','13','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18'),
 ('9456','73','16','1','1','1','2011-02-21 12:20:13','2011-02-21 12:26:18');
+
+INSERT INTO taxonhybridparent(id,childid,parentid)
+VALUES (1,2663,2658),(2,2663,2661);
 

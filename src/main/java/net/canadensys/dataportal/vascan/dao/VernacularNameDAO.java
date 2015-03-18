@@ -1,15 +1,25 @@
 package net.canadensys.dataportal.vascan.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import net.canadensys.dataportal.vascan.model.VernacularNameModel;
 
 /**
  * Interface for accessing vernacular names
- * @author canadensys
+ * 
+ * @author cgendreau
  *
  */
 public interface VernacularNameDAO {
+	
+	//denormalized data (DD) keys
+	public static final String DD_TAXON_ID = "taxonid";
+	public static final String DD_NAME = "name";
+	public static final String DD_REFERENCE = "reference";
+	public static final String DD_URL = "url";
+	public static final String DD_LANGUAGE = "language";
+	public static final String DD_STATUS_ID = "statusid";
 
 	/**
 	 * Load a VernacularNameModel from an identifier
@@ -30,5 +40,5 @@ public interface VernacularNameDAO {
 	 * @param taxonIdList
 	 * @return list of Object with the following content: "taxonid","name","reference","url","language","statusid"
 	 */
-	public List<Object[]> loadCompleteVernacularNameData(List<Integer> taxonIdList);
+	public List<Map<String,Object>> loadDenormalizedVernacularNameData(List<Integer> taxonIdList);
 }

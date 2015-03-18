@@ -55,8 +55,12 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
+	<bean id="hybridDAO" class="net.canadensys.dataportal.vascan.dao.impl.HibernateHybridDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
 	<bean id="nameDAO" class="net.canadensys.dataportal.vascan.dao.impl.ElasticSearchNameDAO">
 		<property name="client" ref="esClient"/>
 	</bean>
-	
+
 </beans>

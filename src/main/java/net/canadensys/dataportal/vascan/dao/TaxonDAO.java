@@ -15,6 +15,28 @@ import net.canadensys.dataportal.vascan.model.TaxonModel;
  */
 public interface TaxonDAO {
 	
+	//denormalized data (DD) keys
+	public static final String DD_ID = "id";
+	public static final String DD_MDATE = "mdate";
+	public static final String DD_STATUS = "status";
+	public static final String DD_CONCAT_PARENT_ID = "concatParentId";
+	public static final String DD_URL = "url";
+	public static final String DD_REFERENCE = "reference";
+	public static final String DD_CALNAME_AUTHOR = "calnameauthor";
+	public static final String DD_AUTHOR = "author";
+	public static final String DD_RANK = "rank";
+	public static final String DD_CONCAT_PARENT_CALNAME_AUTHOR = "concatParentCalNameAuthor";
+	public static final String DD_HIGHER_CLASSIFICATION = "higherclassification";
+	public static final String DD_CLASS = "class";
+	public static final String DD_ORDER = "_order";
+	public static final String DD_FAMILY = "family";
+	public static final String DD_GENUS = "genus";
+	public static final String DD_SUBGENUS = "subgenus";
+	public static final String DD_SPECIFIC_EPITHET = "specificepithet";
+	public static final String DD_INFRASPECIFIC_EPITHET = "infraspecificepithet";
+	public static final String DD_CALHABIT = "calhabit";
+	public static final String DD_STATUS_ID = "statusid";
+	
 	/**
 	 * Save a TaxonLookupModel. A TaxonLookupModel contains denormalized fields allowing faster access (than joining).
 	 * @return success or not
@@ -110,13 +132,11 @@ public interface TaxonDAO {
 	
 	
 	/**
-	 * Deprected : use searchIterator()
 	 * Load denormalized taxon data for a collection of ids.
 	 * @param taxonIdList
 	 * @return list of Object with the following content: "id","mdate","status","parentid","url","reference","calnameauthor","author","rank","parentfsn","higherclassification","class",
 			"order","family","genus","subgenus","specificepithet","infraspecificepithet"
 	 */
-	@Deprecated
-	public List<Object[]> loadCompleteTaxonData(List<Integer> taxonIdList);
+	public List<Map<String,Object>> loadDenormalizedTaxonData(List<Integer> taxonIdList);
 
 }

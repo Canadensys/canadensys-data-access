@@ -58,10 +58,6 @@ import org.springframework.stereotype.Repository;
 public class HibernateTaxonDAO implements TaxonDAO{
 	
 	private enum RegionCriterionOperatorEnum{OR,AND};
-	
-	// Aliases given to denormalized query fields
-	public static final String CONCAT_PARENT_ID = "concatParentId";
-	public static final String CONCAT_PARENT_CALNAME_AUTHOR = "concatParentCalNameAuthor";
 
 	//get log4j handler
 	private static final Logger LOGGER = Logger.getLogger(HibernateTaxonDAO.class);
@@ -78,14 +74,11 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	//jOOQ
 	private static final SQLDialect DQL_DIALECT = SQLDialect.MYSQL;
 	private static final Table<Record> LOOKUP_TABLE = table("lookup");
-	private static final Table<Record> TAXON_TABLE = table("taxon");
-	private static final Table<Record> TAXONOMY_TABLE = table("taxonomy");
 	
 	//predefined SQL
 	//database independant order by clause using nested sets with NULL last
 	//(in mysql it's cleaner to use ISNULL(lookup._left))
 	private static final String TAXONOMIC_ORDERBY = "ORDER BY COALESCE(lookup._left," + Integer.MAX_VALUE + "), lookup._left ASC";
-	
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -270,9 +263,9 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		}
 		
 		orderBySQL = getOrderBy(sort,"lookup.calname");
-		
+
 		Query searchQuery = buildSearchDenormalizedQuery(sessionFactory.getCurrentSession(), searchCondition, orderBySQL);
-		searchQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP); 
+		searchQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		
 		// limit
 		if(limitResultsTo > 0 ){
@@ -293,25 +286,25 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			"reference.url, reference.reference, lookup.calnameauthor,taxon.author,lookup.rank,"+
 			"GROUP_CONCAT(pLookup.calnameauthor) AS concatParentCalNameAuthor, lookup.higherclassification,"+
 			"lookup.class, lookup._order,lookup.family,lookup.genus,"+
-			"lookup.subgenus,lookup.specificepithet,lookup.infraspecificepithet "+
+			"lookup.subgenus,lookup.specificepithet,lookup.infraspecificepithet,lookup.calhabit,taxon.statusid "+
 			"FROM taxon "+
 			"INNER JOIN lookup ON taxon.id = lookup.taxonid "+
 			"INNER JOIN reference ON taxon.referenceid = reference.id "+
 			"LEFT JOIN taxonomy ON taxonomy.childid = taxon.id "+
 			"LEFT JOIN lookup pLookup ON pLookup.taxonid = taxonomy.parentid "+
-			"WHERE " + whereClause.toString() + 
+			"WHERE " + DSL.using(DQL_DIALECT).renderInlined(whereClause) + 
 			" GROUP BY taxon.id " +
 			StringUtils.defaultString(orderBySQL))
 			    .addScalar("id", IntegerType.INSTANCE)
 				.addScalar("mdate", CalendarType.INSTANCE)
 				.addScalar("status", StringType.INSTANCE)
-				.addScalar(CONCAT_PARENT_ID, StringType.INSTANCE)
+				.addScalar(DD_CONCAT_PARENT_ID, StringType.INSTANCE)
 				.addScalar("url", StringType.INSTANCE)
 				.addScalar("reference", StringType.INSTANCE)
 				.addScalar("calnameauthor", StringType.INSTANCE)
 				.addScalar("author", StringType.INSTANCE)
 				.addScalar("rank", StringType.INSTANCE)
-				.addScalar(CONCAT_PARENT_CALNAME_AUTHOR, StringType.INSTANCE)
+				.addScalar(DD_CONCAT_PARENT_CALNAME_AUTHOR, StringType.INSTANCE)
 				.addScalar("higherclassification", StringType.INSTANCE)
 				.addScalar("class", StringType.INSTANCE)
 				.addScalar("_order", StringType.INSTANCE)
@@ -319,7 +312,9 @@ public class HibernateTaxonDAO implements TaxonDAO{
 				.addScalar("genus", StringType.INSTANCE)
 				.addScalar("subgenus", StringType.INSTANCE)
 				.addScalar("specificepithet", StringType.INSTANCE)
-				.addScalar("infraspecificepithet", StringType.INSTANCE);
+				.addScalar("infraspecificepithet", StringType.INSTANCE)
+				.addScalar(DD_CALHABIT, StringType.INSTANCE)
+				.addScalar(DD_STATUS_ID, IntegerType.INSTANCE);
 	}
 	
 	/**
@@ -426,36 +421,42 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return (List<Object[]>)query.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Object[]> loadCompleteTaxonData(List<Integer> taxonIdList){
-		Query query = sessionFactory.getCurrentSession().createSQLQuery("SELECT taxon.id, taxon.mdate, lookup.status, taxonomy.parentid, reference.url, reference.reference, lookup.calnameauthor,taxon.author,lookup.rank, N.calnameauthor AS parentFSN, lookup.higherclassification, "+
-			"lookup.class, lookup._order,lookup.family,lookup.genus,lookup.subgenus,lookup.specificepithet,lookup.infraspecificepithet" +
+	public List<Map<String,Object>> loadDenormalizedTaxonData(List<Integer> taxonIdList){
+		Query query = sessionFactory.getCurrentSession().createSQLQuery("SELECT taxon.id, taxon.mdate, lookup.status, GROUP_CONCAT(taxonomy.parentid) concatParentId, reference.url," +
+			"reference.reference, lookup.calnameauthor,taxon.author,lookup.rank, GROUP_CONCAT(parentLookup.calnameauthor) AS concatParentCalNameAuthor, lookup.higherclassification, " +
+			"lookup.class, lookup._order,lookup.family,lookup.genus,lookup.subgenus,lookup.specificepithet,lookup.infraspecificepithet,lookup.calhabit,taxon.statusid" +
 			" FROM taxon" +
 			" INNER JOIN lookup ON taxon.id = lookup.taxonid"+
 			" INNER JOIN reference ON taxon.referenceid = reference.id"+
 			" LEFT JOIN taxonomy ON taxonomy.childid = taxon.id"+
-			" LEFT JOIN taxon T ON taxonomy.parentid = T.id"+
-			" LEFT JOIN lookup N ON N.taxonid = T.id"+
-		    " WHERE taxon.id IN (:id)")
-		    .addScalar("id", IntegerType.INSTANCE)
-			.addScalar("mdate",CalendarType.INSTANCE)
-			.addScalar("status",StringType.INSTANCE)
-			.addScalar("parentid",IntegerType.INSTANCE)
-			.addScalar("url",StringType.INSTANCE)
-			.addScalar("reference",StringType.INSTANCE)
-			.addScalar("calnameauthor",StringType.INSTANCE)
-			.addScalar("author",StringType.INSTANCE)
-			.addScalar("rank",StringType.INSTANCE)
-			.addScalar("parentfsn",StringType.INSTANCE)
-			.addScalar("higherclassification",StringType.INSTANCE)
-			.addScalar("class",StringType.INSTANCE)
-			.addScalar("_order",StringType.INSTANCE)
-			.addScalar("family",StringType.INSTANCE)
-			.addScalar("genus",StringType.INSTANCE)
-			.addScalar("subgenus",StringType.INSTANCE)
-			.addScalar("specificepithet",StringType.INSTANCE)
-			.addScalar("infraspecificepithet",StringType.INSTANCE);
+			" LEFT JOIN taxon parentTaxon ON taxonomy.parentid = parentTaxon.id"+
+			" LEFT JOIN lookup parentLookup ON parentLookup.taxonid = parentTaxon.id"+
+		    " WHERE taxon.id IN (:id)"+
+		    " GROUP BY taxon.id ")
+		    .addScalar(DD_ID, IntegerType.INSTANCE)
+			.addScalar(DD_MDATE, CalendarType.INSTANCE)
+			.addScalar(DD_STATUS, StringType.INSTANCE)
+			.addScalar(DD_CONCAT_PARENT_ID, StringType.INSTANCE)
+			.addScalar(DD_URL, StringType.INSTANCE)
+			.addScalar(DD_REFERENCE, StringType.INSTANCE)
+			.addScalar(DD_CALNAME_AUTHOR, StringType.INSTANCE)
+			.addScalar(DD_AUTHOR, StringType.INSTANCE)
+			.addScalar(DD_RANK, StringType.INSTANCE)
+			.addScalar(DD_CONCAT_PARENT_CALNAME_AUTHOR, StringType.INSTANCE)
+			.addScalar(DD_HIGHER_CLASSIFICATION, StringType.INSTANCE)
+			.addScalar(DD_CLASS, StringType.INSTANCE)
+			.addScalar(DD_ORDER, StringType.INSTANCE)
+			.addScalar(DD_FAMILY, StringType.INSTANCE)
+			.addScalar(DD_GENUS, StringType.INSTANCE)
+			.addScalar(DD_SUBGENUS,StringType.INSTANCE)
+			.addScalar(DD_SPECIFIC_EPITHET, StringType.INSTANCE)
+			.addScalar(DD_INFRASPECIFIC_EPITHET, StringType.INSTANCE)
+			.addScalar(DD_CALHABIT, StringType.INSTANCE)
+			.addScalar(DD_STATUS_ID, IntegerType.INSTANCE);
 		query.setParameterList("id", taxonIdList);
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		return query.list();
 	}
 	
@@ -741,7 +742,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			// match against all the statuses checked in the checklist builder
 			statusByProvince = null;
 			for(String currStatus: status){
-				statusByProvince = safeOr(statusByProvince,field(prov).eq(currStatus));
+				statusByProvince = safeOr(statusByProvince,DSL.fieldByName("lookup",prov).eq(currStatus));
 			}
 
 			if(allStatus == null){
@@ -779,7 +780,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		Condition anyStatusProvince = null;
 		for(String currRegion : regions){
 			for(String currStatus: status){
-				anyStatusProvince = safeOr(anyStatusProvince, field(currRegion).eq(currStatus));
+				anyStatusProvince = safeOr(anyStatusProvince, DSL.fieldByName("lookup",currRegion).eq(currStatus));
 			}
 		}
 		return anyStatusProvince;
@@ -821,9 +822,8 @@ public class HibernateTaxonDAO implements TaxonDAO{
 					break;
 				}
 			}
-			
 			if(exclude){
-				exclusionCondition = safeAnd(exclusionCondition, field(currRegion).notIn(Arrays.asList(status)));
+				exclusionCondition = safeAnd(exclusionCondition, DSL.fieldByName("lookup",currRegion).notIn(Arrays.asList(status)));
 			}
 		}
 		return exclusionCondition;
