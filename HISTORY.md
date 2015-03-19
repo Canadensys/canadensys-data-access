@@ -1,6 +1,10 @@
 Version History
 ===============
-Version 2.13.1 2015-01-27
+Version 2.13.0 2015-03-19
+* New denormalized queries in TaxonDAO
+* New jooq dependency
+
+Version 2.12.1 2015-01-27
 * Fixed dwca-reader dependency
 
 Version 2.12.0 2014-12-17
