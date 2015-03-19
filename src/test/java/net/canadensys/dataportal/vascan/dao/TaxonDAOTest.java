@@ -245,6 +245,12 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		mockTaxonNameList = extractMockTaxonNameFromMap(taxonIt);
 		assertTrue(mockTaxonNameList.containsAll(Arrays.asList(new String[]{MOCK3_AUTHOR, MOCK5_AUTHOR})));
 		assertEquals(2, mockTaxonNameList.size());
+		
+		//test taxonid filter
+		regionQueryPart.setRegionSelector(RegionSelector.ALL_OF);
+		taxonIt = taxonDAO.searchIteratorDenormalized(-1, null, 1, regionQueryPart, NATIVE_EPHEMERE_STATUSES, null, false, null);
+		mockTaxonNameList = extractMockTaxonNameFromMap(taxonIt);
+		assertTrue(mockTaxonNameList.containsAll(Arrays.asList(new String[]{MOCK1_AUTHOR})));
 	}
 	
 	@Test

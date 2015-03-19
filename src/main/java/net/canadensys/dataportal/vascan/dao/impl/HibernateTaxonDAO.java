@@ -72,7 +72,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	public static final int STATUS_SYNONYM = 2;
 	
 	//jOOQ
-	private static final SQLDialect DQL_DIALECT = SQLDialect.MYSQL;
+	private static final SQLDialect SQL_DIALECT = SQLDialect.MYSQL;
 	private static final Table<Record> LOOKUP_TABLE = table("lookup");
 	
 	//predefined SQL
@@ -259,7 +259,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		
 		// filter by taxonid
 		if(taxonid !=null && taxonid > 0){
-			searchCondition = safeAnd(searchCondition, condition(getTaxonConditionSQL(taxonid,TAXON_MANAGED_ID)));
+			searchCondition = safeAnd(searchCondition, condition(getTaxonConditionSQL(taxonid,"taxon."+TAXON_MANAGED_ID)));
 		}
 		
 		orderBySQL = getOrderBy(sort,"lookup.calname");
@@ -292,7 +292,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 			"INNER JOIN reference ON taxon.referenceid = reference.id "+
 			"LEFT JOIN taxonomy ON taxonomy.childid = taxon.id "+
 			"LEFT JOIN lookup pLookup ON pLookup.taxonid = taxonomy.parentid "+
-			"WHERE " + DSL.using(DQL_DIALECT).renderInlined(whereClause) + 
+			"WHERE " + DSL.using(SQL_DIALECT).renderInlined(whereClause) + 
 			" GROUP BY taxon.id " +
 			StringUtils.defaultString(orderBySQL))
 			    .addScalar("id", IntegerType.INSTANCE)
@@ -576,12 +576,12 @@ public class HibernateTaxonDAO implements TaxonDAO{
 				DSL.select(field("_left"),field("_right")).from(LOOKUP_TABLE)
 				.where(field("taxonid").eq(taxonId))).as("tlf");
 		
-		Select<?> subSelect = DSL.using(DQL_DIALECT)
+		Select<?> subSelect = DSL.using(SQL_DIALECT)
 			.select(field("taxonid")).from(LOOKUP_TABLE, leftRightOfTaxon)
 			.where(field("lookup._left").gt(field("tlf._left"))
 			.and(field("lookup._right").lt(field("tlf._right"))));
 
-		String sql = "SELECT " + taxonId + " UNION " + subSelect.getSQL();
+		String sql = "SELECT " + taxonId + " UNION " +  DSL.using(SQL_DIALECT).renderInlined(subSelect);
 		return SQLHelper.in(idPropertyName, sql);
 	}
 	
