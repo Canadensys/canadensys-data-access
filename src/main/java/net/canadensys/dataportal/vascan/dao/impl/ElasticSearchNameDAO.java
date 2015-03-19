@@ -101,7 +101,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 		    			QueryBuilders.boolQuery()
 		    				.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
 		    				.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
-		    				.should(QueryBuilders.fuzzyQuery(TAXON_NAME_FIELD,text))
+		    				//.should(QueryBuilders.fuzzyQuery(TAXON_NAME_FIELD,text))
 		    			)
 	                .should(QueryBuilders.matchQuery(TAXON_NAME_GENUS_FIRST_LETTER_FIELD,text)))
 	            .setSize(pageSize)
@@ -154,7 +154,7 @@ public class ElasticSearchNameDAO implements NameDAO{
 		    				QueryBuilders.boolQuery()
 		    					.should(QueryBuilders.matchQuery(TAXON_NAME_NGRAM_FIELD,text))
 		    					.should(QueryBuilders.matchQuery(TAXON_NAME_EPITHET_FIELD,text))
-		    					.should(QueryBuilders.fuzzyQuery(TAXON_NAME_FIELD,text))
+		    					//.should(QueryBuilders.fuzzyQuery(TAXON_NAME_FIELD,text))
 		    				).boost(1)
 		    			)
 		    			//this will allow to give more weight for a perfect match on a taxon
