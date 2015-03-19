@@ -17,6 +17,7 @@ import org.hibernate.type.StringType;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Implementation for handling hybrids related models through Hibernate technology.
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author cgendreau
  *
  */
+@Repository("hybridDAO")
 public class HibernateHybridDAO implements HybridDAO {
 	
 	private static final SQLDialect DQL_DIALECT = SQLDialect.MYSQL;

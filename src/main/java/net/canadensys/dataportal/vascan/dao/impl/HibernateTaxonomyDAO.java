@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.canadensys.dataportal.vascan.dao.TaxonomyDAO;
 import net.canadensys.dataportal.vascan.model.TaxonLookupModel;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -26,7 +25,7 @@ import org.springframework.stereotype.Repository;
 public class HibernateTaxonomyDAO implements TaxonomyDAO {
 
 	//get log4j handler
-	private static final Logger LOGGER = Logger.getLogger(HibernateTaxonomyDAO.class);
+	//private static final Logger LOGGER = Logger.getLogger(HibernateTaxonomyDAO.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -45,7 +44,7 @@ public class HibernateTaxonomyDAO implements TaxonomyDAO {
 	@Override
 	public List<Integer> getSynonymChildrenIdList(List<Integer> taxonIdList){
 		Session hibernateSession = sessionFactory.getCurrentSession();
-		Query query = hibernateSession.createSQLQuery("SELECT taxonomy.childid FROM taxonomy,taxon WHERE taxonomy.parentid IN (:taxonid) AND taxon.id = taxonomy.childid AND taxon.statusid = :statusid");
+		Query query = hibernateSession.createSQLQuery("SELECT DISTINCT(taxonomy.childid) FROM taxonomy,taxon WHERE taxonomy.parentid IN (:taxonid) AND taxon.id = taxonomy.childid AND taxon.statusid = :statusid");
 		query.setParameterList("taxonid", taxonIdList);
 		query.setParameter("statusid", HibernateTaxonDAO.STATUS_SYNONYM);
 		return query.list();

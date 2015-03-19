@@ -21,7 +21,7 @@ public interface TaxonomyDAO {
 	public Set<Integer> getChildrenIdSet(Integer taxonId, boolean recursive);
 	
 	/**
-	 * Get the all the direct accepted children id for a taxonid.
+	 * Returns the direct accepted children taxon for a taxonid.
 	 * This will not traverse the entire tree.
 	 * @param taxonId
 	 * @return
@@ -29,9 +29,8 @@ public interface TaxonomyDAO {
 	public List<Integer> getAcceptedChildrenIdList(Integer taxonId);
 	
 	/**
-	 * Get the all the synonym id (taxonid) for a taxonid list.
-	 * This will not traverse the entire tree.
-	 * @param taxonIdList
+	 * Returns all the distinct synonym (taxonid) for a taxonid list.
+	 * @param taxonIdList list of accepted taxon id
 	 * @return
 	 */
 	public List<Integer> getSynonymChildrenIdList(List<Integer> taxonIdList);

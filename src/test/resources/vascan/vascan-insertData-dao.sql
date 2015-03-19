@@ -61,6 +61,15 @@ INSERT INTO `reference` (id,referencecode) VALUES (1,'empty');
 INSERT INTO `reference` (id,referencecode,referenceshort,reference,url) VALUES 
 (105,'Chase&Reveal09','Chase & Reveal, 2009','Chase, M.W. & J.L. Reveal. 2009. A phylogenetic classification of land plants to accompany APG III. Botanical Journal of the Linnaen Society 161 (2): 122-127.','http://dx.doi.org/10.1111/j.1095-8339.2009.01002.x');
 
+--mock taxon
+INSERT INTO taxon (id,uninomial,binomial,author,statusid,rankid,referenceid) VALUES
+(1,'_Mock1','abdita','Author',1,2,1),
+(2,'_Mock2','abdita','Author',1,2,1),
+(3,'_Mock3','abdita','Author',1,2,1),
+(4,'_Mock4','abdita','Author',1,4,1),
+(5,'_Mock5','abdita','Author',1,4,1),
+(6,'_Mock6','abdita','Author',1,4,1);
+
 INSERT INTO taxon (id,uninomial,author,statusid,rankid,referenceid) VALUES
 (73,'Equisetopsida','C. Aghard',1,1,105),
 (26,'Equisetidae','Warming',1,2,105),
@@ -100,22 +109,22 @@ INSERT INTO lookup (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,
 
 
 INSERT INTO lookup (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
-(1,'_Mock1','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
-'accepted','herb,shrub,tree,vine','class','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
+(1,'_Mock1','_Mock1 Author','<em>Equisetopsida</em>','<em>_Mock1</em> Author',
+'accepted','herb,shrub,tree,vine','subclass','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
-(2,'_Mock2','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
+(2,'_Mock2','_Mock2 Author','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','subclass','native','introduced','native','native','native','native','native','native','native','native','native','native','native','native','native','native');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
-(3,'_Mock3','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
-'accepted','herb,shrub,tree,vine','class','native','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
+(3,'_Mock3','_Mock3 Author','<em>Equisetopsida</em>','<em>_Mock3</em> Author',
+'accepted','herb,shrub,tree,vine','subclass','native','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
-(4,'_Mock4','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
+(4,'_Mock4','_Mock4 Author','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','order','native','native','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
-(5,'_Mock5','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
+(5,'_Mock5','_Mock5 Author','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','order','ephemere','ephemere','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
 INSERT INTO lookup  (taxonid,calname,calnameauthor,calnamehtml,calnamehtmlauthor,status,calhabit,rank,ab,bc,gl,nl_l,mb,nb,nl_n,nt,ns,nu,`ON`,pe,qc,pm,sk,yt) VALUES
-(6,'_Mock6','Equisetopsida C. Aghard','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
+(6,'_Mock6','_Mock6 Author','<em>Equisetopsida</em>','<em>Equisetopsida</em> C. Aghard',
 'accepted','herb,shrub,tree,vine','order','native','introduced','native','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced','introduced');
 
 INSERT INTO vernacularname (id,name,statusid,taxonid,language,referenceid) VALUES
