@@ -21,6 +21,7 @@ import net.canadensys.dataportal.vascan.model.TaxonModel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -98,7 +99,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	
 	@Override
 	public boolean deleteTaxon(Integer taxonId){
-		TaxonModel taxonModelToDelete = loadTaxon(taxonId);
+		TaxonModel taxonModelToDelete = loadTaxon(taxonId, false);
 		if(taxonModelToDelete != null){
 			Session hibernateSession = sessionFactory.getCurrentSession();
 			//check if some data are pointing on us
@@ -141,10 +142,13 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	}
 
 	@Override
-	public TaxonModel loadTaxon(Integer taxonId) {
+	public TaxonModel loadTaxon(Integer taxonId, boolean deepLoad) {
 		try{
 			Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class);
 			searchCriteria.add(Restrictions.eq("id", taxonId));
+			if(deepLoad){
+				searchCriteria.setFetchMode("vernacularnames", FetchMode.JOIN);
+			}
 			return (TaxonModel)searchCriteria.uniqueResult();
 		}
 		catch(HibernateException e){

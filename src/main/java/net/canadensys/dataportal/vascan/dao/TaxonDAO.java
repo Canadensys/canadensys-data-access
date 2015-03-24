@@ -111,10 +111,11 @@ public interface TaxonDAO {
 	
 	/**
 	 * Load a TaxonModel from an identifier.
-	 * @param vernacularNameId
+	 * @param taxonId
+	 * @param deepLoad should we load data from other table(s) inside this query. (for now it only means vernacular names).
 	 * @return
 	 */
-	public TaxonModel loadTaxon(Integer taxonId);
+	public TaxonModel loadTaxon(Integer taxonId, boolean deepLoad);
 	
 	/**
 	 * Load a TaxonModel list from a list of id

@@ -52,7 +52,9 @@ public class TaxonModel implements Comparable<TaxonModel>{
 	private Set<VernacularNameModel>	vernacularnames;
 	private Set<TaxonModel>				children;
 	private List<TaxonModel>			parents;
+	
 	private List<TaxonModel>			hybridparents;
+	private List<TaxonModel>			hybridchildren;
 	
 
 	/**
@@ -375,6 +377,30 @@ public class TaxonModel implements Comparable<TaxonModel>{
 	 */
 	public void setHybridparents(List<TaxonModel> hybridparents) {
 		this.hybridparents = hybridparents;
+	}
+	
+	/**
+	 * @return the hybridParents
+	 */
+	@ManyToMany
+	@JoinTable(name = "taxonhybridparent",
+	    joinColumns = {
+			@JoinColumn(name="parentid")
+	    }
+		,inverseJoinColumns = {
+			@JoinColumn(name="childid")
+	    }
+	)
+	@Basic(fetch = FetchType.LAZY)
+	public List<TaxonModel> getHybridchildren() {
+		return hybridchildren;
+	}
+	
+	/**
+	 * @param hybridchildren the hybrid children to set
+	 */
+	public void setHybridchildren(List<TaxonModel> hybridchildren) {
+		this.hybridchildren = hybridchildren;
 	}
 	
 	/**

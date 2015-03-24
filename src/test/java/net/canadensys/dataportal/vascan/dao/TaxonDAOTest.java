@@ -108,7 +108,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	 */
 	@Test
 	public void testLoadTaxonModel(){
-		TaxonModel taxon = taxonDAO.loadTaxon(73);
+		TaxonModel taxon = taxonDAO.loadTaxon(73, false);
 		assertEquals("Equisetopsida",taxon.getUninomial());
 		//validate joins
 		assertEquals("accepted",taxon.getStatus().getStatus());
@@ -147,6 +147,24 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		List<TaxonModel> taxonModelList = taxonDAO.loadTaxonList(Arrays.asList(new Integer[]{73,26}));
 		assertTrue(taxonModelList.get(0).getId().equals(73) || taxonModelList.get(0).getId().equals(26));
 		assertTrue(taxonModelList.get(1).getId().equals(73) || taxonModelList.get(1).getId().equals(26));
+	}
+	
+	/**
+	 * Test the loading of hybrid parent(s) and children
+	 */
+	@Test
+	public void testHybridLoading(){
+		//get the hybrid parents of a hybrid taxon
+		TaxonModel taxon = taxonDAO.loadTaxon(2663, false);
+		List<TaxonModel> hybridParents = taxon.getHybridparents();
+		assertFalse(hybridParents.isEmpty());
+		assertEquals(new Integer(2658), hybridParents.get(0).getId());
+		
+		//get the hybrid taxon from the hybrid parent
+		taxon = taxonDAO.loadTaxon(2658, false);
+		List<TaxonModel> hybridChildren = taxon.getHybridchildren();
+		assertFalse(hybridChildren.isEmpty());
+		assertEquals(new Integer(2663), hybridChildren.get(0).getId());
 	}
 	
 	/**
