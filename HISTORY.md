@@ -1,8 +1,12 @@
 Version History
 ===============
 
+Version 2.14.0 2015-03-24
+* Maven script set to Java 7 target
+* Changed loadTaxon metod signature
+
 Version 2.13.1 2015-03-19
-*[Bug fix](https://github.com/Canadensys/canadensys-data-access/compare/2.13.0...2.13.1)
+* Bug fix: [code diff](https://github.com/Canadensys/canadensys-data-access/compare/2.13.0...2.13.1)
 
 Version 2.13.0 2015-03-19
 * New denormalized queries in TaxonDAO
