@@ -18,6 +18,7 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.DisMaxQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -71,10 +72,10 @@ public class ElasticSearchNameDAO implements NameDAO{
 	public LimitedResult<List<NameConceptModelIF>> search(String text, boolean useAutocompletion, int pageNumber) {
 		SearchRequestBuilder srb;
 		if(useAutocompletion){
-			srb = buildSearchRequestBuilderFromText(text,pageSize);
+			srb = buildSearchRequestBuilderFromText(text, pageSize);
 		}
 		else{
-			srb = buildSearchRequestBuilderFromTextNoNGram(text,pageSize);
+			srb = buildSearchRequestBuilderFromTextNoNGram(text, pageSize);
 		}
 		if(pageNumber > 0){
 			srb.setFrom(pageNumber*pageSize);
@@ -207,6 +208,41 @@ public class ElasticSearchNameDAO implements NameDAO{
 	    	.setSize(pageSize)
             .addSort(SortBuilders.scoreSort())
             .addSort(SortBuilders.fieldSort(SORT_NAME_FIELD).order(SortOrder.ASC));
+	}
+	
+	private SearchRequestBuilder buildSearchRequestBuilderFromTextNoNGram_Experimental(String text, int pageSize, boolean fuzzyQuery){
+		return client.prepareSearch(INDEX_NAME)
+	        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+	        .setQuery(getDisMaxQuery(text, fuzzyQuery))
+	    	.setSize(pageSize)
+            .addSort(SortBuilders.scoreSort())
+            .addSort(SortBuilders.fieldSort(SORT_NAME_FIELD).order(SortOrder.ASC));
+	}
+	
+	/**
+	 * Get a configured DisMaxQueryBuilder.
+	 * Perfect matches will be boosted.
+	 * @param text
+	 * @param fuzzyQuery
+	 * @return
+	 */
+	private DisMaxQueryBuilder getDisMaxQuery(String text, boolean fuzzyQuery){
+		DisMaxQueryBuilder disMaxQueryBldr = QueryBuilders
+			.disMaxQuery().add(
+				QueryBuilders.multiMatchQuery(text, 
+					TAXON_NAME_FIELD+"^2",
+					TAXON_NAME_EPITHET_FIELD,
+					TAXON_NAME_GENUS_FIRST_LETTER_FIELD,
+					VERNACULAR_NAME_FIELD+"^2",
+					VERNACULAR_NAME_SPLIT_NAME_FIELD));
+		
+		if(fuzzyQuery){	
+			disMaxQueryBldr.add(
+				QueryBuilders.fuzzyQuery(TAXON_NAME_FIELD, text))
+			.add(
+        		QueryBuilders.fuzzyQuery(VERNACULAR_NAME_FIELD, text));
+		}
+		return disMaxQueryBldr;
 	}
 	
 	/**
