@@ -35,7 +35,6 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.BigIntegerType;
 import org.hibernate.type.CalendarType;
@@ -56,7 +55,7 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository("taxonDAO")
-public class HibernateTaxonDAO implements TaxonDAO{
+public class HibernateTaxonDAO implements TaxonDAO {
 	
 	private enum RegionCriterionOperatorEnum{OR,AND};
 
@@ -178,55 +177,55 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		return (List<TaxonModel>)searchCriteria.list();
 	}
 	
-	@Override
-	public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
-			String[] rank, boolean includeHybrids, String sort){
-		
-		// don't go any further if no region & status
-		// Make sure this request is looking for something
-		if((status == null || rqp == null || rqp.getRegion() == null) && (taxonid == null || taxonid.intValue() == 0) && habitus !=null && habitus.equals("all")){
-			return null;
-		}
-		
-		List<Criterion> lookupCriterionList = new ArrayList<Criterion>();
-		
-		// filter by status in region
-		if(status != null && rqp != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
-			lookupCriterionList.add(getStatusRegionCriterion(rqp, status));
-		}
-		
-		// filter by habitus
-		if(habitus != null && habitus!="" && !habitus.equals("all")){
-			lookupCriterionList.add(getHabitCriterion(habitus));
-		}
-		
-		// filter by rank
-		if(rank != null){
-			lookupCriterionList.add(getRankCriterion(rank));
-		}
-		
-		// filter by hybrids
-		if(!includeHybrids){
-			lookupCriterionList.add(getExcludeHybridCriterion());
-		}
-		
-		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class)
-				.createAlias("lookup", "lkp", JoinType.INNER_JOIN, Restrictions.and(lookupCriterionList.toArray(new Criterion[0])) );
-		
-		if(taxonid !=null && taxonid > 0){
-			searchCriteria.add(getTaxonCriterion(taxonid,TAXON_MANAGED_ID));
-		}
-		
-		// order
-		addOrderBy(searchCriteria, sort,"lkp.calname");
-		
-		// limit
-		if(limitResultsTo > 0 ){
-			addLimitClause(searchCriteria, limitResultsTo);
-		}
-		
-		return new ScrollableResultsIteratorWrapper<TaxonModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY), sessionFactory.getCurrentSession());
-	}
+//	@Override
+//	public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
+//			String[] rank, boolean includeHybrids, String sort){
+//		
+//		// don't go any further if no region & status
+//		// Make sure this request is looking for something
+//		if((status == null || rqp == null || rqp.getRegion() == null) && (taxonid == null || taxonid.intValue() == 0) && habitus !=null && habitus.equals("all")){
+//			return null;
+//		}
+//		
+//		List<Criterion> lookupCriterionList = new ArrayList<Criterion>();
+//		
+//		// filter by status in region
+//		if(status != null && rqp != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
+//			lookupCriterionList.add(getStatusRegionCriterion(rqp, status));
+//		}
+//		
+//		// filter by habitus
+//		if(habitus != null && habitus!="" && !habitus.equals("all")){
+//			lookupCriterionList.add(getHabitCriterion(habitus));
+//		}
+//		
+//		// filter by rank
+//		if(rank != null){
+//			lookupCriterionList.add(getRankCriterion(rank));
+//		}
+//		
+//		// filter by hybrids
+//		if(!includeHybrids){
+//			lookupCriterionList.add(getExcludeHybridCriterion());
+//		}
+//		
+//		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class)
+//				.createAlias("lookup", "lkp", JoinType.INNER_JOIN, Restrictions.and(lookupCriterionList.toArray(new Criterion[0])) );
+//		
+//		if(taxonid !=null && taxonid > 0){
+//			searchCriteria.add(getTaxonCriterion(taxonid,TAXON_MANAGED_ID));
+//		}
+//		
+//		// order
+//		addOrderBy(searchCriteria, sort,"lkp.calname");
+//		
+//		// limit
+//		if(limitResultsTo > 0 ){
+//			addLimitClause(searchCriteria, limitResultsTo);
+//		}
+//		
+//		return new ScrollableResultsIteratorWrapper<TaxonModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY), sessionFactory.getCurrentSession());
+//	}
 	
 	@Override
 	public Iterator<Map<String,Object>> searchIteratorDenormalized(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
@@ -285,7 +284,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	 * @param whereClause
 	 * @return
 	 */
-	private static Query buildSearchDenormalizedQuery(Session hibernateSession, Condition whereClause, String orderBySQL ){
+	private Query buildSearchDenormalizedQuery(Session hibernateSession, Condition whereClause, String orderBySQL ){
 		return hibernateSession.createSQLQuery("SELECT taxon.id, taxon.mdate, lookup.status, GROUP_CONCAT(taxonomy.parentid) concatParentId,"+
 			"reference.url, reference.reference, lookup.calnameauthor,taxon.author,lookup.rank,"+
 			"GROUP_CONCAT(pLookup.calnameauthor) AS concatParentCalNameAuthor, lookup.higherclassification,"+
@@ -474,17 +473,22 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	}
 	
 	/**
-	 * TODO Issue 753
+	 * Add ORDER BY clause to the provided Criteria representing the provided 'sort'.
+	 * Note: taxonomic sort will put synonyms at the beginning (as opposed to  getOrderBy(String,String) method ).
+	 * 
+	 * @param searchCriteria
 	 * @param sort
+	 * @param propertyName name of the property to used (for alphabetic sort only)
 	 * @return
 	 */
 	private void addOrderBy(Criteria searchCriteria, String sort, String propertyName){
 		if(StringUtils.isNotBlank(sort)){
-			if(sort.equals("alphabetically")){
+			if(sort.equals(SORT_ALPHABETIC)){
 				searchCriteria.addOrder(Order.asc(propertyName));
 			}
-			else if(sort.equals("taxonomically")){
+			else if(sort.equals(SORT_TAXONOMIC)){
 				//nothing to do, it's the assumed default order. This is risky and should be fixed.
+				searchCriteria.addOrder(Order.asc("_left"));
 			}
 			else{
 				LOGGER.warn("unknown sort value:" + sort);
@@ -494,16 +498,18 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	
 	/**
 	 * Get ORDER BY clause in SQL representing the provided 'sort'.
+	 * Note: taxonomic sort will put synonyms at the end.
 	 * 
 	 * @param sort
+	 * @param propertyName name of the property to used (for alphabetic sort only)
 	 * @return sql ORDER BY clause or null
 	 */
 	private String getOrderBy(String sort, String propertyName){
 		if(StringUtils.isNotBlank(sort)){
-			if(sort.equals("alphabetically")){
+			if(sort.equals(SORT_ALPHABETIC)){
 				return DSL.orderBy(field(propertyName).asc()).toString();
 			}
-			else if(sort.equals("taxonomically")){
+			else if(sort.equals(SORT_TAXONOMIC)){
 				return TAXONOMIC_ORDERBY;
 			}
 			else{
@@ -571,6 +577,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 		
 	/**
 	 * Returns SQL string build from a jOOQ sub query that returns a taxon and all of its accepted children.
+	 * 
 	 * @param taxonId
 	 * @param idPropertyName
 	 * @return
@@ -591,7 +598,7 @@ public class HibernateTaxonDAO implements TaxonDAO{
 	
 	/**
 	 * Returns a Criterion for one ore more rank(s)
-		 * @param rank a validated rank array
+	 * @param rank a validated rank array
 	 * @return
 	 */	
 	private Criterion getRankCriterion(String[] rank){

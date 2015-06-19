@@ -15,6 +15,9 @@ import net.canadensys.dataportal.vascan.model.TaxonModel;
  */
 public interface TaxonDAO {
 	
+	public static final String SORT_TAXONOMIC = "taxonomically";
+	public static final String SORT_ALPHABETIC = "alphabetically";
+	
 	//denormalized data (DD) keys
 	public static final String DD_ID = "id";
 	public static final String DD_MDATE = "mdate";
@@ -73,7 +76,7 @@ public interface TaxonDAO {
 	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
 	
 	
-	public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
+	//public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
 	
 	/**
 	 * Returns an iterator containing the denormalized data as a result of a search.
