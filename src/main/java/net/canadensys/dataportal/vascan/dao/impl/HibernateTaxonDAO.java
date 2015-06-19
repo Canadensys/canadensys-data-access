@@ -51,6 +51,10 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Implementation for handling TaxonModel and TaxonLookupModel through Hibernate technology.
+ * Includes method to load taxon data in a denormalized form using JOOQ (to bypasss Hibernate mapping).
+ * 
+ * Note: maybe creating JooqTaxonDAO would be appropriate but we would still use Hibernate to execute the query.
+ * 
  * @author canadensys
  *
  */
@@ -176,56 +180,7 @@ public class HibernateTaxonDAO implements TaxonDAO {
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class).createCriteria("lookup").add(Restrictions.like("calname", taxonCalculatedName));
 		return (List<TaxonModel>)searchCriteria.list();
 	}
-	
-//	@Override
-//	public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
-//			String[] rank, boolean includeHybrids, String sort){
-//		
-//		// don't go any further if no region & status
-//		// Make sure this request is looking for something
-//		if((status == null || rqp == null || rqp.getRegion() == null) && (taxonid == null || taxonid.intValue() == 0) && habitus !=null && habitus.equals("all")){
-//			return null;
-//		}
-//		
-//		List<Criterion> lookupCriterionList = new ArrayList<Criterion>();
-//		
-//		// filter by status in region
-//		if(status != null && rqp != null && rqp.getRegion() != null && rqp.getRegionSelector() != null){
-//			lookupCriterionList.add(getStatusRegionCriterion(rqp, status));
-//		}
-//		
-//		// filter by habitus
-//		if(habitus != null && habitus!="" && !habitus.equals("all")){
-//			lookupCriterionList.add(getHabitCriterion(habitus));
-//		}
-//		
-//		// filter by rank
-//		if(rank != null){
-//			lookupCriterionList.add(getRankCriterion(rank));
-//		}
-//		
-//		// filter by hybrids
-//		if(!includeHybrids){
-//			lookupCriterionList.add(getExcludeHybridCriterion());
-//		}
-//		
-//		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonModel.class)
-//				.createAlias("lookup", "lkp", JoinType.INNER_JOIN, Restrictions.and(lookupCriterionList.toArray(new Criterion[0])) );
-//		
-//		if(taxonid !=null && taxonid > 0){
-//			searchCriteria.add(getTaxonCriterion(taxonid,TAXON_MANAGED_ID));
-//		}
-//		
-//		// order
-//		addOrderBy(searchCriteria, sort,"lkp.calname");
-//		
-//		// limit
-//		if(limitResultsTo > 0 ){
-//			addLimitClause(searchCriteria, limitResultsTo);
-//		}
-//		
-//		return new ScrollableResultsIteratorWrapper<TaxonModel>(searchCriteria.scroll(ScrollMode.FORWARD_ONLY), sessionFactory.getCurrentSession());
-//	}
+
 	
 	@Override
 	public Iterator<Map<String,Object>> searchIteratorDenormalized(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status,
@@ -324,7 +279,7 @@ public class HibernateTaxonDAO implements TaxonDAO {
 	 * @see TaxonDAO
 	 */
 	@Override
-	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort){
+	public Iterator<TaxonLookupModel> searchIterator(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort){
 		Criteria searchCriteria = sessionFactory.getCurrentSession().createCriteria(TaxonLookupModel.class);
 
 		// don't go any further if no region & status
@@ -841,7 +796,7 @@ public class HibernateTaxonDAO implements TaxonDAO {
 	}
 	
 	/**
-	 * JOOQ OR Condition that handles null on current.
+	 * JOOQ OR Condition that handles null on current Condition.
 	 * @param current
 	 * @param condition
 	 * @return
@@ -855,7 +810,7 @@ public class HibernateTaxonDAO implements TaxonDAO {
 	}
 	
 	/**
-	 * JOOQ AND Condition that handles null aon current.
+	 * JOOQ AND Condition that handles null on current Condition.
 	 * @param current
 	 * @param condition
 	 * @return

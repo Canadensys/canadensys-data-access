@@ -167,29 +167,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		assertFalse(hybridChildren.isEmpty());
 		assertEquals(new Integer(2663), hybridChildren.get(0).getId());
 	}
-	
-	/**
-	 * Simple test to find the only rank='class' from the searchIterator function.
-	 * 
-	 */
-//	@Test
-//	public void testSearchIterator(){
-//		Iterator<TaxonModel> taxonIt = taxonDAO.searchIterator(-1, null, null, null, null, new String[]{"class"}, false, null);
-//		
-//		assertTrue(taxonIt.hasNext());
-//		TaxonModel t = taxonIt.next();
-//		
-//		Iterator<DistributionModel> distIt = t.getDistribution().iterator();
-//		int qty=0;
-//		while(distIt.hasNext()){
-//			distIt.next();
-//			qty++;
-//		}
-//		assertTrue(qty > 2);
-//		
-//		assertEquals("Class", t.getRank().getRank());
-//	}
-	
+		
 	/**
 	 * Simple test to find the only rank='class' from the searchIteratorDenormalized function.
 	 * 
@@ -278,9 +256,12 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		assertTrue(count > 0);
 	}
 	
+	/**
+	 * Test search by taxonid and the "taxonomically" sort order.
+	 */
 	@Test
-	public void loadTaxonLookupModelTaxonIdCriteria(){
-		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(-1, null, 7, null, null, null, false, "taxonomically");
+	public void testSearchIteratorTaxonIdCriteria(){
+		Iterator<TaxonLookupModel> it = taxonDAO.searchIterator(-1, null, 7, null, null, null, false, "taxonomically");
 		String[] orderedCalName = new String[]{"_Mock7","_Mock1","_Mock3","_Mock5","_Mock2","_Mock4","_Mock6"};
 		int i = 0;
 		while(it.hasNext()){
@@ -290,26 +271,26 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	}	
 	
 	@Test
-	public void loadTaxonLookupModelStatusRegionCriteria(){
+	public void testSearchIteratorStatusRegionCriteria(){
 		RegionQueryPart regionQueryPart = new RegionQueryPart();
 		regionQueryPart.setRegion(new String[]{"AB","bc"});
 		
 		//always make sure that region is case insensitive
 		//allof should be read : give me all the native and ephemere of AB and BC
 		regionQueryPart.setRegionSelector(RegionSelector.ALL_OF);
-		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		Iterator<TaxonLookupModel> it = taxonDAO.searchIterator(200, null, -1,regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		List<String> mockTaxonList = extractMockTaxonNameFromLookup(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock1","_Mock3"})));
 		assertTrue(!mockTaxonList.contains("_Mock2"));
 
 		//anyof should be read : give me any of the native and ephemere of AB or BC
 		regionQueryPart.setRegionSelector(RegionSelector.ANY_OF);
-		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.searchIterator(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		assertTrue(extractMockTaxonNameFromLookup(it).containsAll(Arrays.asList(new String[]{"_Mock1","_Mock2","_Mock3"})));
 		
 		//only_in should be read : give me the native and ephemere that are only native or ephemere in AB or BC
 		regionQueryPart.setRegionSelector(RegionSelector.ONLY_IN);
-		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.searchIterator(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxonNameFromLookup(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock5"})));
 		assertEquals(2, mockTaxonList.size());
@@ -317,7 +298,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		//only_in and setSearchOnlyInCanada  should be read : give me the native and ephemere that are only native or ephemere in AB or BC (ignoring Greenland and St-Pierre)
 		regionQueryPart.setRegionSelector(RegionSelector.ONLY_IN);
 		regionQueryPart.setSearchOnlyInCanada(true);
-		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.searchIterator(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxonNameFromLookup(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4","_Mock5","_Mock6", "_Mock7"})));
 		assertEquals(5, mockTaxonList.size());
@@ -325,7 +306,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		//all of, only in and setSearchOnlyInCanada  should be read : give me the native,ephemere that are only native or ephemere in AB and BC (ignoring Greenland and St-Pierre status)
 		regionQueryPart.setRegionSelector(RegionSelector.ALL_OF_ONLY_IN);
 		regionQueryPart.setSearchOnlyInCanada(true);
-		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.searchIterator(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxonNameFromLookup(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock4","_Mock5"})));
 		assertEquals(3, mockTaxonList.size());
@@ -333,7 +314,7 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 		//all of, only in should be read : give me the native,ephemere that are only native or ephemere in AB and BC (including Greenland and St-Pierre status)
 		regionQueryPart.setRegionSelector(RegionSelector.ALL_OF_ONLY_IN);
 		regionQueryPart.setSearchOnlyInCanada(false);
-		it = taxonDAO.loadTaxonLookup(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
+		it = taxonDAO.searchIterator(200, null, -1, regionQueryPart, new String[]{"native","ephemere"}, null, false, null);
 		mockTaxonList = extractMockTaxonNameFromLookup(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock3","_Mock5"})));
 		assertEquals(2, mockTaxonList.size());
@@ -343,12 +324,12 @@ public class TaxonDAOTest extends AbstractTransactionalJUnit4SpringContextTests{
 	 * Test TaxonLookupModel loading using status and rank.
 	 */
 	@Test
-	public void loadTaxonLookupModelStatusRankCriteria(){
+	public void searchIteratorStatusRankCriteria(){
 		RegionQueryPart regionQueryPart = new RegionQueryPart();
 		regionQueryPart.setRegion(new String[]{"AB","bc"});
 		regionQueryPart.setRegionSelector(RegionSelector.ANY_OF);
 		
-		Iterator<TaxonLookupModel> it = taxonDAO.loadTaxonLookup(200, null, -1,regionQueryPart, NATIVE_EPHEMERE_STATUSES, new String[]{"family","variety"}, false, null);
+		Iterator<TaxonLookupModel> it = taxonDAO.searchIterator(200, null, -1,regionQueryPart, NATIVE_EPHEMERE_STATUSES, new String[]{"family","variety"}, false, null);
 		List<String> mockTaxonList = extractMockTaxonNameFromLookup(it);
 		assertTrue(mockTaxonList.containsAll(Arrays.asList(new String[]{"_Mock2"})));
 		assertTrue(!mockTaxonList.contains("_Mock4"));

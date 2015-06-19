@@ -48,7 +48,7 @@ public interface TaxonDAO {
 	
 	/**
 	 * Remove a taxon from the database. The taxon will not be deleted if it is used as a parent in taxonomy or a hybrid parent.
-	 *TODO : also check for verncular
+	 * TODO : also check for vernacular
 	 * @param taxonId
 	 * @return
 	 */
@@ -62,7 +62,8 @@ public interface TaxonDAO {
 	public TaxonLookupModel loadTaxonLookup(Integer taxonId);
 	
 	/**
-	 * Get an Iterator on the TaxonLookupModel matching the criteria 
+	 * Get an Iterator on the TaxonLookupModel matching the criteria.
+	 * 
 	 * @param limitResultsTo 
 	 * @param habitus
 	 * @param taxonid
@@ -73,11 +74,8 @@ public interface TaxonDAO {
 	 * @param sort
 	 * @return
 	 */
-	public Iterator<TaxonLookupModel> loadTaxonLookup(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
-	
-	
-	//public Iterator<TaxonModel> searchIterator(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
-	
+	public Iterator<TaxonLookupModel> searchIterator(int limitResultsTo, String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
+		
 	/**
 	 * Returns an iterator containing the denormalized data as a result of a search.
 	 * 
@@ -94,7 +92,8 @@ public interface TaxonDAO {
 	public Iterator<Map<String,Object>> searchIteratorDenormalized(int limitResultsTo, String habitus, Integer taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids, String sort);
 	
 	/**
-	 * Count the taxon matching the criteria 
+	 * Count the taxon matching the criteria.
+	 * 
 	 * @param habitus
 	 * @param taxonid
 	 * @param rqp
@@ -106,7 +105,7 @@ public interface TaxonDAO {
 	public Integer countTaxonLookup(String habitus, int taxonid, RegionQueryPart rqp, String[] status, String[] rank, boolean includeHybrids);
 
 	/**
-	 * 
+	 * Get a list of accepted taxon from "class" rank to maximumRank
 	 * @param maximumRank
 	 * @return List of Object array [id:integer,calname:String,rank:String]
 	 */
