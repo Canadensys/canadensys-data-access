@@ -19,8 +19,6 @@
 				<value>net.canadensys.dataportal.occurrence.model.OccurrenceRawModel</value>
 				<value>net.canadensys.dataportal.occurrence.model.OccurrenceModel</value>
 				<value>net.canadensys.dataportal.occurrence.model.UniqueValuesModel</value>
-				<value>net.canadensys.dataportal.occurrence.model.DownloadLogModel</value>
-				<value>net.canadensys.dataportal.occurrence.model.ImportLogModel</value>
 				<value>net.canadensys.dataportal.occurrence.model.OccurrenceExtensionModel</value>
 			</list>
 		</property>

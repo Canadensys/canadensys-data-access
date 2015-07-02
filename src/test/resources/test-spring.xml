@@ -40,12 +40,4 @@
 	<bean id="autoCompleteOccurrenceDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateOccurrenceAutoCompleteDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
-	
-	<bean id="downloadLogDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateDownloadLogDAO">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
-	
-	<bean id="importLogDAO" class="net.canadensys.dataportal.occurrence.dao.impl.HibernateImportLogDAO">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
 </beans>

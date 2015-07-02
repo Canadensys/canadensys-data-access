@@ -1,9 +1,13 @@
 Version History
 ===============
 
+Version 2.15.0 2015-07-02
+* Fixed Issue #12
+* Renamed loadTaxonLookup to searchIterator
+
 Version 2.14.0 2015-03-24
 * Maven script set to Java 7 target
-* Changed loadTaxon metod signature
+* Changed loadTaxon method signature
 * [Code diff](https://github.com/Canadensys/canadensys-data-access/compare/2.13.1...2.14.0)
 
 Version 2.13.1 2015-03-19

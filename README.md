@@ -2,6 +2,7 @@ canadensys-data-access
 ======================
 
 Canandensys data access layer containing DAO and models.
+Note that occurrence related DAO and models are now part of [liger-data-access](https://github.com/WingLongitude/liger-data-access/).
 
 Code Status
 -----------
@@ -14,7 +15,6 @@ Dependencies
 * [Hibernate](http://www.hibernate.org/)
 * [Apache Commons BeanUtils](http://commons.apache.org/beanutils/)
 * [Jackson](http://wiki.fasterxml.com/JacksonHome)
-* [GBIF dwca-reader](https://github.com/gbif/dwca-reader)
 * [JSON.org](http://www.json.org/java/)
 * [Canadensys Core](https://github.com/Canadensys/canadensys-core)
 
