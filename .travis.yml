@@ -1,5 +1,15 @@
 language: java
-jdk:
-  - oraclejdk8
-  - openjdk7
-  - oraclejdk7
+
+# jdk7 requires Precise, see https://github.com/travis-ci/travis-ci/issues/8503
+matrix:
+ include:
+  - jdk: oraclejdk8
+    dist: trusty
+  - jdk: oraclejdk7
+    dist: precise
+  - jdk: openjdk7
+    dist: precise
+
+# openjdk7 requires hostname see https://github.com/travis-ci/travis-ci/issues/5227
+addons:
+ hostname: dataaccess.dev
