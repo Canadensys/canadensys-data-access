@@ -1,6 +1,9 @@
 Version History
 ===============
 
+Version 2.16.0 2018-06-22
+* Dependencies update only
+
 Version 2.15.0 2015-07-02
 * Fixed Issue #12
 * Renamed loadTaxonLookup to searchIterator
