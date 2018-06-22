@@ -20,7 +20,6 @@
 					<source>1.7</source>
 					<target>1.7</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
-					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -32,8 +31,15 @@
 		<hibernate.version>4.3.11.Final</hibernate.version>
 		<jooq.version>3.5.3</jooq.version>
 		<jackson.version>2.2.3</jackson.version>
-    <apache.beanutils>1.9.3</apache.beanutils>
+		<apache.beanutils>1.9.3</apache.beanutils>
 		<canadensys.core.version>1.8</canadensys.core.version>
+		<log4j.version>1.2.16</log4j.version>
+		<elasticsearch.version>0.90.12</elasticsearch.version>
+
+		<!-- TEST SCOPE -->
+		<junit.version>4.12</junit.version>
+		<h2database.version>1.3.176</h2database.version>
+		<commons-io.version>2.6</commons-io.version>
 	</properties>
 
 	<prerequisites>
@@ -97,7 +103,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
+			<version>${log4j.version}</version>
 		</dependency>
 
 		<!-- Spring -->
@@ -118,7 +124,7 @@
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch</artifactId>
-			<version>0.90.12</version>
+			<version>${elasticsearch.version}</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
@@ -128,7 +134,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -136,7 +142,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.3.176</version>
+			<version>${h2database.version}</version>
 			<scope>test</scope>
 		</dependency>
     
@@ -144,8 +150,8 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
-      <scope>test</scope>
+			<version>${commons-io.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- Support for testing Spring applications with tools such as JUnit -->

@@ -1,7 +1,7 @@
 canadensys-data-access
 ======================
 
-Canandensys data access layer containing DAO and models.
+Canadensys data access layer containing DAO and models.
 Note that occurrence related DAO and models are now part of [liger-data-access](https://github.com/WingLongitude/liger-data-access/).
 
 Code Status
