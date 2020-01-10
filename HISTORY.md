@@ -1,6 +1,9 @@
 Version History
 ===============
 
+Version 2.17.2 2020-01-09
+* Dependencies update only
+
 Version 2.16.0 2018-06-22
 * Dependencies update only
 
