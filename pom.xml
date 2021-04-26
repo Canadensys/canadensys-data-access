@@ -40,7 +40,7 @@
 		<!-- TEST SCOPE -->
 		<junit.version>4.12</junit.version>
 		<h2database.version>1.3.176</h2database.version>
-		<commons-io.version>2.6</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 	</properties>
 
 	<prerequisites>
