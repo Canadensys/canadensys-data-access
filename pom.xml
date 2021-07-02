@@ -35,7 +35,7 @@
 		<apache.beanutils>1.9.3</apache.beanutils>
 		<canadensys.core.version>1.8</canadensys.core.version>
 		<log4j.version>2.13.0</log4j.version>
-		<elasticsearch.version>0.90.12</elasticsearch.version>
+		<elasticsearch.version>6.8.15</elasticsearch.version>
 
 		<!-- TEST SCOPE -->
 		<junit.version>4.12</junit.version>
